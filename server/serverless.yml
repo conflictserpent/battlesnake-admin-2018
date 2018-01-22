@@ -1,0 +1,28 @@
+# serverless.yml
+
+service: battlesnake-admin
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: local
+  region: us-west-2
+  # This is fine for offline, but should really use SSM
+  # https://serverless.com/framework/docs/providers/aws/guide/variables/#reference-variables-using-the-ssm-parameter-store
+  environment: ${file(../scripts/env.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  
+functions:
+  app:
+    handler: entry.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+# Include dependencies from package.json
+custom:
+  webpackIncludeModules: true
+  webpack: webpack.config.js
