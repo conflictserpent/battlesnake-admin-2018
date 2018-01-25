@@ -8,7 +8,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: 'http://battlesnake.local:3000/auth/github/callback',
+      callbackURL: `http://${process.env.HOST}/auth/github/callback`,
     },
     (accessToken, refreshToken, profile, cb) => {
       return cb(null, profile)

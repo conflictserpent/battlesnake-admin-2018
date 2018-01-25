@@ -9,7 +9,16 @@ provider:
   region: us-west-2
   # This is fine for offline, but should really use SSM
   # https://serverless.com/framework/docs/providers/aws/guide/variables/#reference-variables-using-the-ssm-parameter-store
-  environment: ${file(../scripts/env.yml)}
+  environment: ${file(../scripts/env-${self:provider.stage}.yml)}
+  vpc: 
+    securityGroupIds:
+      - sg-c5bda7b9
+      - sg-4b5fba34
+      - sg-725db80d
+    subnetIds:
+      - subnet-4a24ee10
+      - subnet-01e50078
+      - subnet-695f5b21
 
 plugins:
   - serverless-webpack
