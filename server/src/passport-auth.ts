@@ -8,23 +8,27 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: `http://${process.env.HOST}/auth/github/callback`,
+      callbackURL: `${process.env.HOST}/auth/github/callback`,
     },
     (accessToken, refreshToken, profile, cb) => {
-      return cb(null, profile)
+      console.log('strategy callback')
+      cb(null, profile)
     }
   )
 )
 
 passport.serializeUser((user, done) => {
+  console.log('serialize user')
   done(null, user)
 })
 
 passport.deserializeUser((user, done) => {
+  console.log('deserialize user')
   done(null, user)
 })
 
 export function ensureAuthenticated(req, res, next) {
+  console.log('ensure authenticated')
   if (req.isAuthenticated()) {
     return next()
   }
