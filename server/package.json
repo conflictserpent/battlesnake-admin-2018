@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@types/passport": "^0.4.2",
+    "aws-sdk": "^2.188.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
@@ -19,6 +20,7 @@
     "express-session": "^1.15.6",
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
+    "serverless-dynamodb-local": "^0.2.27",
     "serverless-http": "^1.5.2",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0"

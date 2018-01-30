@@ -22,6 +22,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-dynamodb-local
   - serverless-offline
   
 functions:
@@ -35,3 +36,20 @@ functions:
 custom:
   webpackIncludeModules: true
   webpack: webpack.config.js
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+          
