@@ -28,22 +28,9 @@ app.get('/auth/github', passport.authenticate('github'))
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
-
-  var redis = require('redis');
-  console.log("connecting to redis")
-  var client = redis.createClient({
-    host: redisHost,
-    port: '6379'
-  })
-  console.log("redis set")
-  client.set("string key", "string val", redis.print)
-  console.log("redis get")
-  client.get("string key", redis.print)
-  console.log("redis test complete")
 })
 
 app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
-  console.log('authenticated')
   res.redirect('/protected')
 })
 

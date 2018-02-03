@@ -1,8 +1,8 @@
 import request = require('request')
 import _ = require('lodash')
 
-export function createGame(snakes: String[], cb: Function) {
-    let formData = {
+export function createGame(snakes: string[], cb: (id: number) => void) {
+    const formData = {
         "game_form[width]": 20,
         "game_form[height]": 20,
         "game_form[delay]": 10,
@@ -14,13 +14,14 @@ export function createGame(snakes: String[], cb: Function) {
     }
     let count = 0
     snakes.forEach(element => {
-        let key = `game_form[snakes][${count}][url]`
+        const key = `game_form[snakes][${count}][url]`
         formData[key] = element
         count++
     });
     request.post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData }, (err, res, body) => {
-        let game_id = _.get(res.headers['location'].split('/'), 1)
-        if (cb)
-            cb(game_id)
+        const gameId = _.get(res.headers.location.split('/'), 1)
+        if (cb) {
+            cb(gameId)
+        }
     })
 }
