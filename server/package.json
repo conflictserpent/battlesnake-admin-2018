@@ -29,6 +29,7 @@
     "tslint-config-prettier": "^1.6.0"
   },
   "devDependencies": {
+    "@types/jest": "^22.1.1",
     "@types/express": "^4.11.0",
     "jest": "^22.1.4",
     "serverless": "^1.25.0",
