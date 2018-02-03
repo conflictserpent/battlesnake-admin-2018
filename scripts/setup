@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+cd ./server
+yarn
+cd ..
+
+touch ./scripts/env-local.yml
+touch ./scripts/.env
