@@ -1,16 +1,22 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
   "jsRules": {},
   "rules": {
     "no-var-requires": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "object-literal-shorthand": false
+    "object-literal-shorthand": false,
+    "no-console": false
   },
   "typeCheck": true,
   "rulesDirectory": [],
   "linterOptions": {
-    "exclude": ["src/typings/**/*.d.ts"]
+    "exclude": [
+      "src/typings/**/*.d.ts"
+    ]
   }
 }

@@ -1,7 +1,7 @@
 import { Team } from "./team"
 import { Match } from "./match"
 
-const optimalMatchSize = 8
+export const optimalMatchSize = 8
 
 export class Tournament {
     public matches: Match[]
@@ -13,14 +13,33 @@ export class Tournament {
     }
 
     public initialize() {
-        let m = new Match()
-        for (const t of this.teams) {
-            m.teams.push(t)
-            if (m.teams.length >= optimalMatchSize) {
-                this.matches.push(m)
-                m = new Match()
+        this.createMatches(this.teams)
+    }
+
+    private createMatches(teams: Team[]) {
+        const length = teams.length
+        let i = 0
+        let size = 0;
+        let chunks = Math.ceil(length / optimalMatchSize)
+
+        if (length % chunks === 0) {
+            size = Math.floor(length / chunks);
+            while (i < length) {
+                this.addMatch(teams.slice(i, i += size))
             }
         }
+        else {
+            while (i < length) {
+                size = Math.ceil((length - i) / chunks--);
+                this.addMatch(teams.slice(i, i += size));
+            }
+        }
+    }
+
+    private addMatch(teams: Team[]) {
+        const m = new Match()
+        m.teams = teams
+        this.matches.push(m)
     }
 }
 

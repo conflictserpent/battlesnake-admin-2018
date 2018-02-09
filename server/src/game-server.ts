@@ -25,3 +25,9 @@ export function createGame(snakes: string[], cb: (id: number) => void) {
         }
     })
 }
+
+export function getGameStatus(gameId: number, cb: (json: object) => void) {
+    request.get({ url: `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}` }, (err, res, body) => {
+        cb(body)
+    })
+}
