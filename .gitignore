@@ -1,2 +1,5 @@
 scripts/.env
 scripts/env-*.yml
+
+# editors
+.idea*

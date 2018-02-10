@@ -7,6 +7,9 @@ import AWS = require('aws-sdk')
 
 import { ensureAuthenticated } from './passport-auth'
 import config from './config'
+import nunjucks = require('nunjucks')
+import bodyParser = require('body-parser')
+import { createGame, getGameStatus } from './game-server'
 
 const Store = RedisStore(session)
 
@@ -25,6 +28,15 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+nunjucks.configure('views', {
+  autoescape: true,
+  express: app
+});
 
 app.get('/', (req, res) => {
   const inst = new AWS.DynamoDB({
@@ -44,8 +56,34 @@ app.get(
   }
 )
 
+app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('/protected')
+})
+
 app.get('/protected', ensureAuthenticated, (req, res) => {
   res.send('Congrats, sessions work')
+})
+
+
+// GAME TESTING STUFF
+app.get('/start-game', (req, res) => {
+  createGame(['https://dsnek.herokuapp.com', 'https://dsnek.herokuapp.com'], id => {
+    res.send(id)
+  })
+})
+
+app.get('/test-tournament', (req, res) => {
+  res.render('test-tournament.html', {
+    tournament: "test"
+  })
+})
+
+app.post('/game-status', (req, res) => {
+  getGameStatus(req.body.gameId, (json) => {
+    res.render('test-tournament.html', {
+      data: json
+    })
+  })
 })
 
 export default app
