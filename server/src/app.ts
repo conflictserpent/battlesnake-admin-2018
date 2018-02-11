@@ -3,7 +3,6 @@ import passportGithub = require('passport-github')
 import passport = require('passport')
 import session = require('express-session')
 import RedisStore = require('connect-redis')
-import AWS = require('aws-sdk')
 
 import { ensureAuthenticated } from './passport-auth'
 import config from './config'
@@ -39,10 +38,6 @@ nunjucks.configure('views', {
 });
 
 app.get('/', (req, res) => {
-  const inst = new AWS.DynamoDB({
-    region: 'localhost',
-    endpoint: 'http://localhost:8000',
-  })
   res.send('Hello World!')
 })
 
