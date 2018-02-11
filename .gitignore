@@ -4,5 +4,4 @@ scripts/env-*.yml
 # editors
 .idea*
 
-# Amazon local db
-dump.rdb
+.docker-data/
