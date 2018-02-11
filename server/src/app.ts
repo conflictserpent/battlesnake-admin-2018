@@ -9,6 +9,8 @@ import config from './config'
 import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
+import { Tournament } from './tournament';
+import { Team } from './team';
 
 const Store = RedisStore(session)
 
@@ -67,10 +69,27 @@ app.get('/start-game', (req, res) => {
   })
 })
 
-app.get('/test-tournament', (req, res) => {
-  res.render('test-tournament.html', {
-    tournament: "test"
-  })
+app.get('/test-tournament', async (req, res) => {
+  let id = req.query.id
+  if (id) {
+    let t = new Tournament([])
+    await t.load(id)
+    res.render('test-tournament.html', {
+      tournament: JSON.stringify(t),
+    })
+  } else {
+    let teams = []
+    for (let i = 0; i < 100; i++) {
+      teams.push(new Team(i.toString()))
+    }
+    let t = new Tournament(teams)
+    t.initialize()
+    t.save()
+    res.render('test-tournament.html', {
+      tournament: JSON.stringify(t),
+      id: t.id
+    })
+  }
 })
 
 app.post('/game-status', (req, res) => {
