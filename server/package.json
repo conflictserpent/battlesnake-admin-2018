@@ -6,6 +6,7 @@
   "scripts": {
     "sls": "sls",
     "sls:offline": "sls offline start",
+    "start": "sls offline start",
     "sls:deploy": "sls deploy",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "yarn lint",
@@ -14,9 +15,11 @@
   "private": true,
   "dependencies": {
     "@types/passport": "^0.4.2",
+    "aws-sdk": "^2.188.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.18.2",
     "connect-redis": "^3.3.3",
     "express": "^4.16.2",
     "express-nunjucks": "^2.2.3",
@@ -26,6 +29,7 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "request": "^2.83.0",
+    "serverless-dynamodb-local": "^0.2.27",
     "serverless-http": "^1.5.2",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0"
