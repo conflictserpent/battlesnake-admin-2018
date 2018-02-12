@@ -22,7 +22,6 @@ provider:
 
 plugins:
   - serverless-webpack
-  - serverless-dynamodb-local
   - serverless-offline
   
 functions:
@@ -71,4 +70,16 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-          
+    teamTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: teams
+        AttributeDefinitions:
+          - AttributeName: captainId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: captainId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

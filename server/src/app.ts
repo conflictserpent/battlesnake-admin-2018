@@ -58,7 +58,7 @@ app.get('/auth/github/callback', passport.authenticate('github', { failureRedire
 })
 
 app.get('/protected', ensureAuthenticated, (req, res) => {
-  res.send('Congrats, sessions work')
+  res.send('Congrats, sessions work ' + req.user.id)
 })
 
 
