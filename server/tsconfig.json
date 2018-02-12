@@ -2,9 +2,15 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "inlineSourceMap": true,
+    "sourceMap": true,
     "outDir": ".webpack/service",
-    "lib": ["dom", "es2015", "es2015.promise"]
+    "lib": [
+      "dom",
+      "es2015",
+      "es2015.promise"
+    ]
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

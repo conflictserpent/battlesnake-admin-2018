@@ -35,6 +35,12 @@ functions:
 custom:
   webpackIncludeModules: true
   webpack: webpack.config.js
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
 
 resources:
   Resources:
@@ -42,6 +48,19 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: users
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    tournamentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: tournaments
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -64,4 +83,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-      
