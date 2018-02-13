@@ -16,6 +16,6 @@ services:
       - 8000:8000
   
   battlesnake:
-    image: battlesnake/battle_snake
+    image: sendwithus/battlesnake-server
     ports:
       - 3001:3000
