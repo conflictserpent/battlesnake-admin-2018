@@ -9,6 +9,7 @@ import config from './config'
 import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
+import request = require('request')
 import { Tournament } from './tournament';
 import { Team } from './team';
 
@@ -30,17 +31,19 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
 
 nunjucks.configure('views', {
   autoescape: true,
-  express: app
-});
+  express: app,
+})
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World!!!')
 })
 
 app.get('/auth/github', passport.authenticate('github'))
@@ -53,14 +56,17 @@ app.get(
   }
 )
 
-app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/protected')
-})
+app.get(
+  '/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/protected')
+  }
+)
 
 app.get('/protected', ensureAuthenticated, (req, res) => {
   res.send('Congrats, sessions work ' + req.user.id)
 })
-
 
 // GAME TESTING STUFF
 app.get('/start-game', (req, res) => {
@@ -70,19 +76,19 @@ app.get('/start-game', (req, res) => {
 })
 
 app.get('/test-tournament', async (req, res) => {
-  let id = req.query.id
+  const id = req.query.id
   if (id) {
-    let t = new Tournament([])
+    const t = new Tournament([])
     await t.load(id)
     res.render('test-tournament.html', {
       tournament: JSON.stringify(t),
     })
   } else {
-    let teams = []
+    const teams = []
     for (let i = 0; i < 100; i++) {
       teams.push(new Team(i.toString()))
     }
-    let t = new Tournament(teams)
+    const t = new Tournament(teams)
     t.initialize()
     t.save()
     res.render('test-tournament.html', {
@@ -93,9 +99,9 @@ app.get('/test-tournament', async (req, res) => {
 })
 
 app.post('/game-status', (req, res) => {
-  getGameStatus(req.body.gameId, (json) => {
+  getGameStatus(req.body.gameId, json => {
     res.render('test-tournament.html', {
-      data: json
+      data: json,
     })
   })
 })
