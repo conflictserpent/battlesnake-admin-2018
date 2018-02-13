@@ -33,6 +33,9 @@ provider:
         - Fn::GetAtt:
           - TeamsTable
           - Arn
+        - Fn::GetAtt:
+          - TournamentsTable
+          - Arn
 
 plugins:
   - serverless-webpack
@@ -49,6 +52,12 @@ functions:
 custom:
   webpackIncludeModules: true
   webpack: webpack.config.js
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
 
 resources:
   Resources:
@@ -65,6 +74,21 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    
+    TournamentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: tournaments
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    
     TeamsTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -78,4 +102,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-      

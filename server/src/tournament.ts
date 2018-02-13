@@ -1,15 +1,24 @@
 import { Team } from "./team"
 import { Match } from "./match"
+import { getDocumentClient } from './db/client'
+import { promisify } from 'util'
+
+import { v4 } from 'uuid'
 
 export const optimalMatchSize = 8
 
 export class Tournament {
     public matches: Match[]
+    public id: string
+
     private teams: Team[]
+    private table: string
 
     constructor(teams: Team[]) {
         this.teams = teams
         this.matches = []
+        this.table = "tournaments"
+        this.id = v4()
     }
 
     public initialize() {
@@ -40,6 +49,46 @@ export class Tournament {
         const m = new Match()
         m.teams = teams
         this.matches.push(m)
+    }
+
+    public save() {
+        const dc = getDocumentClient()
+        const asyncPut = promisify(dc.put.bind(dc))
+
+        const params = {
+            TableName: this.table,
+            Item: {
+                id: this.id,
+                matches: this.matches
+            },
+        }
+
+        return asyncPut(params)
+    }
+
+    public async load(id: string) {
+        const dc = getDocumentClient()
+        const asyncGet = promisify(dc.get.bind(dc))
+
+        const input = {
+            TableName: this.table,
+            Key: {
+                id: id
+            }
+        }
+
+        let resp = await asyncGet(input)
+        if (!resp.Item.matches) {
+            return
+        }
+
+        this.id = resp.Item.id
+        this.matches = resp.Item.matches
+        for (const m of this.matches) {
+            for (const t of m.teams) {
+                this.teams.push(t)
+            }
+        }
     }
 }
 
