@@ -1,5 +1,5 @@
 import { getDocumentClient } from './client'
-import { promisify } from 'util'
+import promisify = require('util.promisify');
 
 export interface IUser {
   id: string

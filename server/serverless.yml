@@ -12,13 +12,27 @@ provider:
   environment: ${file(../scripts/env-${self:provider.stage}.yml)}
   vpc: 
     securityGroupIds:
-      - sg-c5bda7b9
-      - sg-4b5fba34
-      - sg-725db80d
+      - sg-3f7ec540
     subnetIds:
-      - subnet-4a24ee10
-      - subnet-01e50078
-      - subnet-695f5b21
+      - subnet-680c1720
+      - subnet-12b44c6b
+      - subnet-0d4eec57
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - Fn::GetAtt:
+          - UsersTable
+          - Arn
+        - Fn::GetAtt:
+          - TeamsTable
+          - Arn
 
 plugins:
   - serverless-webpack
@@ -38,7 +52,7 @@ custom:
 
 resources:
   Resources:
-    usersTable:
+    UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: users
@@ -51,7 +65,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    teamTable:
+    TeamsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: teams

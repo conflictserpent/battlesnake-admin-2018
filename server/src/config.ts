@@ -14,7 +14,7 @@ const config = {
 
   // DynamoDB config options
   AWS_REGION: process.env.IS_OFFLINE ? 'localhost' : 'us-west-2',
-  AWS_DYNAMO_ENDPOINT: process.env.IS_OFFLINE ? 'http://localhost:8000' : 'fill-this-in',
+  AWS_DYNAMO_ENDPOINT: process.env.IS_OFFLINE ? 'http://localhost:8000' : 'dynamodb.us-west-2.amazonaws.com',
 }
 
 export default config
