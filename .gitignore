@@ -3,5 +3,9 @@ scripts/env-*.yml
 
 # editors
 .idea*
+.vs-code/
+
+node_modules
+.DS_Store
 
 .docker-data/

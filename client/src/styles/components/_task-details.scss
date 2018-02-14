@@ -1,0 +1,148 @@
+.task-details {
+  margin-top: 2.5rem;
+}
+
+.task-btn-col {
+  width: $btn-size-lg;
+  margin-right: 0.4rem;
+}
+
+.task-description,
+.task-name {
+  display: block;
+  width: 100%;
+  color: $text-color;
+  padding: 0.6rem 1.2rem;
+  
+  border-radius: 0.3rem;
+  border: 0.1rem solid transparent;
+  background: transparent;
+  &:hover {
+    border: 0.1rem solid $toolbar-border-color;
+  }
+}
+
+.task-name {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.task-description {
+  min-height: 12rem;
+  resize: vertical;
+}
+
+.task-description,
+.sub-task-description,
+.task-comment {
+  font-size: 1.6rem;
+  line-height: 1.45;
+}
+
+.action-hidden {
+  opacity: 0;
+  transform: translateX(-10px) scale(0.8);
+  transition: $transition;
+}
+
+.sub-task-section {
+  margin-top: 2rem;
+}
+
+.sub-task {
+  padding: 1.4rem 1.4rem 1.4rem $offset;
+  &:hover {
+    background-color: $subtask-row-color-hover;
+    .action-hidden {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+.sub-task-description,
+.task-comment-wrap {
+  padding: 0 0 0 1.4rem;
+}
+
+.task-meta {
+  padding-left: $offset;
+  padding-right :$offset;
+}
+
+ul.task-meta-items {
+  border-top: 0.1rem solid $toolbar-border-color;
+  margin: 0;
+  padding: 3rem 1.2rem;
+  > li {
+    margin: 0;
+    padding: 0 0 0.4rem 0;
+    list-style: none;
+    font-size: 1.4rem;
+    line-height: 1.45;
+    color: $text-meta-color;
+    font-weight: bold;
+  }
+}
+
+
+.task-comment-user {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+.task-comment-time {
+  font-size: 1.4rem;
+  line-height: 1.45;
+  color: $text-meta-color;
+}
+.task-comment {
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+  line-height: 1.45;
+}
+
+
+.task-new-comment,
+.task-followers {
+  margin-top: 6rem;
+  padding: 1.4rem 0;
+  border-top: 0.1rem solid $toolbar-border-color;
+  border-bottom: 0.1rem solid $toolbar-border-color;
+  background-color: $comment-footer-bg;
+}
+.task-new-comment-input {
+  width: 100%;
+  height: 4rem;
+  padding: 0.6rem;
+  font-size: 1.8rem;
+  border-radius: 0.3rem;
+  border: 0.2rem solid $toolbar-border-color;
+}
+
+.task-followers {
+  margin-top: 0;
+  padding: 0.8rem 4rem 0.8rem 0;
+  border-top: none;
+}
+
+.task-followers-label {
+  width: 8.4rem;
+  margin-right: 2rem;
+  text-align: right;
+  font-size: 1.4rem;
+  line-height: 1.45;
+  color: $text-meta-color;
+  font-weight: bold;
+}
+.task-following-label {
+  width: auto;
+  margin-right: 0;
+  font-size: 1.6rem;
+  line-height: 1.45;
+  color: $text-meta-color;
+  font-weight: bold;
+  border-bottom: 0.1rem dotted currentColor;
+}
+
+
