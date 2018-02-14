@@ -10,8 +10,7 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { Tournament } from './tournament';
-import { Team } from './team';
+import { createRoutes } from './routes/tournament'
 
 const Store = RedisStore(session)
 
@@ -70,32 +69,17 @@ app.get('/protected', ensureAuthenticated, (req, res) => {
 
 // GAME TESTING STUFF
 app.get('/start-game', (req, res) => {
-  createGame(['https://dsnek.herokuapp.com', 'https://dsnek.herokuapp.com'], id => {
+  const teams = []
+  const urls = ['https://dsnek.herokuapp.com', 'https://dsnek.herokuapp.com']
+  urls.forEach(url => {
+    teams.push({
+      snakeUrl: url,
+      name: "a team"
+    })
+  })
+  createGame(teams, id => {
     res.send(id)
   })
-})
-
-app.get('/test-tournament', async (req, res) => {
-  const id = req.query.id
-  if (id) {
-    const t = new Tournament([])
-    await t.load(id)
-    res.render('test-tournament.html', {
-      tournament: JSON.stringify(t),
-    })
-  } else {
-    const teams = []
-    for (let i = 0; i < 100; i++) {
-      teams.push(new Team(i.toString()))
-    }
-    const t = new Tournament(teams)
-    t.initialize()
-    t.save()
-    res.render('test-tournament.html', {
-      tournament: JSON.stringify(t),
-      id: t.id
-    })
-  }
 })
 
 app.post('/game-status', (req, res) => {
@@ -105,5 +89,7 @@ app.post('/game-status', (req, res) => {
     })
   })
 })
+
+createRoutes(app)
 
 export default app

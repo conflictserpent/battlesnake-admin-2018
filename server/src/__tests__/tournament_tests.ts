@@ -1,4 +1,4 @@
-import { createTournament, optimalMatchSize } from "../tournament"
+import { createTournament, optimalMatchSize } from "../db/tournament"
 import { Team } from "../team"
 
 function runTest(numTeams: number, numMatches: number) {

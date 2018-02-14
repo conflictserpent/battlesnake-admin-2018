@@ -1,14 +1,14 @@
-import { Team } from "./team"
-import { Match } from "./match"
-import { getDocumentClient } from './db/client'
 import { promisify } from 'util'
-
 import { v4 } from 'uuid'
+
+import { IMatch, createMatch } from '../match'
+import { Team } from '../team'
+import { getDocumentClient } from '../db/client'
 
 export const optimalMatchSize = 8
 
 export class Tournament {
-    public matches: Match[]
+    public matches: IMatch[]
     public id: string
 
     private teams: Team[]
@@ -46,12 +46,13 @@ export class Tournament {
     }
 
     private addMatch(teams: Team[]) {
-        const m = new Match()
+        const m = createMatch()
         m.teams = teams
         this.matches.push(m)
     }
 
     public save() {
+        console.log(`saving tournament: ${this.id}`)
         const dc = getDocumentClient()
         const asyncPut = promisify(dc.put.bind(dc))
 

@@ -1,7 +1,8 @@
 import request = require('request')
 import _ = require('lodash')
+import { ITeam } from './db/teams';
 
-export function createGame(snakes: string[], cb: (id: number) => void) {
+export function createGame(teams: ITeam[], cb: (id: number) => void) {
     const formData = {
         "game_form[width]": 20,
         "game_form[height]": 20,
@@ -13,11 +14,14 @@ export function createGame(snakes: string[], cb: (id: number) => void) {
         "game_form[game_mode]": "multiplayer"
     }
     let count = 0
-    snakes.forEach(element => {
-        const key = `game_form[snakes][${count}][url]`
-        formData[key] = element
+    teams.forEach(element => {
+        const urlKey = `game_form[snakes][${count}][url]`
+        formData[urlKey] = element.snakeUrl
+        const nameKey = `game_form[snakes][${count}][name]`
+        formData[nameKey] = element.teamName
         count++
     });
+    console.log(formData)
     request.post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData }, (err, res, body) => {
         const gameId = _.get(res.headers.location.split('/'), 1)
         if (cb) {

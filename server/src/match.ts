@@ -1,31 +1,42 @@
 import { Team } from "./team"
 import { createGame, getGameStatus } from "./game-server"
 
-export class Match {
-    public teams: Team[]
-    public results: Team[]
-    private gameId: number
+import { v4 } from 'uuid'
 
-    constructor() {
-        this.teams = []
+export interface IMatch {
+    teams: Team[]
+    results: Team[]
+    matchId: string
+    gameId: number
+}
+
+export function createMatch(): IMatch {
+    return {
+        teams: [],
+        results: [],
+        matchId: v4(),
+        gameId: null,
+    }
+}
+
+export function startGame(match: IMatch, cb: () => void) {
+    createGame(match.teams, n => {
+        match.gameId = n
+        cb()
+    })
+}
+
+export function gameUrl(match: IMatch) {
+    return `${process.env.BATTLESNAKE_SERVER_HOST}/${match.gameId}`
+}
+
+export function matchStatus(match: IMatch, cb: () => void) {
+    if (!match.gameId) {
+        return
     }
 
-    public startGame() {
-        const urls = this.teams.map(t => {
-            return t.snakeUrl
-        })
-        createGame(urls, n => {
-            this.gameId = n
-        })
-    }
-
-    public status() {
-        if (!this.gameId) {
-            return
-        }
-
-        getGameStatus(this.gameId, json => {
-            console.log(json)
-        })
-    }
+    getGameStatus(match.gameId, json => {
+        console.log(json)
+        cb()
+    })
 }

@@ -1,0 +1,27 @@
+<html>
+
+<body>
+    {% for t in tournaments %}
+    <div>
+        {{t.id}}
+        <a href="/delete-tournament?id={{t.id}}">Delete</a>
+        <a href="/reset-matches?id={{t.id}}">Reset Matches</a>
+        <div style="padding-left: 20px">
+            {% for m in t.matches %}
+            <h3>Match: {% if m.gameId %}
+
+                <a href="{{gameServerUrl}}/{{m.gameId}}">View Game</a>
+                {% else %}
+                <a href="/start-match?id={{t.id}}&matchId={{m.matchId}}">run</a>
+                {% endif %}
+            </h3>
+            Game Id: {{m.gameId}}
+            <br/> {% for team in m.teams %} {{ loop.index }} {{team.name}} - {{team.snakeUrl}}
+            <br/> {% endfor %}
+            <br/> {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</body>
+
+</html>
