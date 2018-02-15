@@ -1,0 +1,135 @@
+
+$input-bg: linear-gradient(to left, rgba($purple, 0.2), rgba($blue, 0.2));
+$sidebar-bg: linear-gradient(to top right, lighten($purple,5%), lighten($blue,5%));
+$input-bg-hover: linear-gradient(to left, darken($purple,10%), darken($blue,10%));
+$input-wrap-bg: linear-gradient(to right, $purple, $blue);
+$clip-path:     polygon(100% 0, 100% 18px, calc(100% - 23px) 24px, 100% 30px, 100% 100%, 0 100%, 28px 50%, 0 0);
+$closed-mouth:  polygon(100% 0, 100% 24px, calc(100% - 23px) 22px, 100% 18px, 100% 100%, 0 100%, 28px 50%, 0 0);
+$closed-mouth-2:  polygon(100% 0, 100% 24px, calc(100% - 23px) 22px, 100% 27px, 100% 100%, 0 100%, 28px 50%, 0 0);
+
+
+
+.sidebar {
+  width: 250px;
+  background-image: $sidebar-bg;
+  box-shadow: 5px 0 0 rgba(#fff, 0.5);
+}
+
+.App-logo {
+  width: calc(100% - 32px);
+  margin: auto;
+  height: auto;
+  display: block;
+}
+
+nav {
+  position: relative;
+  display: block;
+  margin: 0 14px;
+  margin-top: 40px;
+  padding: 10px 0 0 0;
+  // &:before {
+  //   content: "";
+  //   position: absolute;
+  //   height: 100%;
+  //   width: calc(100% - 30px);
+  //   left: 15px;
+  //   margin: 0 auto;
+  //   border-radius: 8px;
+  //   background: rgba(255, 255, 255, 0.1);
+  //   box-shadow: 0 2px 5px 1px rgba(0,0,0,0.3);
+  // }
+}
+a.link {
+  font-size: 20px;
+  letter-spacing: 0.8px;
+  margin: 10px auto;
+  color: rgba(#fff,0.9);
+  text-decoration: none;
+}
+
+
+
+//
+
+@keyframes blink {
+  0%, 10%, 16%  {
+    transform: scaleY(1) scaleX(1) translateX(0) translateY(0);
+  }
+  6% {
+    transform: scaleY(0.1) scaleX(0.8) translateX(0) translateY(3px);
+  }
+}
+
+@keyframes mouth {
+  0%, 40%, 48%, 55%  {
+    clip-path: $clip-path;
+  }
+  46%, 51% {
+    clip-path: $closed-mouth;
+  }
+}
+
+a.link {
+  position: relative;
+  z-index: 2;
+  clip-path: $closed-mouth-2;
+  background-image: transparent;
+  opacity: 0.7;
+  margin-left: auto;
+  margin-right: auto;
+
+  height: 40px;
+  width: 100%;
+  border: none;
+  display:flex;
+  align-items: center;
+  padding: 4px 48px;
+  font-weight: normal;
+  font-size: 18px;
+  transition: all 0.3s ease-out;
+  &:focus {
+    outline: none;
+    animation: none;
+    background-image: $input-bg-hover;
+  }
+  &.active {
+    clip-path: $clip-path;
+    opacity: 1;
+    animation: mouth 10s linear infinite;
+    width: calc(100%);
+    background-image: $input-bg-hover;
+  }
+  &:hover {
+    opacity: 1;
+  background-image: $input-bg-hover;
+    
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 8px;
+    background-color: #fff;
+    border-radius: 15px;
+    height: 8px;
+    width: 8px;
+    z-index: 2;
+    transform: scaleY(0.1) scaleX(0.8) translateX(0) translateY(3px);
+    transform-origin: 50% 30%;
+  }
+  &.active:after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 8px;
+    background-color: #fff;
+    border-radius: 15px;
+    height: 8px;
+    width: 8px;
+    z-index: 2;
+    transform: scaleY(1) scaleX(1) translateX(0) translateY(0);    
+    animation: blink 3s linear infinite alternate;
+    transform-origin: 50% 30%;
+  }
+}

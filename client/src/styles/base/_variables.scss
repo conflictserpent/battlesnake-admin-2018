@@ -1,0 +1,66 @@
+//   /$$$$$$   /$$$$$$  /$$        /$$$$$$  /$$$$$$$   /$$$$$$
+//  /$$__  $$ /$$__  $$| $$       /$$__  $$| $$__  $$ /$$__  $$
+// | $$  \__/| $$  \ $$| $$      | $$  \ $$| $$  \ $$| $$  \__/
+// | $$      | $$  | $$| $$      | $$  | $$| $$$$$$$/|  $$$$$$
+// | $$      | $$  | $$| $$      | $$  | $$| $$__  $$ \____  $$
+// | $$    $$| $$  | $$| $$      | $$  | $$| $$  \ $$ /$$  \ $$
+// |  $$$$$$/|  $$$$$$/| $$$$$$$$|  $$$$$$/| $$  | $$|  $$$$$$/
+//  \______/  \______/ |________/ \______/ |__/  |__/ \______/
+
+$pink: hsl(326,82,48);
+$purple: hsl(261,30,28);
+$blue: hsl(207,61,64);
+
+$brightBlue: lighten($blue, 10%);
+
+$body-bg: #F4F5F7;
+$text-color: #2E2D32;
+$text-meta-color: #8B9094;
+
+$btn-text-color: #008285;
+$btn-bg-color: #00ffd9;
+
+$icon-color: #CECECE;
+$icon-border: $icon-color;
+$icon-color-hover: #40C3FD;
+
+$wrapper-border-color: #EDEEF0;
+
+$toolbar-bg-color: #fff;
+$toolbar-border-color: #EAEAEA;
+
+$tooltip-bg: #242833;
+
+// Projects
+$project-row-bg-hover: #F7F8FA;
+$project-bg-color: #ECF1F4;
+$project-bg-color-hover: #E3E4E6; //darker
+$project-label-color: #888F95;
+
+//Subtasks
+$subtask-row-color-hover: #EEF9FF;
+
+//Comments
+$comment-footer-bg: $project-row-bg-hover;
+
+//   /$$$$$$  /$$$$$$ /$$$$$$$$ /$$$$$$$$  /$$$$$$
+//  /$$__  $$|_  $$_/|_____ $$ | $$_____/ /$$__  $$
+// | $$  \__/  | $$       /$$/ | $$      | $$  \__/
+// |  $$$$$$   | $$      /$$/  | $$$$$   |  $$$$$$
+//  \____  $$  | $$     /$$/   | $$__/    \____  $$
+//  /$$  \ $$  | $$    /$$/    | $$       /$$  \ $$
+// |  $$$$$$/ /$$$$$$ /$$$$$$$$| $$$$$$$$|  $$$$$$/
+//  \______/ |______/|________/|________/ \______/
+
+$offset: 4rem;
+$btn-size-lg: 4.4rem;
+$btn-size-sm: 3rem;
+
+$icon-size-lg: 2.4rem;
+$icon-size-sm: 1.6rem;
+
+
+
+// Transitions
+
+$transition: transform 0.1s ease-out, opacity 0.1s ease-out, box-shadow 0.1s ease-out;

@@ -1,0 +1,48 @@
+.bs-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $btn-text-color;
+  cursor: pointer;
+  background-color: $btn-bg-color;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 25px;
+  box-shadow: 0 2px 0 darken($btn-bg-color, 10%);
+  text-shadow: 0 1px 0 rgba(#fff, 0.6);
+  &.btn-block {
+    width: 100%;
+  }
+}
+
+.btn-text {
+  padding: 1.4rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: currentColor;
+}
+
+// hover 
+.bs-btn {
+  &:hover, &:focus {
+    background-color: darken($btn-bg-color, 4%);
+    outline: none;
+  }
+  &:active {
+    background-color: darken($btn-bg-color, 7%);
+    outline: none;
+    box-shadow: 0 1px 0 darken($btn-bg-color, 10%);
+  }
+}
+
+.btn-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  .icon {
+    border: none;
+  }
+}
+
+// 16 - small
+// 24 - large
