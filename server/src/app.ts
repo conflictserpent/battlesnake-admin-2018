@@ -10,7 +10,7 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { createRoutes } from './routes/tournament'
+import { router as tournyRouter } from './routes/tournament'
 
 const Store = RedisStore(session)
 
@@ -90,6 +90,6 @@ app.post('/game-status', (req, res) => {
   })
 })
 
-createRoutes(app)
+app.use('/tournaments', tournyRouter)
 
 export default app
