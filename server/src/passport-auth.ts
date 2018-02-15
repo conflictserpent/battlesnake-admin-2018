@@ -18,7 +18,6 @@ const strategyCallback = async (accessToken, refreshToken, profile, cb) => {
     id: profile.id,
     displayName: profile.displayName,
     userName: profile.userName,
-    isTeamCaptain: false,
   }
   await putUser(user)
   cb(null, user)

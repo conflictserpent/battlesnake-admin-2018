@@ -1,5 +1,4 @@
 import { getDocumentClient } from './client'
-import promisify = require('util.promisify');
 
 export interface IUser {
   id: string
@@ -7,7 +6,7 @@ export interface IUser {
   userName: string
 
   // If the user is a captain then they'll be a team
-  isTeamCaptain: boolean
+  isTeamCaptain?: boolean
   team?: string
 
   teamMember?: string
@@ -16,26 +15,20 @@ export interface IUser {
 const USER_TABLE = 'users'
 
 export function putUser(user: IUser) {
-  const dc = getDocumentClient()
-  const asyncPut = promisify(dc.put.bind(dc))
-
   const params = {
     TableName: USER_TABLE,
     Item: user,
   }
-
-  return asyncPut(params)
+  return getDocumentClient().put(params).promise()
 }
 
 export async function findUserById(id: string) {
-  const dc = getDocumentClient()
-  const asyncGet = promisify(dc.get.bind(dc))
   const params = {
     TableName: USER_TABLE,
     Key: {
       id,
     },
   }
-  const item = await asyncGet(params)
+  const item = await getDocumentClient().get(params).promise()
   return item.Item
 }

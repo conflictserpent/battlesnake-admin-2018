@@ -102,3 +102,17 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    InvitationTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: invitations
+        AttributeDefinitions:
+          - AttributeName: invitationId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: invitationId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

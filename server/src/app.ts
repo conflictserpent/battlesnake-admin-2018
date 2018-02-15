@@ -11,6 +11,7 @@ import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
 import { createRoutes } from './routes/tournament'
+import { userRouter, invitationRouter } from './rest'
 
 const Store = RedisStore(session)
 
@@ -35,6 +36,9 @@ app.use(
     extended: true,
   })
 )
+
+app.use('/self', userRouter)
+app.use('/invitations', invitationRouter)
 
 nunjucks.configure('views', {
   autoescape: true,

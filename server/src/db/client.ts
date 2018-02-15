@@ -1,4 +1,5 @@
 import AWS = require('aws-sdk')
+import promisify = require('util.promisify')
 import config from '../config'
 
 const opts = {
@@ -22,3 +23,9 @@ export const getDocumentClient = () => {
   }
   return new AWS.DynamoDB.DocumentClient()
 }
+
+const dc = getDocumentClient()
+
+export const asyncGet = promisify(dc.get.bind(dc))
+export const asyncPut = promisify(dc.put.bind(dc))
+export const asyncUpdate = promisify(dc.update.bind(dc))
