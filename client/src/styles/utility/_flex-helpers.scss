@@ -1,0 +1,99 @@
+// Flex Parent Helpers - chain them
+.hbox {
+	display: flex;
+	flex-direction: row;
+}
+
+.vbox {
+	display: flex;
+	flex-direction: column;
+}
+
+// common align items
+.ai-fe {
+	align-items: flex-end;
+}
+.ai-fs {
+	align-items: flex-start;
+}
+.ai-c {
+	align-items: center;
+}
+.ai-s {
+	align-items: stretch;
+}
+
+// common align-content
+.ac-fe {
+	align-content: flex-end;
+}
+.ac-fs {
+	align-content: flex-start;
+}
+.ac-c {
+	align-content: center;
+}
+.ac-s {
+	align-content: stretch;
+}
+
+// common justify content
+.jc-fs {
+	justify-content: flex-start;
+}
+.jc-fe {
+	justify-content: flex-end;
+}
+.jc-c {
+	justify-content: center;
+}
+.jc-sb {
+	justify-content: space-between;
+}
+.jc-sa {
+	justify-content: space-around;
+}
+
+// Flex child 
+.as-fe {
+	align-self: flex-end;
+}
+.as-fs {
+	align-self: flex-start;
+}
+.as-c {
+	align-self: center;
+}
+.as-s {
+	align-self: stretch;
+}
+
+.f-1 {
+	flex: 1;
+}
+.f-2 {
+	flex: 2;
+}
+.f-3 {
+	flex: 3;
+}
+.f-4 {
+	flex: 4;
+}
+.f-5 {
+	flex: 5;
+}
+.f-6 {
+	flex: 6;
+}
+
+.fd-rr {
+	flex-direction: row-reverse;
+}
+
+.fill-width {
+	width: 100%;
+}
+.fill-height {
+	height: 100%;
+}

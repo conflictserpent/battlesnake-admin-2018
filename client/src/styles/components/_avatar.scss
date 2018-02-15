@@ -1,0 +1,12 @@
+.avatar {
+  display: block;
+  height: $btn-size-lg;
+  width: $btn-size-lg;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  &.avatar-sm {
+    height: $btn-size-sm;
+    width: $btn-size-sm;
+  }
+}

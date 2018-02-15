@@ -1,0 +1,28 @@
+.project-row {
+  height: 40px;
+  &:hover {
+    background-color: $project-row-bg-hover;
+    .project-label {
+      background-color: $project-bg-color-hover;
+    }
+    .btn-sm {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .btn-sm {
+    margin-left: 0.6rem;
+    opacity: 0;
+    transform: translateX(-10px) scale(0.8);
+    transition: $transition;
+  }
+}
+.project-label {
+  padding: 0.6rem 1.4rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  max-height: 3rem;
+  color: $project-label-color;
+  background-color: $project-bg-color;
+  border-radius: 1.2rem;
+}

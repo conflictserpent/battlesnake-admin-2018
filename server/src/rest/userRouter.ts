@@ -1,11 +1,13 @@
 import express = require('express')
+import { Router } from 'express'
 import { ensureAuthenticated } from '../passport-auth'
 import { putUser, IUser } from '../db/users'
-import { updateTeam, ITeam} from '../db/teams'
+import { updateTeam, ITeam } from '../db/teams'
 import { addInvitation, getInvitation } from '../db/invitations'
 import * as _ from 'lodash'
 
-export const router = express.Router()
+export const router = Router()
+
 
 router.get('/', ensureAuthenticated, (req: express.Request, res: express.Response) => {
   res.json(req.user)
@@ -18,14 +20,14 @@ router.post(
     // TODO:  Pre-req: Make sure user isn't on a team already
     const user: IUser = _.cloneDeep(req.user)
     const captainId = user.id
-    
+
     user.isTeamCaptain = true
     user.team = captainId
-    
+
     const team: ITeam = {
       captainId: captainId,
-      teamName: '',
-      snakeUrl: '',
+      teamName: null,
+      snakeUrl: null,
     }
     await updateTeam(team)
     await putUser(user)

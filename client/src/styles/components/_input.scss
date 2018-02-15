@@ -1,0 +1,26 @@
+// vars
+$input-border: hsl(207,61,64);
+$label-color: hsl(326,82,48);
+
+.input-control {
+	height: 40px;
+	padding: 4px 8px;
+	margin-top: 4px;
+	margin-bottom: 16px;
+	border: none;
+	font-size: 1.8rem;
+	background-color: #fff;
+	border-radius: 4px;
+	box-shadow: 0 0 0 2px rgba($input-border, 0.3);
+	transition: all 0.2s linear;
+	&:focus {
+	box-shadow: 0 0 0 4px rgba(lighten($input-border, 15%), 1),;
+	outline: none;
+	}
+}
+.input-wrap {
+	display: flex;
+	flex-direction: column;
+	font-size: 1.6rem;
+	color: $label-color;
+}

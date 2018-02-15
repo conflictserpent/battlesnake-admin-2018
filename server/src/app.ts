@@ -10,8 +10,8 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { createRoutes } from './routes/tournament'
 import { userRouter, invitationRouter } from './rest'
+import { router as tournyRouter } from './routes/tournament'
 
 const Store = RedisStore(session)
 
@@ -39,6 +39,7 @@ app.use(
 
 app.use('/self', userRouter)
 app.use('/invitations', invitationRouter)
+app.use('/tournaments', tournyRouter)
 
 nunjucks.configure('views', {
   autoescape: true,
@@ -59,14 +60,6 @@ app.get(
   }
 )
 
-app.get(
-  '/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/protected')
-  }
-)
-
 app.get('/protected', ensureAuthenticated, (req, res) => {
   res.send('Congrats, sessions work ' + req.user.id)
 })
@@ -78,7 +71,7 @@ app.get('/start-game', (req, res) => {
   urls.forEach(url => {
     teams.push({
       snakeUrl: url,
-      name: "a team"
+      name: 'a team',
     })
   })
   createGame(teams, id => {
@@ -93,7 +86,5 @@ app.post('/game-status', (req, res) => {
     })
   })
 })
-
-createRoutes(app)
 
 export default app
