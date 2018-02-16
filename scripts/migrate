@@ -7,7 +7,6 @@ aws dynamodb create-table --table-name users \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   --endpoint http://localhost:8000
 
-
 aws dynamodb create-table --table-name teams \
   --attribute-definitions AttributeName=captainId,AttributeType=S \
   --key-schema AttributeName=captainId,KeyType=HASH \
@@ -19,6 +18,5 @@ aws dynamodb create-table --table-name tournaments \
   --key-schema AttributeName=id,KeyType=HASH \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   --endpoint http://localhost:8000
-
 
 # Check results: aws dynamodb list-tables --endpoint http://localhost:8000

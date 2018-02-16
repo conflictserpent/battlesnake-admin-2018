@@ -22,5 +22,11 @@ export const members = [
     email: "joram@gmail.com",
     name: "John",
     createdAt: "Feb 12, 2017"
+  },
+  {
+    github: "brandonb927",
+    email: "battlesnake@brandonb.ca",
+    name: "Brandon",
+    createdAt: "Feb 15, 2018"
   }
 ];

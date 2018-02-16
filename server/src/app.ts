@@ -55,14 +55,6 @@ app.get(
   }
 )
 
-app.get(
-  '/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/protected')
-  }
-)
-
 app.get('/protected', ensureAuthenticated, (req, res) => {
   res.send('Congrats, sessions work ' + req.user.id)
 })

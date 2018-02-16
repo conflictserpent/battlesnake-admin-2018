@@ -7,7 +7,7 @@ import { Team } from '../team'
 import { getDocumentClient } from '../db/client'
 import { startGame } from '../match'
 
-export const router = express.router()
+export const router = express.Router()
 
 const snakeUrls = ['http://35.230.120.237', 'https://dsnek.herokuapp.com']
 
