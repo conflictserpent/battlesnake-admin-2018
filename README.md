@@ -1,7 +1,7 @@
-# Battlesnake Admin
+# BattleSnake Admin
 
 This project is for the admin dashboard of the 2018 [battlesnake.io](https://battlesnake.io) coding event.
-It's gameserver lives at http://github.com/sendwithus/battlesnake-server.
+The actual game server lives at <http://github.com/sendwithus/battlesnake-server>.
 
 ## Getting Started
 
@@ -24,3 +24,13 @@ BATTLESNAKE_SERVER_HOST: http://localhost:3001
 Go [here](https://github.com/settings/developers) to create a new Github OAuth app to get your credentials to fill in `GITHUB_CLIENT_*` values above.
 
 More info here: <https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/>
+
+### Run the required services
+
+First, run `docker-compose -f docker-compose.yml up -d` to spin up all the services including the battlesnake game server.
+
+Then, run the migration script for dynamodb `./scripts/migrate`.
+
+### Start the server and client build
+
+To get the server and client running, open two terminal windows and run `./scripts/run-server` and `./scripts/run-cient` in them respectively.
