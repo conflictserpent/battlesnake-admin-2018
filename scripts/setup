@@ -2,6 +2,12 @@
 
 cd ./server
 yarn
+
+cd ..
+
+cd ./client
+yarn
+
 cd ..
 
 touch ./scripts/env-local.yml
