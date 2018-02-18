@@ -11,6 +11,7 @@ import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
 import { router as tournyRouter } from './routes/tournament'
+import { ITeam } from './db/teams';
 
 const Store = RedisStore(session)
 
@@ -61,24 +62,23 @@ app.get('/protected', ensureAuthenticated, (req, res) => {
 
 // GAME TESTING STUFF
 app.get('/start-game', (req, res) => {
-  const teams = []
+  const teams: ITeam[] = []
   const urls = ['https://dsnek.herokuapp.com', 'https://dsnek.herokuapp.com']
   urls.forEach(url => {
     teams.push({
+      id: "",
       snakeUrl: url,
-      name: "a team"
+      teamName: "a team",
+      captainId: "",
     })
   })
-  createGame(teams, id => {
-    res.send(id)
-  })
+  createGame(teams)
 })
 
 app.post('/game-status', (req, res) => {
-  getGameStatus(req.body.gameId, json => {
-    res.render('test-tournament.html', {
-      data: json,
-    })
+  const json = getGameStatus(req.body.gameId)
+  res.render('test-tournament.html', {
+    data: json,
   })
 })
 

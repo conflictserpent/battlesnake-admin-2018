@@ -1,8 +1,9 @@
 import request = require('request')
 import _ = require('lodash')
 import { ITeam } from './db/teams';
+import { promisify } from 'util';
 
-export function createGame(teams: ITeam[], cb: (id: number) => void) {
+export async function createGame(teams: ITeam[]) {
     const formData = {
         "game_form[width]": 20,
         "game_form[height]": 20,
@@ -21,17 +22,35 @@ export function createGame(teams: ITeam[], cb: (id: number) => void) {
         formData[nameKey] = element.teamName
         count++
     });
-    console.log(formData)
-    request.post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData }, (err, res, body) => {
-        const gameId = _.get(res.headers.location.split('/'), 1)
-        if (cb) {
-            cb(gameId)
-        }
-    })
+    const post = promisify(request.post)
+    const res = await post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData })
+    const gameId = _.get(res.headers.location.split('/'), 1)
+    return gameId
 }
 
-export function getGameStatus(gameId: number, cb: (json: object) => void) {
-    request.get({ url: `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}` }, (err, res, body) => {
-        cb(body)
-    })
+export interface IGameStatus {
+    status: string
+    board: IBoard
+}
+
+interface IBoard {
+    snakes: ISnake[]
+    deadSnakes: IDeadSnake[]
+}
+
+interface ISnake {
+    name: string
+}
+interface IDeadSnake {
+    name: string
+    death: IDeath
+}
+interface IDeath {
+    turn: number
+}
+
+export async function getGameStatus(gameId: number): Promise<IGameStatus> {
+    const get = promisify(request.get)
+    const res = await get({ url: `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}` })
+    return JSON.parse(res.body)
 }
