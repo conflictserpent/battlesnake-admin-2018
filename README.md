@@ -33,4 +33,4 @@ Then, run the migration script for dynamodb `./scripts/migrate`.
 
 ### Start the server and client build
 
-To get the server and client running, open two terminal windows and run `./scripts/run-server` and `./scripts/run-cient` in them respectively.
+To get the server and client running, open two terminal windows and run `./scripts/run-server` and `./scripts/run-client` in them respectively.
