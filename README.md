@@ -14,7 +14,7 @@ Create `./scripts/env-local.yml` and load it with:
 ```yaml
 GITHUB_CLIENT_ID: <fill in with your own>
 GITHUB_CLIENT_SECRET: <fill in with your own>
-GITHUB_CALLBACK_URL: http://localhost:3000/auth/github/callback
+GITHUB_CALLBACK_URL: http://localhost:3009/auth/github/callback
 REDIS_HOST: localhost
 BATTLESNAKE_SERVER_HOST: http://localhost:3001
 ```
