@@ -27,7 +27,7 @@ More info here: <https://developer.github.com/apps/building-oauth-apps/creating-
 
 ### Run the required services
 
-First, run `docker-compose -f docker-compose.yml up -d` to spin up all the services including the battlesnake game server.
+First, run `./scripts/services` to spin up all the services including the battlesnake game server.
 
 Then, run the migration script for dynamodb `./scripts/migrate`.
 
