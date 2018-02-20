@@ -9,7 +9,7 @@ export interface ITeam {
 
 const TEAM_TABLE = 'teams'
 
-export async function getTeam(teamId: string) {
+export async function getTeam(teamId: string): Promise<ITeam> {
   const params = {
     TableName: TEAM_TABLE,
     Key: {
@@ -19,7 +19,7 @@ export async function getTeam(teamId: string) {
   const item = await getDocumentClient()
     .get(params)
     .promise()
-  return item.Item
+  return item.Item as ITeam
 }
 
 // TODO: Make sure user is on this team (otherwise - unauthorized)

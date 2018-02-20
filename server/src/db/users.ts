@@ -4,12 +4,11 @@ export interface IUser {
   // Info from Github
   displayName: string | null
   username: string
-  
+
   // If the user is a captain then they'll be a team
-  id?: string  // might be null: user could be invited, but not signed in yet
+  id?: string // might be null: user could be invited, but not signed in yet
   isTeamCaptain: boolean
-  team?: string
-  teamMember?: string
+  teamId?: string
 }
 
 const setDefaults = (u: IUser): IUser => {
@@ -18,8 +17,7 @@ const setDefaults = (u: IUser): IUser => {
     id: u.id || null,
     displayName: u.displayName || null,
     isTeamCaptain: u.isTeamCaptain || false,
-    team: u.team || null,
-    teamMember: u.teamMember || null,
+    teamId: u.teamId || null,
   }
   return user
 }
@@ -34,13 +32,12 @@ export async function updateUser(u: IUser): Promise<IUser> {
       username: user.username,
     },
     UpdateExpression:
-      'set displayName = :dn, id = :id, isTeamCaptain = :tc, team = :t, teamMember = :tm',
+      'set displayName = :dn, id = :id, isTeamCaptain = :tc, teamId = :t, teamMember = :tm',
     ExpressionAttributeValues: {
       ':dn': user.displayName,
       ':id': user.id,
       ':tc': user.isTeamCaptain,
-      ':t': user.team,
-      ':tm': user.teamMember,
+      ':t': user.teamId,
     },
     ReturnValues: 'ALL_NEW',
   }
@@ -50,7 +47,7 @@ export async function updateUser(u: IUser): Promise<IUser> {
   return res.Attributes as IUser
 }
 
-export async function findUserById(id: string): Promise<IUser> {
+export async function findUserByUserName(id: string): Promise<IUser> {
   const params = {
     TableName: USER_TABLE,
     Key: {
@@ -61,4 +58,21 @@ export async function findUserById(id: string): Promise<IUser> {
     .get(params)
     .promise()
   return item.Item as IUser
+}
+
+export async function getTeamMembers(teamId: string): Promise<IUser[]> {
+  const params = {
+    TableName: USER_TABLE,
+    KeyConditionExpression: '#tm = :tid',
+    ExpressionAttributeNames: {
+      '#tm': 'teamId',
+    },
+    ExpressionAttributeValues: {
+      ':tid': teamId,
+    },
+  }
+  const result = await getDocumentClient()
+    .query(params)
+    .promise()
+  return result.Items as IUser[]
 }

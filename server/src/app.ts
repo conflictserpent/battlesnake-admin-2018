@@ -10,7 +10,7 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter } from './rest'
+import { userRouter, teamRouter } from './rest'
 import { router as tournyRouter } from './routes/tournament'
 import { ITeam } from './db/teams'
 
@@ -39,6 +39,7 @@ app.use(
 )
 
 app.use('/self', userRouter)
+app.use('/team', teamRouter)
 app.use('/tournaments', tournyRouter)
 
 nunjucks.configure('views', {

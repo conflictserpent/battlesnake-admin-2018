@@ -1,7 +1,7 @@
 import passportGithub = require('passport-github')
 import passport = require('passport')
 import config from './config'
-import { updateUser, findUserById, IUser } from './db/users'
+import { updateUser, findUserByUserName, IUser } from './db/users'
 
 const GitHubStrategy = (passportGithub as any).Strategy
 
@@ -29,7 +29,7 @@ passport.serializeUser((user: IUser, done) => {
 
 passport.deserializeUser(async (id, done) => {
   // id has to match the same type as `serialize user`. Casting is ok
-  const user = await findUserById(id as string)
+  const user = await findUserByUserName(id as string)
   done(null, user)
 })
 
