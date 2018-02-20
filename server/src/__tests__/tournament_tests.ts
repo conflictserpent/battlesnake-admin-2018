@@ -1,10 +1,15 @@
 import { createTournament, optimalMatchSize } from "../db/tournament"
-import { Team } from "../team"
+import { ITeam } from "../db/teams"
 
 function runTest(numTeams: number, numMatches: number) {
-    const teams: Team[] = []
+    const teams: ITeam[] = []
     for (let i = 0; i < numTeams; i++) {
-        teams.push(new Team(i.toString()))
+        teams.push({
+            id: i.toString(),
+            captainId: "",
+            snakeUrl: "",
+            teamName: "",
+        })
     }
     const t = createTournament(teams)
     expect(t.matches).toHaveLength(numMatches)

@@ -1,99 +1,108 @@
 import { promisify } from 'util'
 import { v4 } from 'uuid'
 
-import { IMatch, createMatch } from '../match'
-import { Team } from '../team'
-import { getDocumentClient } from '../db/client'
+import { IMatch, createMatch } from './match'
+import { getDocumentClient } from './client'
+import { ITeam } from './teams';
 
 export const optimalMatchSize = 8
 
-export class Tournament {
-  public matches: IMatch[]
-  public id: string
+const dynamoTable = "tournaments"
 
-  private teams: Team[]
-  private table: string
+export interface ITournament {
+  id: string,
+  matches: IMatch[],
+  teams: ITeam[],
+}
 
-  constructor(teams: Team[]) {
-    this.teams = teams
-    this.matches = []
-    this.table = 'tournaments'
-    this.id = v4()
+export function createTournament(teams: ITeam[]) {
+  const obj: ITournament = {
+    id: v4(),
+    matches: [],
+    teams: teams,
+  }
+  initializeTournament(obj)
+  return obj
+}
+
+export function initializeTournament(tournament: ITournament) {
+  createMatches(tournament)
+}
+
+export function saveTournament(tournament: ITournament) {
+  console.log(`saving tournament: ${tournament.id}`)
+  const dc = getDocumentClient()
+  const asyncPut = promisify(dc.put.bind(dc))
+
+  const params = {
+    TableName: dynamoTable,
+    Item: {
+      id: tournament.id,
+      matches: tournament.matches,
+    },
   }
 
-  public initialize() {
-    this.createMatches(this.teams)
+  return asyncPut(params)
+}
+
+export async function loadTournament(id: string) {
+  const dc = getDocumentClient()
+  const asyncGet = promisify(dc.get.bind(dc))
+
+  const input = {
+    TableName: dynamoTable,
+    Key: {
+      id: id,
+    },
   }
 
-  public save() {
-    console.log(`saving tournament: ${this.id}`)
-    const dc = getDocumentClient()
-    const asyncPut = promisify(dc.put.bind(dc))
-
-    const params = {
-      TableName: this.table,
-      Item: {
-        id: this.id,
-        matches: this.matches,
-      },
-    }
-
-    return asyncPut(params)
+  const resp = await asyncGet(input)
+  if (!resp.Item.matches) {
+    return
   }
 
-  public async load(id: string) {
-    const dc = getDocumentClient()
-    const asyncGet = promisify(dc.get.bind(dc))
+  const teams: ITeam[] = []
 
-    const input = {
-      TableName: this.table,
-      Key: {
-        id: id,
-      },
-    }
-
-    const resp = await asyncGet(input)
-    if (!resp.Item.matches) {
-      return
-    }
-
-    this.id = resp.Item.id
-    this.matches = resp.Item.matches
-    for (const m of this.matches) {
-      for (const t of m.teams) {
-        this.teams.push(t)
-      }
-    }
+  let t: ITournament = {
+    id: resp.Item.id,
+    matches: resp.Item.matches,
+    teams: teams,
   }
 
-  private createMatches(teams: Team[]) {
-    const length = teams.length
-    let i = 0
-    let size = 0
-    let chunks = Math.ceil(length / optimalMatchSize)
-
-    if (length % chunks === 0) {
-      size = Math.floor(length / chunks)
-      while (i < length) {
-        this.addMatch(teams.slice(i, (i += size)))
-      }
-    } else {
-      while (i < length) {
-        size = Math.ceil((length - i) / chunks--)
-        this.addMatch(teams.slice(i, (i += size)))
-      }
+  for (const m of t.matches) {
+    for (const team of m.teams) {
+      t.teams.push(team)
     }
   }
+  console.log("loaded tournament")
 
-  private addMatch(teams: Team[]) {
-    const m = createMatch()
-    m.teams = teams
-    this.matches.push(m)
+  return t
+}
+
+function createMatches(tournament: ITournament) {
+  const teams = tournament.teams
+  const length = teams.length
+  let i = 0
+  let size = 0
+  let chunks = Math.ceil(length / optimalMatchSize)
+
+  if (length % chunks === 0) {
+    size = Math.floor(length / chunks)
+    while (i < length) {
+      const m = addMatch(teams.slice(i, (i += size)))
+      tournament.matches.push(m)
+    }
+  } else {
+    while (i < length) {
+      size = Math.ceil((length - i) / chunks--)
+      const m = addMatch(teams.slice(i, (i += size)))
+      tournament.matches.push(m)
+    }
   }
 }
 
-export function createTournament(teams: Team[]): Tournament {
-  const t = new Tournament(teams)
-  t.initialize()
-  return t
+function addMatch(teams: ITeam[]) {
+  const m = createMatch()
+  m.teams = teams
+  return m
 }

@@ -1,7 +1,9 @@
 import { getDocumentClient, asyncPut } from './client'
 
 export interface ITeam {
-  captainId: string // id of team captain. Also the table hash key
+  id: string
+  captainId: string  // id of team captain. Also the table hash key
+
   teamName: string
   snakeUrl: string
 }

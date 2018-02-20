@@ -10,7 +10,7 @@ provider:
   # This is fine for offline, but should really use SSM
   # https://serverless.com/framework/docs/providers/aws/guide/variables/#reference-variables-using-the-ssm-parameter-store
   environment: ${file(../scripts/env-${self:provider.stage}.yml)}
-  vpc: 
+  vpc:
     securityGroupIds:
       - sg-3f7ec540
     subnetIds:
@@ -19,7 +19,7 @@ provider:
       - subnet-0d4eec57
   iamRoleStatements:
     - Effect: "Allow"
-      Action: 
+      Action:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
@@ -40,7 +40,7 @@ provider:
 plugins:
   - serverless-webpack
   - serverless-offline
-  
+
 functions:
   app:
     handler: entry.handler
@@ -74,7 +74,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    
+
     TournamentsTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -88,7 +88,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    
+
     TeamsTable:
       Type: AWS::DynamoDB::Table
       Properties:
