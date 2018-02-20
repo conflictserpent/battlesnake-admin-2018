@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Image, Table } from "semantic-ui-react";
-import { members } from "../data/sampledata";
+import React, { Component } from 'react'
+import { Image, Table } from 'semantic-ui-react'
+import { members } from '../data/sampledata'
 
 class Team extends Component {
-  render() {
+  render () {
     return (
       <Table celled inverted>
         <Table.Header>
@@ -28,12 +28,12 @@ class Team extends Component {
                 <Table.Cell />
                 <Table.Cell textAlign="right">{member.email}</Table.Cell>
               </Table.Row>
-            );
+            )
           })}
         </Table.Body>
       </Table>
-    );
+    )
   }
 }
 
-export default Team;
+export default Team

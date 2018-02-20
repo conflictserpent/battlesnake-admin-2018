@@ -1,0 +1,9 @@
+{
+    "extends": [
+        "standard",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "react/jsx-key": "off"
+    }
+}

@@ -4,6 +4,7 @@ scripts/env-*.yml
 # editors
 .idea*
 .vs-code/
+.vscode/
 
 node_modules
 .DS_Store
