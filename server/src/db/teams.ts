@@ -1,8 +1,7 @@
-import { getDocumentClient, asyncPut } from './client'
+import { getDocumentClient } from './client'
 
 export interface ITeam {
-  id: string
-  captainId: string  // id of team captain. Also the table hash key
+  captainId: string // id of team captain. Also the table hash key
 
   teamName: string
   snakeUrl: string
@@ -23,14 +22,23 @@ export async function getTeam(teamId: string) {
   return item.Item
 }
 
-
 // TODO: Make sure user is on this team (otherwise - unauthorized)
-export async function updateTeam(team: ITeam ) {
+export async function updateTeam(team: ITeam) {
   const params = {
     TableName: TEAM_TABLE,
-    Item: {
-      ...team
+    Key: {
+      captainId: team.captainId,
     },
+    UpdateExpression: 'set snakeUrl = :su, teamName = :tn',
+    ExpressionAttributeValues: {
+      ':tn': team.teamName,
+      ':su': team.snakeUrl,
+    },
+    ReturnValues: 'ALL_NEW',
   }
-  return asyncPut(params)
+
+  const all = await getDocumentClient()
+    .update(params)
+    .promise()
+  return all.Attributes
 }

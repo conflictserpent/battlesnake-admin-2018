@@ -26,6 +26,6 @@ export const getDocumentClient = () => {
 
 const dc = getDocumentClient()
 
-export const asyncGet = promisify(dc.get.bind(dc))
-export const asyncPut = promisify(dc.put.bind(dc))
-export const asyncUpdate = promisify(dc.update.bind(dc))
+// export const asyncGet = promisify(dc.get.bind(dc))
+// export const asyncPut = promisify(dc.put.bind(dc))
+// export const asyncUpdate = promisify(dc.update.bind(dc))

@@ -10,9 +10,9 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter, invitationRouter } from './rest'
+import { userRouter } from './rest'
 import { router as tournyRouter } from './routes/tournament'
-import { ITeam } from './db/teams';
+import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
 
@@ -39,7 +39,6 @@ app.use(
 )
 
 app.use('/self', userRouter)
-app.use('/invitations', invitationRouter)
 app.use('/tournaments', tournyRouter)
 
 nunjucks.configure('views', {
@@ -71,10 +70,9 @@ app.get('/start-game', (req, res) => {
   const urls = ['https://dsnek.herokuapp.com', 'https://dsnek.herokuapp.com']
   urls.forEach(url => {
     teams.push({
-      id: "",
       snakeUrl: url,
-      teamName: "a team",
-      captainId: "",
+      teamName: 'a team',
+      captainId: '',
     })
   })
   createGame(teams)

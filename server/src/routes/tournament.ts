@@ -9,7 +9,7 @@ import { ITeam } from '../db/teams';
 import { v4 } from 'uuid'
 import { getGameStatus } from '../game-server';
 
-export const router = express.Router()
+export const router = Router()
 
 const snakeUrls = ['http://35.230.120.237', 'https://dsnek.herokuapp.com']
 
@@ -47,7 +47,7 @@ router.get('/match-status', async (req, res) => {
   const matchId = req.query.matchId
 
   const t = await loadTournament(req.query.id)
-  const m = t.matches.find(match => match.matchId == matchId)
+  const m = t.matches.find(match => match.matchId === matchId)
   if (m == null || !m.gameId) {
     res.redirect('/tournaments')
     return
@@ -68,7 +68,6 @@ router.get('/extra', async (req, res) => {
     const teams = []
     for (let i = 0; i < 100; i++) {
       const team: ITeam = {
-        id: v4(),
         snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
         teamName: company.companyName(),
         captainId: v4(),
