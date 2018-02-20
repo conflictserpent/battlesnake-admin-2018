@@ -1,15 +1,15 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 const Nav = () => (
   <nav>
-    <NavLink className="link" to="/team">
+    <NavLink exact className="link" to="/team">
       Team
     </NavLink>
-    <NavLink className="link" to="/snakes">
+    <NavLink className="link" to="/team/snakes">
       Snakes
     </NavLink>
   </nav>
-);
+)
 
-export default Nav;
+export default Nav
