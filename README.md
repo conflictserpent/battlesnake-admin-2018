@@ -14,7 +14,7 @@ Create `./scripts/env-local.yml` and load it with:
 ```yaml
 GITHUB_CLIENT_ID: <fill in with your own>
 GITHUB_CLIENT_SECRET: <fill in with your own>
-GITHUB_CALLBACK_URL: http://localhost:3000/auth/github/callback
+GITHUB_CALLBACK_URL: http://localhost:3009/auth/github/callback
 REDIS_HOST: localhost
 BATTLESNAKE_SERVER_HOST: http://localhost:3001
 ```
@@ -27,10 +27,10 @@ More info here: <https://developer.github.com/apps/building-oauth-apps/creating-
 
 ### Run the required services
 
-First, run `docker-compose -f docker-compose.yml up -d` to spin up all the services including the battlesnake game server.
+First, run `./scripts/services` to spin up all the services including the battlesnake game server.
 
 Then, run the migration script for dynamodb `./scripts/migrate`.
 
 ### Start the server and client build
 
-To get the server and client running, open two terminal windows and run `./scripts/run-server` and `./scripts/run-cient` in them respectively.
+To get the server and client running, open two terminal windows and run `./scripts/run-server` and `./scripts/run-client` in them respectively.
