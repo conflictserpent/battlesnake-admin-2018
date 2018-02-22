@@ -4,6 +4,10 @@
         "plugin:react/recommended"
     ],
     "rules": {
-        "react/jsx-key": "off"
+        "react/jsx-key": "off",
+        "react/prop-types": "off"
+    },
+    "globals": {
+        "fetch": false
     }
 }

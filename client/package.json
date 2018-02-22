@@ -30,5 +30,6 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-standard": "^3.0.1"
-  }
+  },
+  "proxy": "http://localhost:3009"
 }

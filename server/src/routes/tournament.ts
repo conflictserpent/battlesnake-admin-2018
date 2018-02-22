@@ -84,6 +84,22 @@ router.get('/extra', async (req, res) => {
   }
 })
 
+router.post('/create', async (req, res) => {
+  const teams = []
+  for (let i = 0; i < 100; i++) {
+    const team: ITeam = {
+      id: v4(),
+      snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
+      teamName: company.companyName(),
+      captainId: v4(),
+    }
+    teams.push(team)
+  }
+  const t = createTournament(teams)
+  saveTournament(t)
+  res.send(JSON.stringify(t))
+})
+
 router.get('/delete', async (req, res) => {
   if (!req.query.id) {
     res.redirect('/tournaments')
