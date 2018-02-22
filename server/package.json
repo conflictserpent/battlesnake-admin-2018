@@ -5,8 +5,8 @@
   "main": "src/entry.ts",
   "scripts": {
     "sls": "sls",
-    "sls:offline": "sls offline start",
-    "start": "sls offline start",
+    "sls:offline": "sls offline start --port 3009",
+    "start": "sls offline start --port 3009",
     "deploy": "sls deploy --stage prod",
     "logs": "sls logs -f app --stage prod -t",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",

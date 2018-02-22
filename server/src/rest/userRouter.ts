@@ -1,7 +1,7 @@
 import express = require('express')
 import { Router } from 'express'
 import { ensureAuthenticated } from '../passport-auth'
-import { updateUser, findUserByUserName, IUser } from '../db/users'
+import { updateUser, findUserByUserName, setTeamCaptain, IUser } from '../db/users'
 import { updateTeam, ITeam } from '../db/teams'
 import * as _ from 'lodash'
 
@@ -29,9 +29,8 @@ router.post(
     }
 
     await updateTeam(team)
-    await updateUser(user)
-
-    res.json(user)
+    const result = await setTeamCaptain(user, true)
+    res.json(result)
   }
 )
 
@@ -41,10 +40,8 @@ router.post(
   async (req: express.Request, res: express.Response) => {
     // TODO:  Pre-req: Make sure the captains team is empty (?)
     const user: IUser = _.cloneDeep(req.user)
-    user.isTeamCaptain = false
-    user.teamId = null
-    await updateUser(user)
-    res.json(user)
+    const result = await setTeamCaptain(user, false)
+    res.json(result)
   }
 )
 

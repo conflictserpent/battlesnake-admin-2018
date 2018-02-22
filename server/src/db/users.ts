@@ -32,12 +32,11 @@ export async function updateUser(u: IUser): Promise<IUser> {
       username: user.username,
     },
     UpdateExpression:
-      'set displayName = :dn, id = :id, isTeamCaptain = :tc, teamId = :t, teamMember = :tm',
+      'set displayName = :dn, id = :id, isTeamCaptain = :tc',
     ExpressionAttributeValues: {
       ':dn': user.displayName,
       ':id': user.id,
       ':tc': user.isTeamCaptain,
-      ':t': user.teamId,
     },
     ReturnValues: 'ALL_NEW',
   }
@@ -46,6 +45,51 @@ export async function updateUser(u: IUser): Promise<IUser> {
     .promise()
   return res.Attributes as IUser
 }
+
+
+export async function setTeamCaptain(user: IUser, captain: boolean): Promise<IUser> {
+  const teamId = captain ? user.username : null
+  const params = {
+    TableName: USER_TABLE,
+    Key: {
+      username: user.username,
+    },
+    UpdateExpression:
+      'set id = :id, isTeamCaptain = :tc, teamId = :tm',
+    ExpressionAttributeValues: {
+      ':id': user.id,
+      ':tc': captain,
+      ':tm': teamId
+    },
+    ReturnValues: 'ALL_NEW',
+  }
+  const res = await getDocumentClient()
+    .update(params)
+    .promise()
+  return res.Attributes as IUser
+}
+
+
+export async function setTeamMembership(user: IUser, teamId: string | null): Promise<IUser> {
+  const params = {
+    TableName: USER_TABLE,
+    Key: {
+      username: user.username,
+    },
+    UpdateExpression:
+      'set displayName = :dn, id = :id, teamId = :tm',
+    ExpressionAttributeValues: {
+      ':id': user.id,
+      ':tm': teamId
+    },
+    ReturnValues: 'ALL_NEW',
+  }
+  const res = await getDocumentClient()
+    .update(params)
+    .promise()
+  return res.Attributes as IUser
+}
+
 
 export async function findUserByUserName(id: string): Promise<IUser> {
   const params = {
@@ -65,7 +109,7 @@ export async function getTeamMembers(teamId: string): Promise<IUser[]> {
     TableName: USER_TABLE,
     KeyConditionExpression: '#tm = :tid',
     ExpressionAttributeNames: {
-      '#tm': 'teamId',
+      '#tm': 'teamMember',
     },
     ExpressionAttributeValues: {
       ':tid': teamId,
