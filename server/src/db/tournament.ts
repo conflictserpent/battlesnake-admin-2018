@@ -32,7 +32,7 @@ export function initializeTournament(tournament: ITournament) {
 export function saveTournament(tournament: ITournament) {
   console.log(`saving tournament: ${tournament.id}`)
   const dc = getDocumentClient()
-  const asyncPut = promisify(dc.put.bind(dc))
+  // const asyncPut = promisify(dc.put.bind(dc))
 
   const params = {
     TableName: dynamoTable,
@@ -42,7 +42,7 @@ export function saveTournament(tournament: ITournament) {
     },
   }
 
-  return asyncPut(params)
+  return dc.put(params).promise()
 }
 
 export async function loadTournament(id: string) {
