@@ -22,3 +22,5 @@ export const getDocumentClient = () => {
   }
   return new AWS.DynamoDB.DocumentClient()
 }
+
+const dc = getDocumentClient()
