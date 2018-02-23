@@ -6,7 +6,6 @@ import RedisStore = require('connect-redis')
 
 import { ensureAuthenticated } from './passport-auth'
 import config from './config'
-import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
@@ -25,6 +24,9 @@ app.use(
       host: config.REDIS_HOST,
       port: '6379',
     }),
+    cookie: {
+      domain: config.COOKIE_DOMAIN,
+    },
     resave: true,
     saveUninitialized: false,
   })
@@ -42,28 +44,17 @@ app.use('/self', userRouter)
 app.use('/team', teamRouter)
 app.use('/tournaments', tournyRouter)
 
-nunjucks.configure('views', {
-  autoescape: true,
-  express: app,
-})
-
-app.get('/', (req, res) => {
-  res.send('Hello World!!!')
-})
-
+// Init login flow
 app.get('/auth/github', passport.authenticate('github'))
 
+// Sets up session; redirect to app
 app.get(
   '/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('/protected')
+    res.redirect(config.AUTH_REDIRECT_URL)
   }
 )
-
-app.get('/protected', ensureAuthenticated, (req, res) => {
-  res.send('Congrats, sessions work ' + req.user.id)
-})
 
 // GAME TESTING STUFF
 app.get('/start-game', (req, res) => {
