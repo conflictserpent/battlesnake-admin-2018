@@ -20,7 +20,7 @@ const userManager = Clz => {
 
     componentDidMount = async () => {
       try {
-        const user = await axios.get(`${config.SERVER}/self`, {
+        const user = await axios.get(`${config.SERVER}/api/self`, {
           withCredentials: true
         });
         console.log("user", user);

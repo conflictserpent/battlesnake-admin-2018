@@ -17,6 +17,8 @@ GITHUB_CLIENT_SECRET: <fill in with your own>
 GITHUB_CALLBACK_URL: http://localhost:3009/auth/github/callback
 REDIS_HOST: localhost
 BATTLESNAKE_SERVER_HOST: http://localhost:3001
+AUTH_REDIRECT_URL: http://localhost:3000
+COOKIE_DOMAIN: localhost
 ```
 
 ### Create Github OAuth vars
