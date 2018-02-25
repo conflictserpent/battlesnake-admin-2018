@@ -9,8 +9,7 @@ import config from './config'
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter, teamRouter } from './rest'
-import { router as tournyRouter } from './routes/tournament'
+import { userRouter, teamRouter, tournyRouter } from './rest'
 import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
