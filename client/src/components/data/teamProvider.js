@@ -25,7 +25,7 @@ export const teamProvider = ReactClass => {
 
     componentDidMount = async () => {
       try {
-        const teamResp = await axios.get(`${config.SERVER}/team`, {
+        const teamResp = await axios.get(`${config.SERVER}/api/team`, {
           withCredentials: true
         });
         this.setState({

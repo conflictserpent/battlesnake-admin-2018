@@ -27,7 +27,7 @@ export const userProvider = ReactClass => {
 
     componentDidMount = async () => {
       try {
-        const userResponse = await axios.get(`${config.SERVER}/self`, {
+        const userResponse = await axios.get(`${config.SERVER}/api/self`, {
           withCredentials: true
         });
         this.setState({
