@@ -120,14 +120,16 @@ export async function findUserByUserName(id: string): Promise<IUser> {
 export async function getTeamMembers(teamId: string): Promise<IUser[]> {
   const params = {
     TableName: USER_TABLE,
+    IndexName: 'membership',
     KeyConditionExpression: '#tm = :tid',
     ExpressionAttributeNames: {
-      '#tm': 'teamMember',
+      '#tm': 'teamId',
     },
     ExpressionAttributeValues: {
       ':tid': teamId,
     },
   }
+
   const result = await getDocumentClient()
     .query(params)
     .promise()

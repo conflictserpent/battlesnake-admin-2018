@@ -74,6 +74,23 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+          
+      GlobalSecondaryIndexes:
+        - IndexName: membership
+          KeySchema:
+            - AttributeName: username
+              KeyType: HASH
+            - AttributeName: teamId
+              KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+              - id
+              - displayName
+              - isTeamCaptain
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
     TournamentsTable:
       Type: AWS::DynamoDB::Table
