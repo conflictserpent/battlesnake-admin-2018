@@ -26,6 +26,7 @@ module.exports = {
     extensions: ['.ts', '.js', '.tsx', '.jsx'],
   },
   plugins: [
-    new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: false })
+    // This doesn't work on lambda for some reason:
+    // new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: false })
   ]
 }

@@ -66,10 +66,10 @@ resources:
       Properties:
         TableName: users
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: username
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: username
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
