@@ -15,9 +15,11 @@ const config = {
   // DynamoDB config options
   AWS_REGION: process.env.IS_OFFLINE ? 'localhost' : 'us-west-2',
   AWS_DYNAMO_ENDPOINT: process.env.IS_OFFLINE ? 'http://localhost:8000' : 'dynamodb.us-west-2.amazonaws.com',
-  
+
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || 'battlesnake.local',
-  AUTH_REDIRECT_URL: process.env.AUTH_REDIRECT_URL || 'http://battlesnake.local:3000'
+  AUTH_REDIRECT_URL: process.env.AUTH_REDIRECT_URL || 'http://battlesnake.local:3000',
+
+  HOMEPAGE: process.env.HOMEPAGE || 'https://s3-us-west-2.amazonaws.com/admin.battlesnake.io/index.html'
 }
 
 export default config

@@ -40,9 +40,10 @@ app.use(
   })
 )
 
-app.use('/self', userRouter)
-app.use('/team', teamRouter)
-app.use('/tournaments', tournyRouter)
+
+app.use('/api/self', userRouter)
+app.use('/api/team', teamRouter)
+app.use('/api/tournaments', tournyRouter)
 
 // Init login flow
 app.get('/auth/github', passport.authenticate('github'))
@@ -74,6 +75,17 @@ app.post('/game-status', (req, res) => {
   const json = getGameStatus(req.body.gameId)
   res.render('test-tournament.html', {
     data: json,
+  })
+})
+
+app.get('/', (req, res) => {
+  request(config.HOMEPAGE, (err, _, body) => {
+    if (err) {
+      res.status(500)
+      console.log('fetching index failed', err)
+      return
+    }
+    res.send(body)
   })
 })
 
