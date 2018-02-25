@@ -19,7 +19,7 @@ export const members = [
   },
   {
     github: "joram",
-    email: "joram@gmail.com",
+    email: "john.c.oram@gmail.com",
     name: "John",
     createdAt: "Feb 12, 2017"
   },
