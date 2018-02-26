@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd client
+
+# Build the client while setting the public URL to the JS bucket.
+export PUBLIC_URL=https://s3-us-west-2.amazonaws.com/admin.battlesnake.io
+export REACT_APP_SERVER=https://admin.battlesnake.io
+yarn run build
+
+# Sync up the files to the S3 bucket.
+aws s3 sync build s3://admin.battlesnake.io
