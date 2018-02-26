@@ -17,6 +17,7 @@ const strategyCallback = async (accessToken, refreshToken, profile, cb) => {
     username: profile.username,
     displayName: profile.displayName,
   }
+  console.log(user)
   await updateUser(user as IUser)
   cb(null, user)
 }

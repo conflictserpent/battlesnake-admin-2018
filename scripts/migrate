@@ -2,9 +2,13 @@
 #? Locally create tables for dynamodb
 
 aws dynamodb create-table --table-name users \
-  --attribute-definitions AttributeName=username,AttributeType=S \
+  --attribute-definitions AttributeName=username,AttributeType=S AttributeName=teamId,AttributeType=S \
   --key-schema AttributeName=username,KeyType=HASH \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+  --global-secondary-indexes IndexName=membership,\
+KeySchema=["{AttributeName=teamId,KeyType=HASH}"],\
+Projection="{ProjectionType=INCLUDE ,NonKeyAttributes=["key", "username", "displayName", "isTeamCaptain"]}",\
+ProvisionedThroughput="{ReadCapacityUnits=5,WriteCapacityUnits=5}" \
   --endpoint http://localhost:8000
 
 aws dynamodb create-table --table-name teams \
@@ -19,5 +23,6 @@ aws dynamodb create-table --table-name tournaments \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   --endpoint http://localhost:8000
 
-# Check results: aws dynamodb list-tables --endpoint http://localhost:8000
+# Check results: 
+# aws dynamodb list-tables --endpoint http://localhost:8000
 # aws dynamodb scan --table-name users --endpoint-url http://localhost:8000

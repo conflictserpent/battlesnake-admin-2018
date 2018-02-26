@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-
 import { Route, NavLink } from 'react-router-dom'
 import { Grid, Container, Button, Image, Table } from 'semantic-ui-react'
 
-import Snakes from './snakes'
-import Nav from './nav'
+import Snakes from '../components/snakes'
+import Nav from '../components/nav'
+import { membersProvider } from '../components/data'
 
 import logo from '../images/logo-bs18.png'
-import { members } from '../data/sampledata'
 
 class Team extends Component {
   render () {
@@ -17,7 +16,7 @@ class Team extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <Nav />
           <Button inverted as={NavLink} to="/login">
-                Login Page
+            Login Page
           </Button>
         </Grid.Column>
         <Grid.Column width={12}>
@@ -31,8 +30,11 @@ class Team extends Component {
   }
 }
 
-class TeamHome extends Component {
+class TeamHomeDisplay extends Component {
   render () {
+    let members = !this.props.membersMgr.loading
+      ? this.props.membersMgr.members
+      : []
     return (
       <Table celled inverted>
         <Table.Header>
@@ -50,12 +52,14 @@ class TeamHome extends Component {
                   <Image
                     floated="left"
                     rounded
-                    src={`https://github.com/${member.github}.png?size=40`}
+                    src={`https://github.com/${member.username}.png?size=40`}
                   />
-                  {member.name}
+                  {member.displayName || member.username}
                 </Table.Cell>
                 <Table.Cell />
-                <Table.Cell textAlign="right">{member.email}</Table.Cell>
+                <Table.Cell textAlign="right">
+                  {member.displayName || member.username}
+                </Table.Cell>
               </Table.Row>
             )
           })}
@@ -64,5 +68,6 @@ class TeamHome extends Component {
     )
   }
 }
+const TeamHome = membersProvider(TeamHomeDisplay)
 
 export default Team

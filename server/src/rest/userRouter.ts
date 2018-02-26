@@ -15,7 +15,7 @@ router.post(
   '/captain-on',
   ensureAuthenticated,
   async (req: express.Request, res: express.Response) => {
-    const user: IUser = req.user
+    const user: IUser = (req.user as IUser)
     if (user.teamId) {
       throw new Error('Already a team member - must remove self from team')
     }
@@ -39,17 +39,8 @@ router.post(
   ensureAuthenticated,
   async (req: express.Request, res: express.Response) => {
     // TODO:  Pre-req: Make sure the captains team is empty (?)
-    const user: IUser = _.cloneDeep(req.user)
+    const user: IUser = _.cloneDeep(req.user as IUser)
     const result = await setTeamCaptain(user, false)
     res.json(result)
-  }
-)
-
-router.post(
-  '/leave-team',
-  ensureAuthenticated,
-  async (req: express.Request, res: express.Response) => {
-    // If user is a team member; remove self from team, save, finish
-    // else: error
   }
 )
