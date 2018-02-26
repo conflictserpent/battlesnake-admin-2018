@@ -5,6 +5,7 @@ export interface ITeam {
 
   teamName: string
   snakeUrl: string
+  division: string
 }
 
 const TEAM_TABLE = 'teams'

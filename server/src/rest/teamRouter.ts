@@ -42,6 +42,7 @@ router.post('/', ensureAuthenticated, async (req: express.Request, res: express.
     captainId: teamId,
     teamName: req.body.teamName,
     snakeUrl: req.body.snakeUrl,
+    division: null
   })
   res.json(newTeam)
 })

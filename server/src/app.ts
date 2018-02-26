@@ -65,6 +65,7 @@ app.get('/start-game', (req, res) => {
       snakeUrl: url,
       teamName: 'a team',
       captainId: '',
+      division: ''
     })
   })
   createGame(teams)

@@ -19,13 +19,14 @@ router.post(
     if (user.teamId) {
       throw new Error('Already a team member - must remove self from team')
     }
-    
+
     user.isTeamCaptain = true
     user.teamId = user.username
     const team: ITeam = {
       captainId: user.username,
       teamName: null,
       snakeUrl: null,
+      division: null
     }
 
     await updateTeam(team)
