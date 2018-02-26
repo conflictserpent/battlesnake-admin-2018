@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Card, Icon, Image, Container, Button, Dropdown, Input, Menu } from 'semantic-ui-react'
+import { Icon, Dropdown, Input, Menu } from 'semantic-ui-react'
 
 export class MenuSubMenu extends Component {
   state = {}
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-  render() {
+  render () {
     const { activeItem } = this.state
 
     return (

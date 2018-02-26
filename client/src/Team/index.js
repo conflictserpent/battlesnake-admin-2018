@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { Route, NavLink } from "react-router-dom";
-import { Grid, Container, Button, Image, Table } from "semantic-ui-react";
+import React, { Component } from 'react'
+import { Route, NavLink } from 'react-router-dom'
+import { Grid, Container, Button, Image, Table } from 'semantic-ui-react'
 
-import Snakes from "../components/snakes";
-import Nav from "../components/nav";
-import { membersProvider } from "../components/data";
+import Snakes from '../components/snakes'
+import Nav from '../components/nav'
+import { membersProvider } from '../components/data'
 
-import logo from "../images/logo-bs18.png";
+import logo from '../images/logo-bs18.png'
 
 class Team extends Component {
-  render() {
+  render () {
     return (
       <Grid container>
         <Grid.Column width={4}>
@@ -26,15 +26,15 @@ class Team extends Component {
           </Container>
         </Grid.Column>
       </Grid>
-    );
+    )
   }
 }
 
 class TeamHomeDisplay extends Component {
-  render() {
+  render () {
     let members = !this.props.membersMgr.loading
       ? this.props.membersMgr.members
-      : [];
+      : []
     return (
       <Table celled inverted>
         <Table.Header>
@@ -61,13 +61,13 @@ class TeamHomeDisplay extends Component {
                   {member.displayName || member.username}
                 </Table.Cell>
               </Table.Row>
-            );
+            )
           })}
         </Table.Body>
       </Table>
-    );
+    )
   }
 }
-const TeamHome = membersProvider(TeamHomeDisplay);
+const TeamHome = membersProvider(TeamHomeDisplay)
 
-export default Team;
+export default Team

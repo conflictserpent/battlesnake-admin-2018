@@ -1,45 +1,45 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { Form } from "semantic-ui-react";
-import config from "../config";
-import { teamProvider } from "../components/data";
+import React, { Component } from 'react'
+import axios from 'axios'
+import { Form } from 'semantic-ui-react'
+import config from '../config'
+import { teamProvider } from '../components/data'
 
 class Snake extends Component {
-  state = { snakeUrl: "", teamName: "", loading: false, error: null };
+  state = { snakeUrl: '', teamName: '', loading: false, error: null };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = async () => {
-    const { snakeUrl, teamName } = this.state;
-    console.log(snakeUrl, teamName);
-    this.setState({ loading: true });
+    const { snakeUrl, teamName } = this.state
+    console.log(snakeUrl, teamName)
+    this.setState({ loading: true })
     try {
-      const teamResp = await axios(`${config.SERVER}/team`, {
-        method: "post",
+      await axios(`${config.SERVER}/team`, {
+        method: 'post',
         withCredentials: true,
         data: {
           snakeUrl: this.state.snakeUrl,
           teamName: this.state.teamName
         }
-      });
+      })
     } catch (e) {
-      console.log(e);
-      this.setState({ error: e });
+      console.log(e)
+      this.setState({ error: e })
     }
-    this.setState({ loading: false });
+    this.setState({ loading: false })
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
       this.setState({
-        snakeUrl: nextProps.teamMgr.team.snakeUrl || "",
-        teamName: nextProps.teamMgr.team.teamName || ""
-      });
+        snakeUrl: nextProps.teamMgr.team.snakeUrl || '',
+        teamName: nextProps.teamMgr.team.teamName || ''
+      })
     }
   }
 
-  render() {
-    const { snakeUrl, teamName } = this.state;
+  render () {
+    const { snakeUrl, teamName } = this.state
     return (
       <Form
         loading={this.props.teamMgr.loading || this.state.loading}
@@ -61,8 +61,8 @@ class Snake extends Component {
         <Form.Button content="Submit" />
         {/* </Form.Group> */}
       </Form>
-    );
+    )
   }
 }
 
-export default teamProvider(Snake);
+export default teamProvider(Snake)

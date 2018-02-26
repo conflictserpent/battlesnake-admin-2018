@@ -19,7 +19,8 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
   const user: IUser = req.user as IUser
   const teamId = user.teamId
   if (!teamId) {
-    throw new Error('not on a team')
+    res.status(500).send('not on a team')
+    throw new Error('not on a team') // need to do something about this, otherwise, you get 30s requests
   }
   const team: ITeam = await getTeam(teamId)
   if (!team) {
@@ -87,12 +88,12 @@ router.post(
       const newUser = addUnknownUserToTeam(userName, req.user.teamId)
       return res.json({ status: 'ok' })
     }
-    
+
     // Don't add user to another team
     if (user.teamId) {
       return res.status(400).json({ msg: 'user already in a team' })
     }
-  
+
     setTeamMembership(userName, req.user.teamId)
     return res.json({ status: 'ok' })
   }

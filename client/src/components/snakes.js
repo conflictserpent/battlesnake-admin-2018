@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Table } from "semantic-ui-react";
+import React, { Component } from 'react'
+import { Table } from 'semantic-ui-react'
 
 class Snakes extends Component {
-  render() {
+  render () {
     return (
       <Table celled inverted>
         <Table.Header>
@@ -20,8 +20,8 @@ class Snakes extends Component {
           </Table.Row>
         </Table.Body>
       </Table>
-    );
+    )
   }
 }
 
-export default Snakes;
+export default Snakes

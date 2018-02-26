@@ -12,7 +12,7 @@ class Tournaments extends Component {
   }
 
   createTournaments () {
-    fetch('/tournaments/create', {
+    fetch('/api/tournaments/create', {
       method: 'POST',
       body: JSON.stringify({}),
       headers: {'Content-Type': 'application/json'}

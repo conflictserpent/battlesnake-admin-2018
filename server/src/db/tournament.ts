@@ -63,7 +63,7 @@ export async function loadTournament(id: string) {
 
   const teams: ITeam[] = []
 
-  let t: ITournament = {
+  const t: ITournament = {
     id: resp.Item.id,
     matches: resp.Item.matches,
     teams: teams,
