@@ -14,7 +14,7 @@ class Snake extends Component {
     console.log(snakeUrl, teamName)
     this.setState({ loading: true })
     try {
-      await axios(`${config.SERVER}/team`, {
+      await axios(`${config.SERVER}/api/team`, {
         method: 'post',
         withCredentials: true,
         data: {

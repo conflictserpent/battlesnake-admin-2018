@@ -33,8 +33,9 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
 router.post('/', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const user: IUser = req.user as IUser
   const teamId = user.teamId
-  if (!teamId) {
-    throw new Error('not on a team')
+  if (teamId) {
+    res.status(500).send('already on a team')
+    throw new Error('already on a team')
   }
 
   const newTeam = await updateTeam({

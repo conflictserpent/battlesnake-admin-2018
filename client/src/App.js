@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { userProvider } from './components/data'
 import config from './config'
-import SnakeView from './Snake'
-import Team from './Team'
+import Team, {CreateTeam} from './Team'
 import Admin from './Admin'
 import Tournaments from './Tournament'
 import 'semantic-ui-css/semantic.min.css'
@@ -46,23 +45,14 @@ class App extends Component {
       return <WelcomeScreen />
     }
 
-    // Not on a team
-    if (!this.props.userMgr.user.teamId) {
-      // Need to join a squad or become a team capt'n
-      console.log('need to team up')
-    }
-
     // Finally - on a team - can edit team, invite members, or leave team
-
     return (
       <Router>
         <div className="body-wrapper">
           {!this.props.userMgr.loggedIn && <LoginLink />}
-          <Route
-            exact
-            path="/"
-            render={() => <SnakeView userMgr={this.props.userMgr} />}
-          />
+          {!this.props.userMgr.user.teamId && <Redirect to='/new-team' />}
+          <Route exact path="/" render={() => <Redirect to='/team' />} />
+          <Route path="/new-team" component={CreateTeam} />
           <Route path="/team" component={Team} />
           <Route path="/swu" component={Admin} />
           <Route path="/tournament" component={Tournaments} />

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Route, NavLink } from 'react-router-dom'
-import { Grid, Container, Button, Image, Table } from 'semantic-ui-react'
+import axios from 'axios'
+import { Route } from 'react-router-dom'
+import config from '../config'
+import { Grid, Container, Image, Table, Form } from 'semantic-ui-react'
 
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
@@ -15,9 +17,6 @@ class Team extends Component {
         <Grid.Column width={4}>
           <img src={logo} className="App-logo" alt="logo" />
           <Nav />
-          <Button inverted as={NavLink} to="/login">
-            Login Page
-          </Button>
         </Grid.Column>
         <Grid.Column width={12}>
           <Container>
@@ -69,5 +68,57 @@ class TeamHomeDisplay extends Component {
   }
 }
 const TeamHome = membersProvider(TeamHomeDisplay)
+
+export class CreateTeam extends Component {
+  state = { snakeUrl: '', teamName: '', loading: false, error: null };
+
+  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+
+  handleSubmit = async () => {
+    const { snakeUrl, teamName } = this.state
+    console.log(snakeUrl, teamName)
+    this.setState({ loading: true })
+    try {
+      await axios(`${config.SERVER}/api/self/captain-on`, {
+        method: 'post',
+        withCredentials: true,
+        data: {
+          snakeUrl: this.state.snakeUrl,
+          teamName: this.state.teamName
+        }
+      })
+      window.location = '/'
+    } catch (e) {
+      console.log(e)
+      this.setState({ error: e })
+    }
+    this.setState({ loading: false })
+  };
+  render () {
+    const { snakeUrl, teamName } = this.state
+    return (
+      <div>
+        <h1>Create a new Team</h1>
+        <Form
+          onSubmit={this.handleSubmit}
+        >
+          <Form.Input
+            placeholder="Team Name"
+            name="teamName"
+            value={teamName}
+            onChange={this.handleChange}
+          />
+          <Form.Input
+            placeholder="Snake URL"
+            name="snakeUrl"
+            value={snakeUrl}
+            onChange={this.handleChange}
+          />
+          <Form.Button content="Submit" />
+        </Form>
+      </div>
+    )
+  }
+}
 
 export default Team
