@@ -87,7 +87,6 @@ router.post('/create', async (req, res) => {
   const teams = []
   for (let i = 0; i < 100; i++) {
     const team: ITeam = {
-      id: v4(),
       snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
       teamName: company.companyName(),
       captainId: v4(),

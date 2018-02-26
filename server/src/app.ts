@@ -10,8 +10,7 @@ import nunjucks = require('nunjucks')
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter, teamRouter } from './rest'
-import { router as tournyRouter } from './routes/tournament'
+import { userRouter, teamRouter, tournamentRouter } from './rest'
 import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
@@ -40,7 +39,7 @@ app.use(
 
 app.use('/self', userRouter)
 app.use('/team', teamRouter)
-app.use('/tournaments', tournyRouter)
+app.use('/tournaments', tournamentRouter)
 
 nunjucks.configure('views', {
   autoescape: true,
