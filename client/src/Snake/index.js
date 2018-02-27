@@ -12,7 +12,9 @@ class Snake extends Component {
   handleSubmit = async () => {
     const { snakeUrl, teamName } = this.state
     console.log(snakeUrl, teamName)
+
     this.setState({ loading: true })
+
     try {
       await axios(`${config.SERVER}/api/team`, {
         method: 'post',
@@ -26,6 +28,7 @@ class Snake extends Component {
       console.log(e)
       this.setState({ error: e })
     }
+
     this.setState({ loading: false })
   };
 

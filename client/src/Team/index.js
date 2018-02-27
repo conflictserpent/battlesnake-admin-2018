@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Route } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 import config from '../config'
 import { Grid, Container, Image, Table, Form } from 'semantic-ui-react'
 
@@ -15,7 +15,9 @@ class Team extends Component {
     return (
       <Grid container>
         <Grid.Column width={4}>
-          <img src={logo} className="App-logo" alt="logo" />
+          <Link to="/">
+            <img src={logo} className="App-logo" alt="logo" />
+          </Link>
           <Nav />
         </Grid.Column>
         <Grid.Column width={12}>
@@ -46,7 +48,7 @@ class TeamHomeDisplay extends Component {
         <Table.Body>
           {members.map(member => {
             return (
-              <Table.Row>
+              <Table.Row key={member.username}>
                 <Table.Cell>
                   <Image
                     floated="left"
