@@ -3,6 +3,8 @@ import _ = require('lodash')
 import { ITeam } from './db/teams';
 import { promisify } from 'util';
 
+export const SERVER_HOST = process.env.BATTLESNAKE_SERVER_HOST
+
 export async function createGame(teams: ITeam[]) {
     const formData = {
         "game_form[width]": 20,
@@ -26,6 +28,32 @@ export async function createGame(teams: ITeam[]) {
     const res = await post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData })
     const gameId = _.get(res.headers.location.split('/'), 1)
     return gameId
+}
+
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes }) {
+  const formData = {
+      "game_form[width]": width || 20,
+      "game_form[height]": height || 20,
+      "game_form[delay]": 10,
+      "game_form[recv_timeout]": 200,
+      "game_form[max_food]": maxFood || 10,
+      "game_form[snake_start_length]": snakeStartLength || 3,
+      "game_form[dec_health_points]": decHealthPoints || 1,
+      "game_form[game_mode]": "multiplayer"
+  }
+  Object.keys(snakes).forEach((key, idx) => {
+      const urlKey = `game_form[snakes][${idx}][url]`
+      const nameKey = `game_form[snakes][${idx}][name]`
+      const deleteKey = `game_form[snakes][${idx}][delete]`
+
+      formData[urlKey] = 'http://35.185.235.22'
+      formData[nameKey] = key
+      formData[deleteKey] = 'false'
+  });
+  const post = promisify(request.post)
+  const res = await post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData })
+  const gameId = _.get(res.headers.location.split('/'), 1)
+  return gameId
 }
 
 export interface IGameStatus {
