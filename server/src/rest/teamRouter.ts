@@ -29,9 +29,10 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
   res.json(team)
 })
 
-// Update
+// Create
 router.post('/', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const user: IUser = req.user as IUser
+  console.log(user)
   const teamId = user.teamId
   if (teamId) {
     res.status(500).send('already on a team')
@@ -45,6 +46,22 @@ router.post('/', ensureAuthenticated, async (req: express.Request, res: express.
     division: null
   })
   res.json(newTeam)
+})
+
+// Update
+router.post('/update', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+  const user: IUser = req.user as IUser
+  const teamId = user.teamId
+  if (!teamId) {
+    throw new Error('not on a team')
+  }
+
+  const updatedTeam = await updateTeam({
+    captainId: teamId,
+    teamName: req.body.teamName,
+    snakeUrl: req.body.snakeUrl
+  })
+  res.json(updatedTeam)
 })
 
 // List members

@@ -2080,10 +2080,6 @@ expect@^22.4.0:
     jest-message-util "^22.4.0"
     jest-regex-util "^22.1.0"
 
-express-async-handler@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/express-async-handler/-/express-async-handler-1.0.3.tgz#2175dedb340ce202f244c6e49ecc12ef459a17d2"
-
 express-session@^1.15.6:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.6.tgz#47b4160c88f42ab70fe8a508e31cbff76757ab0a"

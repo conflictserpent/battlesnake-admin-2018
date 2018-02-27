@@ -5,6 +5,7 @@ export interface ITeam {
 
   teamName: string
   snakeUrl: string
+  // description: string
   division: string
 }
 
@@ -30,10 +31,12 @@ export async function updateTeam(team: ITeam) {
     Key: {
       captainId: team.captainId,
     },
+    // UpdateExpression: 'set snakeUrl = :su, teamName = :tn, description = :de',
     UpdateExpression: 'set snakeUrl = :su, teamName = :tn',
     ExpressionAttributeValues: {
       ':tn': team.teamName,
       ':su': team.snakeUrl,
+      // ':de': team.description
     },
     ReturnValues: 'ALL_NEW',
   }

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { userProvider } from './components/data'
 import config from './config'
-import Team, {CreateTeam} from './Team'
+import Team from './Team'
+import CreateTeam from './Team/create'
 import Admin from './Admin'
 import Tournaments from './Tournament'
 import 'semantic-ui-css/semantic.min.css'
@@ -50,10 +51,10 @@ class App extends Component {
       <Router>
         <div className="body-wrapper">
           {!this.props.userMgr.loggedIn && <LoginLink />}
-          {!this.props.userMgr.user.teamId && <Redirect to='/new-team' />}
-          <Route exact path="/" render={() => <Redirect to='/team' />} />
-          <Route path="/new-team" component={CreateTeam} />
+          {!this.props.userMgr.user.teamId && <Redirect to="/new-team" />}
+          <Route exact path="/" render={() => <Redirect to="/team" />} />
           <Route path="/team" component={Team} />
+          <Route path="/new-team" component={CreateTeam} />
           <Route path="/swu" component={Admin} />
           <Route path="/tournament" component={Tournaments} />
         </div>
