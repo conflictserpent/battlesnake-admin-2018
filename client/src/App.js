@@ -5,6 +5,7 @@ import config from './config'
 import Team, {CreateTeam} from './Team'
 import Admin from './Admin'
 import Tournaments from './Tournament'
+import Bounty from './Bounty'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 
@@ -49,13 +50,21 @@ class App extends Component {
     return (
       <Router>
         <div className="body-wrapper">
-          {!this.props.userMgr.loggedIn && <LoginLink />}
-          {!this.props.userMgr.user.teamId && <Redirect to='/new-team' />}
+          {!this.props.userMgr.loggedIn &&
+            <LoginLink />
+          }
+          {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
+            <Redirect to='/new-team' />
+          }
+          {this.props.userMgr.user.bountyCollector &&
+            <Redirect to='/bounty' />
+          }
           <Route exact path="/" render={() => <Redirect to='/team' />} />
           <Route path="/new-team" component={CreateTeam} />
           <Route path="/team" component={Team} />
           <Route path="/swu" component={Admin} />
           <Route path="/tournament" component={Tournaments} />
+          <Route path="/bounty" component={Bounty} />
         </div>
       </Router>
     )
