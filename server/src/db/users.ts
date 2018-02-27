@@ -1,5 +1,11 @@
 import { getDocumentClient } from './client'
 
+export interface IBountyCollector {
+  snakeUrls: any
+  boardWidth: number
+  boardHeight: number
+}
+
 export interface IUser {
   // Info from Github
   displayName: string | null
@@ -9,6 +15,8 @@ export interface IUser {
   id?: string // might be null: user could be invited, but not signed in yet
   isTeamCaptain: boolean
   teamId?: string
+
+  bountyCollector?: IBountyCollector
 }
 
 const setDefaults = (u: IUser): IUser => {
@@ -18,6 +26,7 @@ const setDefaults = (u: IUser): IUser => {
     displayName: u.displayName || null,
     isTeamCaptain: u.isTeamCaptain || false,
     teamId: u.teamId || null,
+    bountyCollector: null,
   }
   return user
 }
@@ -134,4 +143,24 @@ export async function getTeamMembers(teamId: string): Promise<IUser[]> {
     .query(params)
     .promise()
   return result.Items as IUser[]
+}
+
+export async function setAsBountyCollector(username: string, collector: IBountyCollector): Promise<IUser> {
+  const params = {
+    TableName: USER_TABLE,
+    Key: {
+      username: username,
+    },
+    UpdateExpression: 'set bountyCollector = :dn, id = :id, isTeamCaptain = :tc',
+    ExpressionAttributeValues: {
+      ':dn': {
+        M: collector,
+      },
+    },
+    ReturnValues: 'ALL_NEW',
+  }
+  const result = await getDocumentClient()
+    .update(params)
+    .promise()
+  return result.Attributes as IUser
 }
