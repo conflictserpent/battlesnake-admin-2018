@@ -1,26 +1,25 @@
 import * as React from 'react'
 import { userProvider } from '../components/data'
 import { Form } from 'semantic-ui-react'
-import axios from "axios"
+import axios from 'axios'
 import config from '../config'
-
 
 class Bounty extends React.Component {
   state = {}
 
   handleFieldChange = (name, ev) => {
     this.setState({
-      [name]: ev.target.value,
+      [name]: ev.target.value
     })
   }
 
   handleStartGame = (ev) => {
-    const result = axios(`${config.SERVER}/api/team/${this.state.teamName}/start-bounty-game`, {
+    axios(`${config.SERVER}/api/team/${this.state.teamName}/start-bounty-game`, {
       method: 'post',
-      withCredentials: true,
+      withCredentials: true
     }).then(res => {
       this.setState({
-        game: res.data,
+        game: res.data
       })
     })
   }

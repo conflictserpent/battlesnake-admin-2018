@@ -10,7 +10,7 @@ import {
   IUser,
 } from '../db/users'
 import { updateTeam, getTeam, ITeam } from '../db/teams'
-import { createGameWithConfig, SERVER_HOST } from '../game-server'
+import { createGameWithConfig, ISnakeConfig, SERVER_HOST } from '../game-server'
 import * as _ from 'lodash'
 
 export const router = Router()
@@ -81,11 +81,16 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
   }
 
   // Collect snakes.
-  const snakes = {
-    [team.captainId]: team.snakeUrl,
-  }
-  user.bountyCollector.snakeUrls.values.forEach((snakeUrl, idx) => {
-    snakes[`${user.username}-${idx}`] = snakeUrl
+  const snakes: ISnakeConfig[] = [{
+    name: team.captainId,
+    url: team.snakeUrl
+  }]
+
+  user.bountyCollector.snakeUrls.forEach((snakeUrl, idx) => {
+    snakes.push({
+      name: `${user.username}-${idx}`,
+      url: snakeUrl
+    })
   })
 
   let gameId: string

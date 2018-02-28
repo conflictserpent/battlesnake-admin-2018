@@ -30,7 +30,7 @@ const WelcomeScreen = () => <div>Welcome!</div>
  *  -- Snake management
  */
 class App extends Component {
-  render () {
+  render() {
     // Loading
     if (this.props.userMgr.loading) {
       return <LoadingScreen />

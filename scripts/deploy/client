@@ -5,6 +5,7 @@ cd client
 # Build the client while setting the public URL to the JS bucket.
 export PUBLIC_URL=https://s3-us-west-2.amazonaws.com/admin.battlesnake.io
 export REACT_APP_SERVER=https://admin.battlesnake.io
+EXPORT GAME_SERVER=http://testing.battlesnake.io # update to actual production server day of
 yarn run build
 
 # Sync up the files to the S3 bucket.

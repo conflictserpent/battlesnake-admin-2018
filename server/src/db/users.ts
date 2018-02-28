@@ -1,7 +1,7 @@
 import { getDocumentClient } from './client'
 
 export interface IBountyCollector {
-  snakeUrls: any
+  snakeUrls: string[]
   boardWidth: number
   boardHeight: number
 }

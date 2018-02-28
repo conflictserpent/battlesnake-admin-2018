@@ -11,7 +11,7 @@ import { membersProvider } from '../components/data'
 import logo from '../images/logo-bs18.png'
 
 class Team extends Component {
-  render () {
+  render() {
     return (
       <Grid container>
         <Grid.Column width={4}>
@@ -30,7 +30,7 @@ class Team extends Component {
 }
 
 class TeamHomeDisplay extends Component {
-  render () {
+  render() {
     let members = !this.props.membersMgr.loading
       ? this.props.membersMgr.members
       : []
@@ -74,7 +74,7 @@ export class CreateTeam extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = async () => {
+  handleSubmit = async() => {
     const { snakeUrl, teamName } = this.state
     console.log(snakeUrl, teamName)
     this.setState({ loading: true })
@@ -94,7 +94,7 @@ export class CreateTeam extends Component {
     }
     this.setState({ loading: false })
   };
-  render () {
+  render() {
     const { snakeUrl, teamName } = this.state
     return (
       <div>

@@ -15,46 +15,55 @@ const snakeUrls = ['http://35.230.120.237', 'https://dsnek.herokuapp.com']
 
 router.get('/', async (req, res) => {
   const dc = getDocumentClient()
-  const asyncScan = promisify(dc.scan.bind(dc))
   const input = {
     TableName: 'tournaments',
   }
-  const resp = await asyncScan(input)
-  res.render('tournaments.html', {
+  const resp = await dc.scan(input).promise()
+  res.send({
     tournaments: await Promise.all(resp.Items.map(async t => {
+
       return {
         id: t.id,
+        division: t.division,
         matches: await Promise.all(t.matches.map(async m => {
-          const winners = await getMatchWinners(m)
+          const winners = (await getMatchWinners(m)).filter(w => w !== null)
           return {
             ...m,
-            winners: winners.map(w => w.teamName)
+            winners: (winners || []).map(w => w.teamName)
           }
         }))
       }
     })),
-    gameServerUrl: process.env.BATTLESNAKE_SERVER_HOST,
+    // gameServerUrl: process.env.BATTLESNAKE_SERVER_HOST,
   })
 })
 
-router.get('/match-status', async (req, res) => {
-  if (!req.query.matchId || !req.query.id) {
-    res.redirect('/tournaments')
+router.get("/:id", async (req, res) => {
+  const t = await loadTournament(req.params.id)
+  res.send(t)
+})
+
+router.get('/:id/match/:matchId', async (req, res) => {
+  if (!req.params.matchId || !req.params.id) {
+    res.send({})
     return
   }
 
-  const id = req.query.id
-  const matchId = req.query.matchId
+  const id = req.params.id
+  const matchId = req.params.matchId
 
-  const t = await loadTournament(req.query.id)
+  const t = await loadTournament(id)
   const m = t.matches.find(match => match.matchId === matchId)
-  if (m == null || !m.gameId) {
-    res.redirect('/tournaments')
+  if (m == null || (m.gameIds || []).length === 0) {
+    res.send({})
     return
   }
 
-  const json = await getGameStatus(m.gameId)
-  res.send(json)
+  const winners = (await getMatchWinners(m)).filter(w => w !== null)
+  res.send({
+    ...m,
+    winners
+  })
 })
 
 router.get('/extra', async (req, res) => {
@@ -71,10 +80,11 @@ router.get('/extra', async (req, res) => {
         snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
         teamName: company.companyName(),
         captainId: v4(),
+        division: 'Expert'
       }
       teams.push(team)
     }
-    const t = createTournament(teams)
+    const t = createTournament(teams, 'Expert')
     saveTournament(t)
     res.render('test-tournament.html', {
       tournament: JSON.stringify(t),
@@ -90,42 +100,41 @@ router.post('/create', async (req, res) => {
       snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
       teamName: company.companyName(),
       captainId: v4(),
+      division: 'Expert'
     }
     teams.push(team)
   }
-  const t = createTournament(teams)
+  const t = createTournament(teams, 'Expert')
   saveTournament(t)
   res.send(JSON.stringify(t))
 })
 
-router.get('/delete', async (req, res) => {
-  if (!req.query.id) {
-    res.redirect('/tournaments')
-    return
+router.post('/delete', async (req, res) => {
+  if (!req.body.id) {
+    res.send({})
   }
   const dc = getDocumentClient()
-  const asyncDelete = promisify(dc.delete.bind(dc))
   const input = {
     TableName: 'tournaments',
     Key: {
-      id: req.query.id,
+      id: req.body.id,
     },
   }
-  await asyncDelete(input)
-  res.redirect('/tournaments')
+  await dc.delete(input).promise()
+  res.send({})
 })
 
-router.get('/start-match', async (req, res) => {
-  if (!req.query.matchId || !req.query.id) {
-    res.redirect('/tournaments')
+router.get('/:id/match/:matchId/run-game', async (req, res) => {
+  if (!req.params.matchId || !req.params.id) {
+    res.send({})
     return
   }
 
-  const t = await loadTournament(req.query.id)
-  const m = t.matches.find(mm => mm.matchId === req.query.matchId)
+  const t = await loadTournament(req.params.id)
+  const m = t.matches.find(mm => mm.matchId === req.params.matchId)
   await startGame(m)
   await saveTournament(t)
-  res.redirect('/tournaments')
+  res.send(m)
 })
 
 router.get('/reset-matches', async (req, res) => {
@@ -135,7 +144,7 @@ router.get('/reset-matches', async (req, res) => {
   }
 
   const t = await loadTournament(req.query.id)
-  t.matches.forEach(m => (m.gameId = null))
+  t.matches.forEach(m => (m.gameIds = []))
   await saveTournament(t)
   res.redirect('/tournaments')
 })

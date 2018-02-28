@@ -5,7 +5,11 @@
     ],
     "rules": {
         "react/jsx-key": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "space-before-function-paren": [
+            "error",
+            "never"
+        ]
     },
     "globals": {
         "fetch": false
