@@ -33,6 +33,7 @@ interface IGameConfig {
     maxFood: number,
     snakeStartLength: number,
     decHealthPoints: number,
+    pinTail?: boolean,
     snakes: ISnakeConfig[]
 }
 
@@ -41,13 +42,14 @@ export interface ISnakeConfig {
     url: string
 }
 
-export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes }: IGameConfig) {
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig) {
     console.log("create game with config")
     const formData = {
         "game_form[width]": width || 20,
         "game_form[height]": height || 20,
         "game_form[delay]": 10,
         "game_form[recv_timeout]": 200, // this is the line to configure game latency, day of the tournament
+        "game_form[pin_tail]": `${!!pinTail}`,
         "game_form[max_food]": maxFood || 10,
         "game_form[snake_start_length]": snakeStartLength || 3,
         "game_form[dec_health_points]": decHealthPoints || 1

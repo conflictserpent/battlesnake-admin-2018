@@ -4,6 +4,10 @@ export interface IBountyCollector {
   snakeUrls: string[]
   boardWidth: number
   boardHeight: number
+  maxFood: number
+  snakeStartLength: number
+  decHealthPoints: number
+  pinTail: boolean
 }
 
 export interface IUser {
