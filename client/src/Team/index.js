@@ -12,7 +12,7 @@ import TeamEdit from './edit'
 import logo from '../images/logo-bs18.png'
 
 class Team extends Component {
-  render () {
+  render() {
     return (
       <Grid container>
         <Grid.Column width={4}>
@@ -34,7 +34,7 @@ class Team extends Component {
 }
 
 class TeamHomeDisplay extends Component {
-  render () {
+  render() {
     let members = !this.props.membersMgr.loading
       ? this.props.membersMgr.members
       : []

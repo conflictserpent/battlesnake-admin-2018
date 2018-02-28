@@ -1,4 +1,3 @@
-import { promisify } from 'util'
 import { v4 } from 'uuid'
 
 import { IMatch, createMatch } from './match'
@@ -13,13 +12,15 @@ export interface ITournament {
   id: string,
   matches: IMatch[],
   teams: ITeam[],
+  division: string
 }
 
-export function createTournament(teams: ITeam[]) {
+export function createTournament(teams: ITeam[], division: string) {
   const obj: ITournament = {
     id: v4(),
     matches: [],
     teams: teams,
+    division: division
   }
   initializeTournament(obj)
   return obj
@@ -32,13 +33,13 @@ export function initializeTournament(tournament: ITournament) {
 export function saveTournament(tournament: ITournament) {
   console.log(`saving tournament: ${tournament.id}`)
   const dc = getDocumentClient()
-  // const asyncPut = promisify(dc.put.bind(dc))
 
   const params = {
     TableName: dynamoTable,
     Item: {
       id: tournament.id,
       matches: tournament.matches,
+      division: tournament.division
     },
   }
 
@@ -47,7 +48,6 @@ export function saveTournament(tournament: ITournament) {
 
 export async function loadTournament(id: string) {
   const dc = getDocumentClient()
-  const asyncGet = promisify(dc.get.bind(dc))
 
   const input = {
     TableName: dynamoTable,
@@ -56,7 +56,7 @@ export async function loadTournament(id: string) {
     },
   }
 
-  const resp = await asyncGet(input)
+  const resp = await dc.get(input).promise()
   if (!resp.Item.matches) {
     return
   }
@@ -67,6 +67,7 @@ export async function loadTournament(id: string) {
     id: resp.Item.id,
     matches: resp.Item.matches,
     teams: teams,
+    division: resp.Item.division
   }
 
   for (const m of t.matches) {
@@ -74,7 +75,7 @@ export async function loadTournament(id: string) {
       t.teams.push(team)
     }
   }
-  console.log("loaded tournament")
+  console.log("WAT!!! loaded tournament")
 
   return t
 }

@@ -23,7 +23,7 @@ class EditTeam extends Component {
     })
   };
 
-  handleSubmit = async () => {
+  handleSubmit = async() => {
     this.setState({ loading: true })
 
     const { snakeUrl, teamName } = this.state
@@ -71,7 +71,7 @@ class EditTeam extends Component {
     })
   };
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
       this.setState({
         snakeUrl: nextProps.teamMgr.team.snakeUrl || '',
@@ -81,7 +81,7 @@ class EditTeam extends Component {
     }
   }
 
-  render () {
+  render() {
     const { snakeUrl, teamName, description } = this.state
     return (
       <Form

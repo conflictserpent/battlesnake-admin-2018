@@ -78,7 +78,7 @@ app.post('/game-status', (req, res) => {
   })
 })
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   request(config.HOMEPAGE, (err, _, body) => {
     if (err) {
       res.status(500)

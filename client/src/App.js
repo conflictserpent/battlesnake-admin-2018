@@ -6,6 +6,7 @@ import Team from './Team'
 import CreateTeam from './Team/create'
 import Admin from './Admin'
 import Tournaments from './Tournament'
+import Bounty from './Bounty'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 
@@ -30,7 +31,7 @@ const WelcomeScreen = () => <div>Welcome!</div>
  *  -- Snake management
  */
 class App extends Component {
-  render () {
+  render() {
     // Loading
     if (this.props.userMgr.loading) {
       return <LoadingScreen />
@@ -50,13 +51,22 @@ class App extends Component {
     return (
       <Router>
         <div className="body-wrapper">
-          {!this.props.userMgr.loggedIn && <LoginLink />}
-          {!this.props.userMgr.user.teamId && <Redirect to="/new-team" />}
-          <Route exact path="/" render={() => <Redirect to="/team" />} />
+          {!this.props.userMgr.loggedIn &&
+            <LoginLink />
+          }
+          {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
+            <Redirect to='/new-team' />
+          }
+          {this.props.userMgr.user.bountyCollector &&
+            <Redirect to='/bounty' />
+          }
+          <Route exact path="/" render={() => <Redirect to='/team' />} />
+          <Route path="/new-team" component={CreateTeam} />
           <Route path="/team" component={Team} />
           <Route path="/new-team" component={CreateTeam} />
           <Route path="/swu" component={Admin} />
           <Route path="/tournament" component={Tournaments} />
+          <Route path="/bounty" component={Bounty} />
         </div>
       </Router>
     )

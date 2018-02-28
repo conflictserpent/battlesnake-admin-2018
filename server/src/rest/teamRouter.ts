@@ -10,6 +10,7 @@ import {
   IUser,
 } from '../db/users'
 import { updateTeam, getTeam, ITeam } from '../db/teams'
+import { createGameWithConfig, ISnakeConfig, SERVER_HOST } from '../game-server'
 import * as _ from 'lodash'
 
 export const router = Router()
@@ -75,6 +76,58 @@ router.get('/members', ensureAuthenticated, async (req: express.Request, res: ex
   // Get a list of team members for this users team
   const members = await getTeamMembers(teamId)
   res.json(members)
+})
+
+// Start a bounty game
+router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+  const teamId = req.params.teamId
+  const user: IUser = req.user as IUser
+
+  if (!user.bountyCollector) {
+    throw new Error('user must be a bounty collector')
+  }
+
+  let team: ITeam = null
+  try {
+    team = await getTeam(teamId)
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+    res.json({ error })
+    return
+  }
+
+  // Collect snakes.
+  const snakes: ISnakeConfig[] = [{
+    name: team.captainId,
+    url: team.snakeUrl
+  }]
+
+  user.bountyCollector.snakeUrls.forEach((snakeUrl, idx) => {
+    snakes.push({
+      name: `${user.username}-${idx}`,
+      url: snakeUrl
+    })
+  })
+
+  let gameId: string
+  try {
+    gameId = await createGameWithConfig({
+      width: user.bountyCollector.boardWidth,
+      height: user.bountyCollector.boardHeight,
+      maxFood: 10,
+      snakeStartLength: 5,
+      decHealthPoints: 1,
+      snakes: snakes,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+    res.json({ error })
+    return
+  }
+
+  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
 })
 
 // Info about the team captain

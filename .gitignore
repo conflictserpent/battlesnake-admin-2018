@@ -1,5 +1,5 @@
 scripts/.env
-scripts/env-*.yml
+scripts/env-*
 
 # editors
 .idea*

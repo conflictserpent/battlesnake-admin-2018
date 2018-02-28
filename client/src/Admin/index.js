@@ -5,7 +5,7 @@ import { Grid, Container } from 'semantic-ui-react'
 import logo from '../images/logo-bs18.png'
 
 class Admin extends Component {
-  render () {
+  render() {
     return (
       <Grid container>
         <Grid.Column width={4}>
@@ -22,7 +22,7 @@ class Admin extends Component {
 }
 
 class SwuHome extends Component {
-  render () {
+  render() {
     return (<h1>SWU HOME</h1>)
   }
 }

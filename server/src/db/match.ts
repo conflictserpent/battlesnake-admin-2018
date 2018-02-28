@@ -6,7 +6,7 @@ export interface IMatch {
     teams: ITeam[]
     results: ITeam[]
     matchId: string
-    gameId: number
+    gameIds: number[]
 }
 
 export function createMatch(): IMatch {
@@ -14,40 +14,47 @@ export function createMatch(): IMatch {
         teams: [],
         results: [],
         matchId: v4(),
-        gameId: null,
+        gameIds: [],
     }
 }
 
 export async function startGame(match: IMatch) {
-    match.gameId = await createGame(match.teams)
+    console.log("start game")
+    const winners = (await getMatchWinners(match)).filter(w => w !== null)
+    console.log("winners:", winners)
+    const winnerIds = winners.map(w => w.captainId)
+    if (!match.gameIds) {
+        match.gameIds = []
+    }
+    match.gameIds.push(await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1)))
 }
 
-export function gameUrl(match: IMatch) {
-    return `${process.env.BATTLESNAKE_SERVER_HOST}/${match.gameId}`
+export function gameUrl(match: IMatch, gameId: number) {
+    return `${process.env.BATTLESNAKE_SERVER_HOST}/${gameId}`
 }
 
-export async function matchStatus(match: IMatch): Promise<IGameStatus> {
-    if (!match.gameId) {
+export async function matchStatus(match: IMatch): Promise<IGameStatus[]> {
+    if (match.gameIds.length === 0) {
         return
     }
 
-    return await getGameStatus(match.gameId)
+    return Promise.all(match.gameIds.map(id => getGameStatus(id)))
 }
 
 export async function getMatchWinners(match: IMatch): Promise<ITeam[]> {
-    const json = await matchStatus(match)
-    const winners: ITeam[] = []
+    return Promise.all((match.gameIds || []).map(id => getGameWinner(match, id)))
+}
 
-    if (!json || json.status != "halted") {
-        return winners
+export async function getGameWinner(match: IMatch, gameId: number): Promise<ITeam> {
+    const json = await getGameStatus(gameId)
+
+    if (!json || json.status !== "halted") {
+        return null
     }
 
-    console.log(json)
     if (json.board.snakes.length > 0) {
-        winners.push(findSnake(match, json.board.snakes[0].name))
+        return findSnake(match, json.board.snakes[0].name)
     }
-
-    const numToTake = 2 - winners.length
 
     json.board.deadSnakes.sort((a, b) => {
         if (a.death.turn > b.death.turn) {
@@ -59,12 +66,9 @@ export async function getMatchWinners(match: IMatch): Promise<ITeam[]> {
         return 0
     })
 
-    const additional = json.board.deadSnakes.slice(0, numToTake).map(s => findSnake(match, s.name))
-    winners.push(...additional)
-
-    return winners
+    return findSnake(match, json.board.deadSnakes[0].name)
 }
 
 function findSnake(match: IMatch, name: string): ITeam {
-    return match.teams.find(t => t.teamName == name)
+    return match.teams.find(t => t.teamName === name)
 }
