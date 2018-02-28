@@ -64,7 +64,7 @@ router.get('/members', ensureAuthenticated, async (req: express.Request, res: ex
 // Start a bounty game
 router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const teamId = req.params.teamId
-  const user: IUser = req.user
+  const user: IUser = req.user as IUser
 
   if (!user.bountyCollector) {
     throw new Error('user must be a bounty collector')

@@ -8,9 +8,10 @@ function runTest(numTeams: number, numMatches: number) {
       captainId: i.toString(),
       snakeUrl: '',
       teamName: '',
+      division: '',
     })
   }
-  const t = createTournament(teams)
+  const t = createTournament(teams, "Expert")
   expect(t.matches).toHaveLength(numMatches)
 
   const expectedSize = t.matches[0].teams.length
