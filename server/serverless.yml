@@ -27,15 +27,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - Fn::GetAtt:
-          - UsersTable
-          - Arn
-        - Fn::GetAtt:
-          - TeamsTable
-          - Arn
-        - Fn::GetAtt:
-          - TournamentsTable
-          - Arn
+        - arn:aws:dynamodb:us-west-2:842053936395:table/*
 
 plugins:
   - serverless-webpack
@@ -68,6 +60,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: username
             AttributeType: S
+          - AttributeName: teamId
+            AttributeType: S
         KeySchema:
           - AttributeName: username
             KeyType: HASH
@@ -75,16 +69,14 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
           
-      GlobalSecondaryIndexes:
+        GlobalSecondaryIndexes:
         - IndexName: membership
           KeySchema:
-            - AttributeName: username
-              KeyType: HASH
             - AttributeName: teamId
-              KeyType: RANGE
+              KeyType: HASH
           Projection:
             NonKeyAttributes:
-              - id
+              - username
               - displayName
               - isTeamCaptain
             ProjectionType: INCLUDE
