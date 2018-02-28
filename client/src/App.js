@@ -61,7 +61,6 @@ class App extends Component {
             <Redirect to='/bounty' />
           }
           <Route exact path="/" render={() => <Redirect to='/team' />} />
-          <Route path="/new-team" component={CreateTeam} />
           <Route path="/team" component={Team} />
           <Route path="/new-team" component={CreateTeam} />
           <Route path="/swu" component={Admin} />

@@ -57,10 +57,14 @@ router.post('/update', ensureAuthenticated, async (req: express.Request, res: ex
     throw new Error('not on a team')
   }
 
+  const existingTeam = await getTeam(teamId)
+
   const updatedTeam = await updateTeam({
     captainId: teamId,
     teamName: req.body.teamName,
-    snakeUrl: req.body.snakeUrl
+    snakeUrl: req.body.snakeUrl,
+    division: existingTeam.division,
+    description: req.body.description
   })
   res.json(updatedTeam)
 })

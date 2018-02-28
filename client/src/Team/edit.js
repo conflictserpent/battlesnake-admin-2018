@@ -56,8 +56,8 @@ class EditTeam extends Component {
         withCredentials: true,
         data: {
           snakeUrl: this.state.snakeUrl,
-          teamName: this.state.teamName
-          // description: this.state.description // Doesn't work quite yet
+          teamName: this.state.teamName,
+          description: this.state.description
         }
       })
     } catch (e) {
@@ -86,7 +86,7 @@ class EditTeam extends Component {
     return (
       <Form
         loading={this.props.teamMgr.loading || this.state.loading}
-        error={this.state.error && this.state.error.msg}
+        error={this.state.error}
         success={!this.state.loading && this.state.success}
         onSubmit={this.handleSubmit}
       >
