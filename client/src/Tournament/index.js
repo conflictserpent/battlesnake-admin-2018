@@ -207,7 +207,7 @@ class TournamentInfo extends Component {
                     <Table.Cell>
                       {(m.gameIds || []).map(g => {
                         return (
-                          <div>
+                          <div key={g}>
                             <a key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
                           </div>
                         )

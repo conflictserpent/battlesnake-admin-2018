@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { company } from 'faker'
-import { promisify } from 'util'
 
 import { ITournament, createTournament, loadTournament, saveTournament } from '../db/tournament'
 import { getDocumentClient } from '../db/client'

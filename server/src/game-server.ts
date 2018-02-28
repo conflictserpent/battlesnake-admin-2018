@@ -1,7 +1,7 @@
 import request = require('request')
 import _ = require('lodash')
 import { ITeam } from './db/teams';
-import { promisify } from 'util';
+import promisify = require('util.promisify')
 
 export const SERVER_HOST = process.env.BATTLESNAKE_SERVER_HOST
 
@@ -42,6 +42,7 @@ export interface ISnakeConfig {
 }
 
 export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes }: IGameConfig) {
+    console.log("create game with config")
     const formData = {
         "game_form[width]": width || 20,
         "game_form[height]": height || 20,
@@ -61,9 +62,16 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         formData[deleteKey] = 'false'
     });
     const post = promisify(request.post)
-    const res = await post({ url: process.env.BATTLESNAKE_SERVER_HOST, formData: formData })
-    const gameId = _.get(res.headers.location.split('/'), 1)
-    return gameId
+    const host = process.env.BATTLESNAKE_SERVER_HOST
+    console.log(host)
+    try {
+        const res = await post(process.env.BATTLESNAKE_SERVER_HOST, { form: formData })
+        const gameId = _.get(res.headers.location.split('/'), 1)
+        return gameId
+    } catch {
+        console.log("unable to create new game")
+        return -1
+    }
 }
 
 export interface IGameStatus {
@@ -89,6 +97,30 @@ interface IDeath {
 
 export async function getGameStatus(gameId: number): Promise<IGameStatus> {
     const get = promisify(request.get)
-    const res = await get({ url: `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}` })
-    return JSON.parse(res.body)
+    const host = `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}`
+    console.log(host)
+    try {
+        const res = await get({ uri: host })
+        if (res.statusCode !== 200) {
+            return {
+                status: "missing",
+                board: {
+                    snakes: [],
+                    deadSnakes: [],
+                }
+            }
+        }
+
+        return JSON.parse(res.body)
+    }
+    catch {
+        console.log("OH SHIT!!!")
+        return {
+            status: "missing",
+            board: {
+                snakes: [],
+                deadSnakes: [],
+            }
+        }
+    }
 }

@@ -1,4 +1,3 @@
-import { promisify } from 'util'
 import { v4 } from 'uuid'
 
 import { IMatch, createMatch } from './match'
@@ -76,7 +75,7 @@ export async function loadTournament(id: string) {
       t.teams.push(team)
     }
   }
-  console.log("loaded tournament")
+  console.log("WAT!!! loaded tournament")
 
   return t
 }

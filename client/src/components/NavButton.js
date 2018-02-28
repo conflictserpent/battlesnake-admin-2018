@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
 
-const Base = ({ history, newPath, text, ...props }) => (
+const Base = ({ history, newPath, text, ...remaining }) => (
   <Button
     type="button"
-    {...props}
+    {...remaining}
     onClick={() => history.push(newPath)}
   >
     { text }

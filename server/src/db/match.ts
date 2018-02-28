@@ -19,7 +19,9 @@ export function createMatch(): IMatch {
 }
 
 export async function startGame(match: IMatch) {
+    console.log("start game")
     const winners = (await getMatchWinners(match)).filter(w => w !== null)
+    console.log("winners:", winners)
     const winnerIds = winners.map(w => w.captainId)
     if (!match.gameIds) {
         match.gameIds = []
