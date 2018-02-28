@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { Route } from 'react-router-dom'
-import { Grid, Container, Image, Table, Form } from 'semantic-ui-react'
-import Nav from '../components/nav'
+import { Grid, Container } from 'semantic-ui-react'
 import BountyHome from './BountyHome'
-import logo from '../images/logo-bs18.png'
 
 class Bounty extends React.Component {
   render() {
