@@ -31,11 +31,12 @@ export async function updateTeam(team: ITeam) {
     Key: {
       captainId: team.captainId,
     },
-    UpdateExpression: 'set snakeUrl = :su, teamName = :tn, description = :desc',
+    UpdateExpression: 'set snakeUrl = :su, teamName = :tn, description = :desc, division = :div',
     ExpressionAttributeValues: {
       ':tn': team.teamName,
       ':su': team.snakeUrl,
-      ':desc': team.description
+      ':desc': team.description,
+      ':div': team.division
     },
     ReturnValues: 'ALL_NEW',
   }

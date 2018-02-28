@@ -5,6 +5,12 @@ import { Form, Message } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
+const divisions = [
+  { key: 'beginner', text: 'Beginner', value: 'beginner' },
+  { key: 'intermediate', text: 'Intermediate', value: 'intermediate' },
+  { key: 'expert', text: 'Expert', value: 'expert' }
+]
+
 class EditTeam extends Component {
   state = {
     snakeUrl: '',
@@ -18,8 +24,8 @@ class EditTeam extends Component {
   handleChange = (e, { name, value }) => {
     this.setState({
       [name]: value,
-      success: '',
-      error: ''
+      success: false,
+      error: false
     })
   };
 
@@ -57,7 +63,8 @@ class EditTeam extends Component {
         data: {
           snakeUrl: this.state.snakeUrl,
           teamName: this.state.teamName,
-          description: this.state.description
+          description: this.state.description,
+          division: this.state.division
         }
       })
     } catch (e) {
@@ -76,13 +83,14 @@ class EditTeam extends Component {
       this.setState({
         snakeUrl: nextProps.teamMgr.team.snakeUrl || '',
         teamName: nextProps.teamMgr.team.teamName || '',
-        description: nextProps.teamMgr.team.description || ''
+        description: nextProps.teamMgr.team.description || '',
+        division: nextProps.teamMgr.team.division || ''
       })
     }
   }
 
   render() {
-    const { snakeUrl, teamName, description } = this.state
+    const { snakeUrl, teamName, description, division } = this.state
     return (
       <Form
         loading={this.props.teamMgr.loading || this.state.loading}
@@ -91,36 +99,55 @@ class EditTeam extends Component {
         onSubmit={this.handleSubmit}
       >
         <h1>Edit Team</h1>
-        <Form.Input
-          placeholder="Team Name"
-          name="teamName"
-          value={teamName}
-          onChange={this.handleChange}
-          error={
-            this.state.error &&
-            this.state.error.field === 'teamName'
-          }
-        />
-        <Form.Input
-          placeholder="Snake URL"
-          name="snakeUrl"
-          value={snakeUrl}
-          onChange={this.handleChange}
-          error={
-            this.state.error &&
-            this.state.error.field === 'snakeUrl'
-          }
-        />
-        <Form.TextArea
-          placeholder="Team Description"
-          name="description"
-          value={description}
-          onChange={this.handleChange}
-          error={
-            this.state.error &&
-            this.state.error.field === 'description'
-          }
-        />
+        <Form.Group>
+          <Form.Input
+            label="Team Name"
+            placeholder="Team Name"
+            name="teamName"
+            value={teamName}
+            onChange={this.handleChange}
+            error={
+              this.state.error &&
+              this.state.error.field === 'teamName'
+            }
+          />
+          <Form.Input
+            label="Snake URL"
+            placeholder="Snake URL"
+            name="snakeUrl"
+            value={snakeUrl}
+            onChange={this.handleChange}
+            error={
+              this.state.error &&
+              this.state.error.field === 'snakeUrl'
+            }
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.TextArea
+            label="Team Description"
+            placeholder="Team Description"
+            name="description"
+            value={description}
+            onChange={this.handleChange}
+            error={
+              this.state.error &&
+              this.state.error.field === 'description'
+            }
+          />
+          <Form.Dropdown
+            label="Division"
+            options={divisions}
+            name="division"
+            value={division}
+            placeholder="Division"
+            onChange={this.handleChange}
+            error={
+              this.state.error &&
+              this.state.error.field === 'divisions'
+            }
+          />
+        </Form.Group>
         <Message error>
           <p>{this.state.error && this.state.error.msg}</p>
         </Message>
@@ -128,6 +155,8 @@ class EditTeam extends Component {
           <p>Team updated successfully</p>
         </Message>
         <Form.Button content="Submit" />
+
+        <br/>
       </Form>
     )
   }
