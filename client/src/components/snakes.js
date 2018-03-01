@@ -1,25 +1,68 @@
 import React, { Component } from 'react'
-import { Table } from 'semantic-ui-react'
+import { Container, Table, Form } from 'semantic-ui-react'
+
+import axios from 'axios'
+import config from '../config'
 
 class Snakes extends Component {
-  render () {
+  state = {
+    snakes: [],
+    selected: []
+  }
+
+  componentDidMount = () => {
+    this.loadSnakes()
+  }
+
+  loadSnakes = async() => {
+    const resp = await axios(`${config.SERVER}/api/snakes/`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: true
+    })
+    this.setState({snakes: resp.data})
+  }
+
+  selectSnake = (snake) => {
+    let { selected } = this.state
+    if (selected.indexOf(snake) === -1) {
+      selected.push(snake)
+    } else {
+      selected = selected.filter(s => s !== snake)
+    }
+    this.setState({selected})
+  }
+
+  render() {
+    const {snakes} = this.state
     return (
-      <Table celled inverted>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Notes</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>Yo yo</Table.Cell>
-            <Table.Cell>here</Table.Cell>
-            <Table.Cell textAlign="right">another</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+      <Container>
+        <Table celled inverted>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell/>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {snakes.map(s => {
+              return (
+                <Table.Row key={s.name}>
+                  <Table.Cell>
+                    <Form.Checkbox onChange={() => this.selectSnake(s)} />
+                  </Table.Cell>
+                  <Table.Cell>{s.name}</Table.Cell>
+                  <Table.Cell>{s.url}</Table.Cell>
+                </Table.Row>
+              )
+            })}
+          </Table.Body>
+        </Table>
+
+        <Form>
+        </Form>
+      </Container>
     )
   }
 }

@@ -10,7 +10,7 @@ import config from './config'
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter, teamRouter, tournamentRouter, swuRouter } from './rest'
+import { userRouter, teamRouter, tournamentRouter, swuRouter, snakesRouter } from './rest'
 import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
@@ -45,6 +45,7 @@ app.use('/api/self', userRouter)
 app.use('/api/team', teamRouter)
 app.use('/api/tournaments', tournamentRouter)
 app.use('/api/swu', swuRouter)
+app.use('/api/snakes', snakesRouter)
 
 app.post('/api/github-username', (req: express.Request, res: express.Response) => {
   const client = github.client(config.GITHUB_OAUTH_TOKEN);
