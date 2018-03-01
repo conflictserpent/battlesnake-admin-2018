@@ -141,9 +141,10 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
     gameId = await createGameWithConfig({
       width: user.bountyCollector.boardWidth,
       height: user.bountyCollector.boardHeight,
-      maxFood: 10,
-      snakeStartLength: 5,
-      decHealthPoints: 1,
+      maxFood: user.bountyCollector.maxFood,
+      snakeStartLength: user.bountyCollector.snakeStartLength,
+      decHealthPoints: user.bountyCollector.decHealthPoints,
+      pinTail: user.bountyCollector.pinTail,
       snakes: snakes,
     })
   } catch (error) {
