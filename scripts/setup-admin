@@ -1,0 +1,22 @@
+
+#!/bin/bash
+
+read -p "username: " username
+
+cat > dynamo-input.json <<EOF
+{
+  "TableName": "users",
+  "ReturnValues": "ALL_NEW",
+  "ReturnConsumedCapacity": "NONE",
+  "ReturnItemCollectionMetrics": "NONE",
+  "UpdateExpression": "set admin = :m",
+  "ExpressionAttributeValues": {
+    ":m": {
+      "BOOL": true
+    }
+  }
+}
+EOF
+
+aws dynamodb update-item $DYNAMO_FLAGS --table-name users --key "{\"username\": {\"S\": \"${username}\"}}" --cli-input-json="$(cat dynamo-input.json)"
+rm dynamo-input.json

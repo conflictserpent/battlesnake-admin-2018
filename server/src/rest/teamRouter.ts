@@ -1,6 +1,6 @@
 import express = require('express')
 import { Router } from 'express'
-import { ensureAuthenticated } from '../passport-auth'
+import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
 import {
   updateUser,
   findUserByUserName,
@@ -30,7 +30,7 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
   res.json(team)
 })
 
-router.post('/admin-create', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: express.Request, res: express.Response) => {
 
   const user = {
     id: req.body.user.id,
