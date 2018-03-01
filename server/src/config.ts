@@ -9,6 +9,8 @@ const config = {
   // The callback URL is defined when you create a GH token
   GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
 
+  GITHUB_OAUTH_TOKEN: process.env.GITHUB_OAUTH_TOKEN,
+
   // Elasticache
   REDIS_HOST: process.env.REDIS_HOST || 'localhost',
 

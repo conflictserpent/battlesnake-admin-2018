@@ -3,13 +3,14 @@ import passportGithub = require('passport-github')
 import passport = require('passport')
 import session = require('express-session')
 import RedisStore = require('connect-redis')
+import github = require('octonode')
 
 import { ensureAuthenticated } from './passport-auth'
 import config from './config'
 import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
-import { userRouter, teamRouter, tournamentRouter } from './rest'
+import { userRouter, teamRouter, tournamentRouter, swuRouter } from './rest'
 import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
@@ -43,6 +44,21 @@ app.use(
 app.use('/api/self', userRouter)
 app.use('/api/team', teamRouter)
 app.use('/api/tournaments', tournamentRouter)
+app.use('/api/swu', swuRouter)
+
+app.post('/api/github-username', (req: express.Request, res: express.Response) => {
+  const client = github.client(config.GITHUB_OAUTH_TOKEN);
+  console.log(req.body)
+  const ghme = client.user(req.body.username);
+  ghme.info((err, data, headers) => {
+    res.send({
+      username: data.login,
+      avatar: data.avatar_url,
+      id: data.id,
+      displayName: data.name
+    })
+  });
+})
 
 // Init login flow
 app.get('/auth/github', passport.authenticate('github'))

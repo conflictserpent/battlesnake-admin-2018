@@ -30,6 +30,30 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
   res.json(team)
 })
 
+router.post('/admin-create', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+
+  const user = {
+    id: req.body.user.id,
+    username: req.body.user.username,
+    displayName: req.body.user.displayName,
+    isTeamCaptain: true,
+    teamId: req.body.user.username
+  }
+  console.log(user)
+  const newUser = await updateUser(user)
+
+  const team = {
+    captainId: user.username,
+    teamName: req.body.teamName,
+    snakeUrl: req.body.snakeUrl,
+    division: req.body.division,
+    description: req.body.description
+  }
+  console.log(team)
+  const newTeam = await updateTeam(team)
+  res.json(newTeam)
+})
+
 // Create
 router.post('/', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const user: IUser = req.user as IUser

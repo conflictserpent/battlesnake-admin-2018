@@ -9,6 +9,7 @@ import Tournaments from './Tournament'
 import Bounty from './Bounty'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
+import axios from 'axios'
 
 const LoginLink = () => <a href={`${config.SERVER}/auth/github`}>Login Here</a>
 
@@ -17,6 +18,12 @@ const LoadingScreen = () => <div>Loading !!1</div>
 const ErrorScreen = () => <div>Problems abound ... </div>
 
 const WelcomeScreen = () => <div>Welcome!</div>
+
+const NoTeam = () => {
+  return (
+    <div>You are not currently on a team, please contact the person who registered your team, or head to the team registration desk to register.</div>
+  )
+}
 
 /**
  * Things required:
@@ -31,6 +38,17 @@ const WelcomeScreen = () => <div>Welcome!</div>
  *  -- Snake management
  */
 class App extends Component {
+  logout = async() => {
+    try {
+      await axios(`${config.SERVER}/self/logout`, {
+        method: 'get',
+        withCredentials: true
+      })
+      window.location.reload()
+    } catch (e) {
+      console.log(e)
+    }
+  }
   render() {
     // Loading
     if (this.props.userMgr.loading) {
@@ -55,7 +73,7 @@ class App extends Component {
             <LoginLink />
           }
           {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
-            <Redirect to='/new-team' />
+            <NoTeam />
           }
           {this.props.userMgr.user.bountyCollector &&
             <Redirect to='/bounty' />

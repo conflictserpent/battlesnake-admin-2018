@@ -24,6 +24,16 @@ export async function getTeam(teamId: string): Promise<ITeam> {
   return item.Item as ITeam
 }
 
+export async function getTeams(): Promise<ITeam[]> {
+  const params = {
+    TableName: TEAM_TABLE,
+  }
+  const item = await getDocumentClient()
+    .scan(params)
+    .promise()
+  return item.Items as ITeam[]
+}
+
 // TODO: Make sure user is on this team (otherwise - unauthorized)
 export async function updateTeam(team: ITeam) {
   const params = {

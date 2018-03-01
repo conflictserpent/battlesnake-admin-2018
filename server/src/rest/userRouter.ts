@@ -11,6 +11,11 @@ router.get('/', ensureAuthenticated, (req: express.Request, res: express.Respons
   res.json(req.user)
 })
 
+router.get('/logout', (req: express.Request, res: express.Response) => {
+  req.logout()
+  res.send({})
+})
+
 router.post(
   '/captain-on',
   ensureAuthenticated,

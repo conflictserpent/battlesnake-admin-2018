@@ -31,6 +31,7 @@
     "express-session": "^1.15.6",
     "faker": "^4.1.0",
     "lodash": "^4.17.4",
+    "octonode": "^0.9.1",
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "request": "^2.83.0",

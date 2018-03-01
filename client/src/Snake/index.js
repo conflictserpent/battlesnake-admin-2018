@@ -9,7 +9,7 @@ class Snake extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = async () => {
+  handleSubmit = async() => {
     const { snakeUrl, teamName } = this.state
     console.log(snakeUrl, teamName)
 
@@ -32,7 +32,7 @@ class Snake extends Component {
     this.setState({ loading: false })
   };
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
       this.setState({
         snakeUrl: nextProps.teamMgr.team.snakeUrl || '',
@@ -41,7 +41,7 @@ class Snake extends Component {
     }
   }
 
-  render () {
+  render() {
     const { snakeUrl, teamName } = this.state
     return (
       <Form
