@@ -48,10 +48,16 @@ class Bounty extends React.Component {
               Board Height: {config.boardHeight}
             </p>
             <p>
-              Food: {config.food}
+              Max Food: {config.maxFood}
             </p>
             <p>
               Pin Tail: {config.pinTail}
+            </p>
+            <p>
+              Snake Start Length: {config.snakeStartLength}
+            </p>
+            <p>
+              Health Lost Per Turn: {config.decHealthPoints}
             </p>
 
             <div>
