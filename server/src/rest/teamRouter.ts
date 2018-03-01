@@ -123,6 +123,12 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
     return
   }
 
+  if (!team) {
+    res.status(400)
+    res.json({ error: 'Team not found' })
+    return
+  }
+
   // Collect snakes.
   const snakes: ISnakeConfig[] = [{
     name: team.captainId,
