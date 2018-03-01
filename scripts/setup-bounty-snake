@@ -1,0 +1,49 @@
+#!/bin/bash
+
+read -p "username: " username
+read -p "snakeUrl: " snakeUrl
+read -p "boardWidth: " boardWidth
+read -p "boardHeight: " boardHeight
+read -p "maxFood: " maxFood
+read -p "snakeStartLength: " snakeStartLength
+read -p "decHealthPoints: " decHealthPoints
+read -p "pinTail: " pinTail
+
+cat > dynamo-input.json <<EOF
+{
+  "TableName": "users",
+  "ReturnValues": "ALL_NEW",
+  "ReturnConsumedCapacity": "NONE",
+  "ReturnItemCollectionMetrics": "NONE",
+  "UpdateExpression": "set bountyCollector = :m",
+  "ExpressionAttributeValues": {
+    ":m": {
+      "M": {
+        "snakeUrls": {
+          "SS": ["${snakeUrl}"]
+        },
+        "boardWidth": {
+          "N": "${boardWidth}"
+        },
+        "boardHeight": {
+          "N": "${boardHeight}"
+        },
+        "maxFood": {
+          "N": "${maxFood}"
+        },
+        "snakeStartLength": {
+          "N": "${snakeStartLength}"
+        },
+        "decHealthPoints": {
+          "N": "${decHealthPoints}"
+        },
+        "pinTail": {
+          "BOOL": ${pinTail}
+        }
+      }
+    }
+  }
+}
+EOF
+
+aws dynamodb update-item $DYNAMO_FLAGS --table-name users --key "{\"username\": {\"S\": \"${username}\"}}" --cli-input-json="$(cat dynamo-input.json)"

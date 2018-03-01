@@ -160,7 +160,7 @@ export async function setAsBountyCollector(username: string, collector: IBountyC
     Key: {
       username: username,
     },
-    UpdateExpression: 'set bountyCollector = :dn, id = :id, isTeamCaptain = :tc',
+    UpdateExpression: 'set bountyCollector = :dn',
     ExpressionAttributeValues: {
       ':dn': {
         M: collector,
