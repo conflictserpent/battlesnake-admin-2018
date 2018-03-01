@@ -104,6 +104,46 @@ router.get('/members', ensureAuthenticated, async (req: express.Request, res: ex
   res.json(members)
 })
 
+router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+  const teamId = req.params.teamId
+
+  let team: ITeam = null
+  try {
+    team = await getTeam(teamId)
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+    res.json({ error })
+    return
+  }
+
+  const snakes: ISnakeConfig[] = req.body.snakes
+  snakes.push({
+    name: team.teamName,
+    url: team.snakeUrl
+  })
+
+  let gameId: string
+  try {
+    gameId = await createGameWithConfig({
+      width: req.body.width,
+      height: req.body.height,
+      maxFood: req.body.food,
+      snakeStartLength: 3,
+      decHealthPoints: 1,
+      pinTail: false,
+      snakes: snakes,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+    res.json({ error })
+    return
+  }
+
+  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
+})
+
 // Start a bounty game
 router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const teamId = req.params.teamId
