@@ -73,12 +73,13 @@ class App extends Component {
             <LoginLink />
           }
           {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
-            <NoTeam />
+            <Redirect to='/no-team' />
           }
           {this.props.userMgr.user.bountyCollector &&
             <Redirect to='/bounty' />
           }
           <Route exact path="/" render={() => <Redirect to='/team' />} />
+          <Route path="/no-team" component={NoTeam} />
           <Route path="/team" component={Team} />
           <Route path="/new-team" component={CreateTeam} />
           <Route path="/swu" component={Admin} />
