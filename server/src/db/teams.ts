@@ -36,18 +36,26 @@ export async function getTeams(): Promise<ITeam[]> {
 
 // TODO: Make sure user is on this team (otherwise - unauthorized)
 export async function updateTeam(team: ITeam) {
+  const eavals = {
+    ':tn': team.teamName,    
+    ':desc': team.description,
+    ':div': team.division
+  }
+  let uexpr = 'set teamName = :tn, description = :desc, division = :div'
+
+  // snake URL is optional, so check if one is passed to add to update vals/expression
+  if (team.snakeUrl) {
+    eavals[':su'] = team.snakeUrl
+    uexpr += ', snakeUrl = :su'
+  }
+
   const params = {
     TableName: TEAM_TABLE,
     Key: {
       captainId: team.captainId,
     },
-    UpdateExpression: 'set snakeUrl = :su, teamName = :tn, description = :desc, division = :div',
-    ExpressionAttributeValues: {
-      ':tn': team.teamName,
-      ':su': team.snakeUrl,
-      ':desc': team.description,
-      ':div': team.division
-    },
+    UpdateExpression: uexpr,
+    ExpressionAttributeValues: eavals,
     ReturnValues: 'ALL_NEW',
   }
 

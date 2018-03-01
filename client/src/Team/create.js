@@ -11,7 +11,6 @@ const divisions = [
 
 class TeamFields extends Component {
   state = {
-    snakeUrl: '',
     teamName: '',
     description: '',
     division: '',
@@ -29,7 +28,6 @@ class TeamFields extends Component {
         method: 'post',
         withCredentials: true,
         data: {
-          snakeUrl: this.state.snakeUrl,
           teamName: this.state.teamName,
           description: this.state.description,
           division: this.state.division,
@@ -46,7 +44,7 @@ class TeamFields extends Component {
   };
 
   render() {
-    const { snakeUrl, teamName, description, division } = this.state
+    const { teamName, description, division } = this.state
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -60,17 +58,6 @@ class TeamFields extends Component {
             error={
               this.state.error &&
               this.state.error.field === 'teamName'
-            }
-          />
-          <Form.Input
-            label="Snake URL"
-            placeholder="Snake URL"
-            name="snakeUrl"
-            value={snakeUrl}
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'snakeUrl'
             }
           />
         </Form.Group>
