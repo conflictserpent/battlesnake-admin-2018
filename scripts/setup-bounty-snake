@@ -46,4 +46,5 @@ cat > dynamo-input.json <<EOF
 }
 EOF
 
-aws dynamodb update-item $DYNAMO_FLAGS --table-name users --key "{\"username\": {\"S\": \"${username}\"}}" --cli-input-json="$(cat dynamo-input.json)"
+aws dynamodb update-item $DYNAMO_FLAGS --table-name users --key "{\"username\": {\"S\": \"${username}\"}}" --cli-input-json="$(cat dynamo-input.json)" $@
+rm dynamo-input.json
