@@ -72,9 +72,10 @@ class App extends Component {
           {!this.props.userMgr.loggedIn &&
             <LoginLink />
           }
-          {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
+          {/* uncomment the below once admin stuff is merged */}
+          {/* {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
             <Redirect to='/no-team' />
-          }
+          } */}
           {this.props.userMgr.user.bountyCollector &&
             <Redirect to='/bounty' />
           }

@@ -59,9 +59,6 @@ class Snakes extends Component {
             })}
           </Table.Body>
         </Table>
-
-        <Form>
-        </Form>
       </Container>
     )
   }
