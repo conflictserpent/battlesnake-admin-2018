@@ -129,6 +129,11 @@ export async function findUserByUserName(id: string): Promise<IUser> {
   const item = await getDocumentClient()
     .get(params)
     .promise()
+
+  // DynamoDB will return a string[] as { values: string[] }.
+  if (item.Item.bountyCollector && item.Item.bountyCollector.snakeUrls) {
+    item.Item.bountyCollector.snakeUrls = item.Item.bountyCollector.snakeUrls.values
+  }
   return item.Item as IUser
 }
 
@@ -157,7 +162,7 @@ export async function setAsBountyCollector(username: string, collector: IBountyC
     Key: {
       username: username,
     },
-    UpdateExpression: 'set bountyCollector = :dn, id = :id, isTeamCaptain = :tc',
+    UpdateExpression: 'set bountyCollector = :dn',
     ExpressionAttributeValues: {
       ':dn': {
         M: collector,

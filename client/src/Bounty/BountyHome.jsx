@@ -19,15 +19,18 @@ class Bounty extends React.Component {
       withCredentials: true
     }).then(res => {
       this.setState({
-        game: res.data
+        game: res.data,
+        error: null,
       })
+    }).catch(error => {
+      this.setState({ error: error.message })
     })
   }
 
   render() {
     const { loading, user } = this.props.userMgr
     const config = user.bountyCollector
-    const { game } = this.state
+    const { game, error } = this.state
     console.log(game)
 
     return (
@@ -36,10 +39,13 @@ class Bounty extends React.Component {
         {loading &&
           <p>Loading...</p>
         }
-        {!loading &&
+        {config &&
+          <p>Not a bounty collector.</p>
+        }
+        {!loading && config &&
           <div>
             <p>
-              Snake URLs: {config.snakeUrls.values.join(' ')}
+              Snake URLs: {config.snakeUrls.join(' ')}
             </p>
             <p>
               Board Width: {config.boardWidth}
@@ -62,8 +68,11 @@ class Bounty extends React.Component {
 
             <div>
               <h3>Setup Game</h3>
+              <p>
+                Insert the captain's Github username:
+              </p>
               <Form.Input
-                placeholder="Team Name"
+                placeholder="Captains Github Username"
                 name="teamName"
                 onChange={this.handleFieldChange.bind(this, 'teamName')}
                 value={this.state.teamName || ''}
@@ -75,6 +84,12 @@ class Bounty extends React.Component {
               <h4>
                 <a target="_blank" href={game.gameUrl}>{game.gameUrl}</a>
               </h4>
+            }
+
+            {error &&
+              <div>
+                Error starting game: {error}
+              </div>
             }
           </div>
         }
