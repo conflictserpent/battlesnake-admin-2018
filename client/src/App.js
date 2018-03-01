@@ -65,6 +65,8 @@ class App extends Component {
       return <WelcomeScreen />
     }
 
+    console.log(this.props.userMgr)
+
     // Finally - on a team - can edit team, invite members, or leave team
     return (
       <Router>
@@ -72,17 +74,22 @@ class App extends Component {
           {!this.props.userMgr.loggedIn &&
             <LoginLink />
           }
-          {/* uncomment the below once admin stuff is merged */}
-          {/* {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
-            <Redirect to='/no-team' />
-          } */}
-          <Route exact path="/" render={() => <Redirect to='/team' />} />
-          <Route path="/no-team" component={NoTeam} />
-          <Route path="/team" component={Team} />
-          <Route path="/new-team" component={CreateTeam} />
-          <Route path="/swu" component={Admin} />
-          <Route path="/tournament" component={Tournaments} />
-          <Route path="/bounty" component={Bounty} />
+          {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector && !this.props.userMgr.user.admin &&
+            <NoTeam />
+          }
+          {this.props.userMgr.user.teamId &&
+          <div>
+            <Route exact path="/" render={() => <Redirect to='/team' />} />
+            <Route path="/team" component={Team} />
+          </div>}
+          {this.props.userMgr.user.admin &&
+          <div>
+            <Route path="/new-team" component={CreateTeam} />
+            <Route path="/swu" component={Admin} />
+            <Route path="/tournament" component={Tournaments} />
+            <Route path="/bounty" component={Bounty} />
+          </div>}
+
         </div>
       </Router>
     )

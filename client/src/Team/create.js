@@ -156,7 +156,7 @@ class GithubUsername extends Component {
         {user &&
           <div>
             <div>
-              <img src={user.avatar} />
+              <img alt={user.username} src={user.avatar} />
             </div>
             <Button onClick={this.continue}>Continue</Button>
             <Button onClick={this.back}>Back</Button>
