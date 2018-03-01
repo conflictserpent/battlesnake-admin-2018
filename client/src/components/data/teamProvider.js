@@ -11,7 +11,7 @@ export const teamProvider = ReactClass => {
       team: {}
     };
 
-    handleError (e) {
+    handleError(e) {
       if (e.response && e.response.status === 401) {
         this.setState({
           loading: false
@@ -24,7 +24,7 @@ export const teamProvider = ReactClass => {
       })
     }
 
-    componentDidMount = async () => {
+    componentDidMount = async() => {
       try {
         const teamResp = await axios.get(`${config.SERVER}/api/team`, {
           withCredentials: true

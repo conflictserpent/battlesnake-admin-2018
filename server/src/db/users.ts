@@ -20,6 +20,8 @@ export interface IUser {
   isTeamCaptain: boolean
   teamId?: string
 
+  admin?: boolean
+
   bountyCollector?: IBountyCollector
 }
 

@@ -5,7 +5,7 @@ import { Grid, Container, Image, Table } from 'semantic-ui-react'
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
 
-import { membersProvider } from '../components/data'
+import { membersProvider, teamProvider } from '../components/data'
 
 import TeamEdit from './edit'
 
@@ -25,7 +25,7 @@ class Team extends Component {
           <Container>
             <Route exact path="/team" component={TeamHome} />
             <Route path="/team/edit" component={TeamEdit} />
-            <Route path="/team/snakes" component={Snakes} />
+            <Route path="/team/snakes" component={teamProvider(Snakes)} />
           </Container>
         </Grid.Column>
       </Grid>
