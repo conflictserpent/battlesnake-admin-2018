@@ -46,11 +46,12 @@ export async function updateUser(u: IUser): Promise<IUser> {
     Key: {
       username: user.username,
     },
-    UpdateExpression: 'set displayName = :dn, id = :id, isTeamCaptain = :tc',
+    UpdateExpression: 'set displayName = :dn, id = :id, isTeamCaptain = :tc, teamId = :tid',
     ExpressionAttributeValues: {
       ':dn': user.displayName,
       ':id': user.id,
       ':tc': user.isTeamCaptain,
+      ':tid': user.teamId,
     },
     ReturnValues: 'ALL_NEW',
   }
