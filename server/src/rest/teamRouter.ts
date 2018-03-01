@@ -110,7 +110,9 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
   const user: IUser = req.user as IUser
 
   if (!user.bountyCollector) {
-    throw new Error('user must be a bounty collector')
+    res.status(500)
+    res.json({ error: 'must be a bounty collector' })
+    return
   }
 
   let team: ITeam = null
