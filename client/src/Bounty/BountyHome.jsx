@@ -39,7 +39,10 @@ class Bounty extends React.Component {
         {loading &&
           <p>Loading...</p>
         }
-        {!loading &&
+        {config &&
+          <p>Not a bounty collector.</p>
+        }
+        {!loading && config &&
           <div>
             <p>
               Snake URLs: {config.snakeUrls.join(' ')}
