@@ -154,7 +154,7 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
     return
   }
 
-  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
+  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}`, snakes })
 })
 
 // Info about the team captain

@@ -75,9 +75,6 @@ class App extends Component {
           {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector &&
             <Redirect to='/no-team' />
           }
-          {this.props.userMgr.user.bountyCollector &&
-            <Redirect to='/bounty' />
-          }
           <Route exact path="/" render={() => <Redirect to='/team' />} />
           <Route path="/no-team" component={NoTeam} />
           <Route path="/team" component={Team} />

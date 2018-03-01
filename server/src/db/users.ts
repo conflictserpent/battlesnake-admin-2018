@@ -127,6 +127,11 @@ export async function findUserByUserName(id: string): Promise<IUser> {
   const item = await getDocumentClient()
     .get(params)
     .promise()
+
+  // DynamoDB will return a string[] as { values: string[] }.
+  if (item.Item.bountyCollector && item.Item.bountyCollector.snakeUrls) {
+    item.Item.bountyCollector.snakeUrls = item.Item.bountyCollector.snakeUrls.values
+  }
   return item.Item as IUser
 }
 
