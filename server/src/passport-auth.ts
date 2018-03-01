@@ -40,3 +40,12 @@ export function ensureAuthenticated(req, res, next) {
   }
   res.send(401, { err: 'missing authorization' })
 }
+
+export function authorizeAdmin(req, res, next) {
+  const user: IUser = req.user as IUser
+  if (!user.admin) {
+    res.send(403, { err: 'unauthorized' })
+    return
+  }
+  next()
+}

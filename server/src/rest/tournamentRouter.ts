@@ -7,12 +7,13 @@ import { startGame, getMatchWinners } from '../db/match'
 import { ITeam } from '../db/teams';
 import { v4 } from 'uuid'
 import { getGameStatus } from '../game-server';
+import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
 
 export const router = Router()
 
 const snakeUrls = ['http://35.230.120.237', 'https://dsnek.herokuapp.com']
 
-router.get('/', async (req, res) => {
+router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const dc = getDocumentClient()
   const input = {
     TableName: 'tournaments',
@@ -37,12 +38,12 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const t = await loadTournament(req.params.id)
   res.send(t)
 })
 
-router.get('/:id/match/:matchId', async (req, res) => {
+router.get('/:id/match/:matchId', authorizeAdmin, async (req, res) => {
   if (!req.params.matchId || !req.params.id) {
     res.send({})
     return
@@ -65,7 +66,7 @@ router.get('/:id/match/:matchId', async (req, res) => {
   })
 })
 
-router.get('/extra', async (req, res) => {
+router.get('/extra', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const id = req.query.id
   if (id) {
     const t = await loadTournament(id)
@@ -92,7 +93,7 @@ router.get('/extra', async (req, res) => {
   }
 })
 
-router.post('/create', async (req, res) => {
+router.post('/create', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const teams = []
   for (let i = 0; i < 100; i++) {
     const team: ITeam = {
@@ -108,7 +109,7 @@ router.post('/create', async (req, res) => {
   res.send(JSON.stringify(t))
 })
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   if (!req.body.id) {
     res.send({})
   }
@@ -123,7 +124,7 @@ router.post('/delete', async (req, res) => {
   res.send({})
 })
 
-router.get('/:id/match/:matchId/run-game', async (req, res) => {
+router.get('/:id/match/:matchId/run-game', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   if (!req.params.matchId || !req.params.id) {
     res.send({})
     return
@@ -136,7 +137,7 @@ router.get('/:id/match/:matchId/run-game', async (req, res) => {
   res.send(m)
 })
 
-router.get('/reset-matches', async (req, res) => {
+router.get('/reset-matches', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   if (!req.query.id) {
     res.redirect('/tournaments')
     return

@@ -1,6 +1,6 @@
 import express = require('express')
 import { Router } from 'express'
-import { ensureAuthenticated } from '../passport-auth'
+import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
 import {
   updateUser,
   findUserByUserName,
@@ -30,7 +30,7 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
   res.json(team)
 })
 
-router.post('/admin-create', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: express.Request, res: express.Response) => {
 
   const user = {
     id: req.body.user.id,
@@ -150,7 +150,9 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
   const user: IUser = req.user as IUser
 
   if (!user.bountyCollector) {
-    throw new Error('user must be a bounty collector')
+    res.status(500)
+    res.json({ error: 'must be a bounty collector' })
+    return
   }
 
   let team: ITeam = null
