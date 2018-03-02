@@ -40,8 +40,7 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
     isTeamCaptain: true,
     teamId: req.body.user.username
   }
-  console.log(user)
-  const newUser = await updateUser(user)
+  const newUser = await updateUser(user as IUser)
 
   const team = {
     captainId: user.username,
@@ -270,12 +269,12 @@ router.post(
     }
 
     // Don't allow removing el capitan!
-    if (removeUser.teamId == removeUser.username) {
+    if (removeUser.teamId === removeUser.username) {
       return res.status(400).json({ msg: 'captains cannot be removed' })
     }
 
     // Don't allow removing user from another team
-    if (removeUser.teamId != req.user.teamId) {
+    if (removeUser.teamId !== req.user.teamId) {
       return res.status(400).json({ msg: 'users are not on the same team - you can only manage users from your own team' })
     }
 
