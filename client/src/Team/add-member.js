@@ -9,14 +9,14 @@ class AddMember extends Component {
   state = {
     newUsername: '',
     success: false,
-    error: false
+    error: null
   };
 
   handleChange = (e, { name, value }) => {
     this.setState({
       [name]: value,
       success: false,
-      error: false
+      error: null
     })
   };
 
@@ -42,15 +42,14 @@ class AddMember extends Component {
           username: this.state.newUsername
         }
       })
+      this.setState({
+        success: true
+      })
+      window.location.reload()
     } catch (e) {
-      console.log(e)
-      this.setState({ error: e })
+      this.setState({ error: e.response.data.msg })
     }
 
-    this.setState({
-      success: true
-    })
-    window.location.reload()
   };
 
   render() {
@@ -77,7 +76,7 @@ class AddMember extends Component {
             />
           </Form.Group>
           <Message error>
-            <p>{this.state.error && this.state.error.msg}</p>
+            <p>{this.state.error}</p>
           </Message>
           <Message success>
             <p>Added successfully</p>
