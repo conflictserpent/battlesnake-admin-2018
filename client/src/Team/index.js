@@ -5,7 +5,7 @@ import { Grid, Container, Image, Table } from 'semantic-ui-react'
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
 
-import { membersProvider, teamProvider } from '../components/data'
+import { membersProvider, teamProvider, userProvider } from '../components/data'
 
 import TeamEdit from './edit'
 import AddMember from './add-member'
@@ -23,7 +23,7 @@ class Team extends Component {
           <Link to="/">
             <img src={logo} className="App-logo" alt="logo" />
           </Link>
-          <Nav />
+          <Nav bountyCollector={this.props.userMgr.user.bountyCollector}/>
         </Grid.Column>
         <Grid.Column width={12}>
           <Container>
@@ -112,4 +112,4 @@ class TeamHomeDisplay extends Component {
 }
 const TeamHome = membersProvider(TeamHomeDisplay)
 
-export default Team
+export default userProvider(Team)
