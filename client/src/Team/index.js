@@ -9,7 +9,9 @@ import { membersProvider, teamProvider } from '../components/data'
 
 import TeamEdit from './edit'
 import AddMember from './add-member'
-import RemoveMember from './remove-member'
+
+import axios from 'axios'
+import config from '../config'
 
 import logo from '../images/logo-bs18.png'
 
@@ -27,8 +29,8 @@ class Team extends Component {
           <Container>
             <Route exact path="/team" component={TeamHome} />
             <Route path="/team/edit" component={TeamEdit} />
-            <Route path="/team/add-member" component={AddMember} />
-            <Route path="/team/remove/:username" component={RemoveMember} />
+            {/* <Route path="/team/add-member" component={AddMember} /> */}
+            {/* <Route path="/team/remove/:username" component={RemoveMember} /> */}
             <Route path="/team/snakes" component={teamProvider(Snakes)} />
           </Container>
         </Grid.Column>
@@ -38,6 +40,21 @@ class Team extends Component {
 }
 
 class TeamHomeDisplay extends Component {
+  removeMember = async(username) => {
+    try {
+      await axios(`${config.SERVER}/api/team/remove-user`, {
+        method: 'post',
+        withCredentials: true,
+        data: {
+          username: username
+        }
+      })
+    } catch (e) {
+      this.setState({ error: e.response.data.msg })
+    }
+    window.location.reload()
+  }
+
   render() {
     let members = !this.props.membersMgr.loading
       ? this.props.membersMgr.members
@@ -58,6 +75,8 @@ class TeamHomeDisplay extends Component {
                 <Table.Row key={member.username}>
                   <Table.Cell>
                     <Image
+                      width="50"
+                      height="50"
                       floated="left"
                       rounded
                       src={`https://github.com/${member.username}.png?size=40`}
@@ -66,9 +85,9 @@ class TeamHomeDisplay extends Component {
                   </Table.Cell>
                   <Table.Cell />
                   <Table.Cell textAlign="right">
-                    <Link to={'/team/remove/' + member.username}>
-                      <span role="img">❎</span> Remove
-                    </Link>
+                    <a onClick={() => this.removeMember(member.username)}>
+                      <span role="img" aria-label="Remove">❎</span> Remove
+                    </a>
                   </Table.Cell>
                 </Table.Row>
               )
@@ -78,16 +97,13 @@ class TeamHomeDisplay extends Component {
               <Table.Cell />
               <Table.Cell textAlign="right">
                 <Link to="/team/edit">
-                  <span role="img">✏️</span> Edit Team
-                </Link>
-                <br /><br />
-                <Link to="/team/add-member">
-                  <span role="img">😁</span> Add Member
+                  <span role="img" aria-label="Edit">✏️</span> Edit Team
                 </Link>
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
+        <AddMember />
       </div>
     )
   }

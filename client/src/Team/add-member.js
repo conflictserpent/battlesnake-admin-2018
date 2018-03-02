@@ -50,6 +50,7 @@ class AddMember extends Component {
     this.setState({
       success: true
     })
+    window.location.reload()
   };
 
   render() {
