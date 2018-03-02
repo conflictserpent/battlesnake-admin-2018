@@ -116,7 +116,6 @@ export async function getGameStatus(gameId: number): Promise<IGameStatus> {
         return JSON.parse(res.body)
     }
     catch {
-        console.log("OH SHIT!!!")
         return {
             status: "missing",
             board: {

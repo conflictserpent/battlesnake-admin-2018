@@ -49,7 +49,6 @@ app.use('/api/snakes', snakesRouter)
 
 app.post('/api/github-username', (req: express.Request, res: express.Response) => {
   const client = github.client(config.GITHUB_OAUTH_TOKEN);
-  console.log(req.body)
   const ghme = client.user(req.body.username);
   ghme.info((err, data, headers) => {
     res.send({

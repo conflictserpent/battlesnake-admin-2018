@@ -25,6 +25,9 @@ router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
       return {
         id: t.id,
         division: t.division,
+        activeGame: t.gameIndex,
+        activeMatch: t.activeMatch,
+        gameServerId: t.gameServerId,
         matches: await Promise.all(t.matches.map(async m => {
           const winners = (await getMatchWinners(m)).filter(w => w !== null)
           return {
@@ -133,6 +136,21 @@ router.get('/:id/match/:matchId/run-game', ensureAuthenticated, authorizeAdmin, 
   const t = await loadTournament(req.params.id)
   const m = t.matches.find(mm => mm.matchId === req.params.matchId)
   await startGame(m)
+  await saveTournament(t)
+  res.send(m)
+})
+
+router.post('/:id/match/:matchId/set-active', ensureAuthenticated, authorizeAdmin, async (req, res) => {
+  if (!req.params.matchId || !req.params.id) {
+    res.send({})
+    return
+  }
+
+  const t = await loadTournament(req.params.id)
+  const m = t.matches.find(mm => mm.matchId === req.params.matchId)
+  t.gameIndex = req.body.gameIndex
+  t.gameServerId = req.body.gameServerId
+  t.activeMatch = m
   await saveTournament(t)
   res.send(m)
 })

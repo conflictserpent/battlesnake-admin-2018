@@ -20,6 +20,33 @@ class Tournaments extends Component {
   }
 }
 
+export class TournamentActiveGame extends Component {
+  state = {
+    activeGame: null
+  }
+
+  componentDidMount = async() => {
+    await this.loadTournament()
+  }
+
+  loadTournament = async() => {
+    const { match } = this.props
+    const resp = await axios(`${config.SERVER}/api/tournaments/${match.params.id}`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: true
+    })
+    this.setState({
+      gameId: resp.data.gameServerId
+    })
+  }
+
+  render() {
+    const {gameId} = this.state
+    return (<iframe src={`${config.GAME_SERVER}/${gameId}`} style={{width: '100%', height: '1080px'}}></iframe>)
+  }
+}
+
 class TournamentMatchInfo extends Component {
   state = {
     match: null
@@ -122,7 +149,9 @@ class TournamentMatchInfo extends Component {
 
 class TournamentInfo extends Component {
   state = {
-    tournament: null
+    tournament: null,
+    activeMatch: {},
+    activeGame: null
   }
 
   componentDidMount = async() => {
@@ -136,7 +165,11 @@ class TournamentInfo extends Component {
       headers: {'Content-Type': 'application/json'},
       withCredentials: true
     })
-    this.setState({tournament: resp.data})
+    this.setState({
+      tournament: resp.data,
+      activeGame: resp.data.gameIndex,
+      activeMatch: resp.data.activeMatch || {}
+    })
   }
 
   checkMatchStatus = async(matchId) => {
@@ -167,10 +200,24 @@ class TournamentInfo extends Component {
     this.loadTournament()
   }
 
-  render() {
+  setActiveGame = async(match, game, number) => {
     const { tournament } = this.state
+    await axios(`${config.SERVER}/api/tournaments/${tournament.id}/match/${match.matchId}/set-active`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: true,
+      data: {
+        gameServerId: game,
+        gameIndex: number
+      }
+    })
+    this.setState({activeMatch: match, activeGame: number})
+  }
+
+  render() {
+    const { tournament, activeMatch, activeGame } = this.state
     return (
-      <div>
+      <div id="top">
         { !tournament && <div>Loading...</div>}
         { tournament &&
         <div>
@@ -183,6 +230,12 @@ class TournamentInfo extends Component {
               floated="right"
               type="button"
               onClick={this.loadTournament}>Refresh</Button>
+            {activeMatch && activeGame &&
+            <div>
+              Current Match: {activeMatch.matchId}&nbsp;&nbsp;&nbsp;
+              Current Game: {activeGame}&nbsp;&nbsp;&nbsp;
+              <NavLink to={`/tournament/${tournament.id}/active-game`} target="_blank">View</NavLink>
+            </div>}
           </Item>
           <h1>{ tournament.division }</h1>
           <Table>
@@ -208,7 +261,8 @@ class TournamentInfo extends Component {
                       {(m.gameIds || []).map(g => {
                         return (
                           <div key={g}>
-                            <a key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
+                            <a style={{paddingRight: '10px'}} key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
+                            <a href="#top" onClick={() => { this.setActiveGame(m, g, m.gameIds.indexOf(g) + 1) }}>Set Active</a>
                           </div>
                         )
                       })}

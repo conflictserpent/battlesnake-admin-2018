@@ -5,7 +5,8 @@ import config from './config'
 import Team from './Team'
 import CreateTeam from './Team/create'
 import Admin from './Admin'
-import Tournaments from './Tournament'
+import Tournaments, {TournamentActiveGame} from './Tournament'
+
 import Bounty from './Bounty'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
@@ -50,6 +51,10 @@ class App extends Component {
     }
   }
   render() {
+    let className = 'body-wrapper'
+    if (window.location.pathname.endsWith('active-game')) {
+      className = ''
+    }
     // Loading
     if (this.props.userMgr.loading) {
       return <LoadingScreen />
@@ -65,24 +70,23 @@ class App extends Component {
       return <WelcomeScreen />
     }
 
-    console.log(this.props.userMgr)
-
     // Finally - on a team - can edit team, invite members, or leave team
     return (
       <Router>
-        <div className="body-wrapper">
-          {!this.props.userMgr.loggedIn &&
+        <div>
+          <div className={className}>
+            {!this.props.userMgr.loggedIn &&
             <LoginLink />
-          }
-          {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector && !this.props.userMgr.user.admin &&
+            }
+            {!this.props.userMgr.user.teamId && !this.props.userMgr.user.bountyCollector && !this.props.userMgr.user.admin &&
             <NoTeam />
-          }
-          {this.props.userMgr.user.teamId &&
+            }
+            {this.props.userMgr.user.teamId &&
           <div>
             <Route exact path="/" render={() => <Redirect to='/team' />} />
             <Route path="/team" component={Team} />
           </div>}
-          {this.props.userMgr.user.admin &&
+            {this.props.userMgr.user.admin &&
           <div>
             <Route path="/new-team" component={CreateTeam} />
             <Route path="/swu" component={Admin} />
@@ -90,6 +94,9 @@ class App extends Component {
             <Route path="/bounty" component={Bounty} />
           </div>}
 
+          </div>
+
+          <Route path="/tournament/:id/active-game" component={TournamentActiveGame} />
         </div>
       </Router>
     )

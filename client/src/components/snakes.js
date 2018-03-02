@@ -21,7 +21,6 @@ class Snakes extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
-      console.log(nextProps.teamMgr.team)
       this.setState({
         teamId: nextProps.teamMgr.team.captainId
       })
@@ -32,7 +31,6 @@ class Snakes extends Component {
 
   handleSubmit = async() => {
     const { selected, width, height, food, teamId } = this.state
-    console.log(teamId)
     const resp = await axios(`${config.SERVER}/api/team/${teamId}/start-game`, {
       method: 'post',
       withCredentials: true,

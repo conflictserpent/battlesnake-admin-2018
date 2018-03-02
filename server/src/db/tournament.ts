@@ -12,7 +12,10 @@ export interface ITournament {
   id: string,
   matches: IMatch[],
   teams: ITeam[],
-  division: string
+  division: string,
+  gameIndex?: number,
+  gameServerId?: number,
+  activeMatch?: IMatch
 }
 
 export function createTournament(teams: ITeam[], division: string) {
@@ -36,11 +39,7 @@ export function saveTournament(tournament: ITournament) {
 
   const params = {
     TableName: dynamoTable,
-    Item: {
-      id: tournament.id,
-      matches: tournament.matches,
-      division: tournament.division
-    },
+    Item: tournament,
   }
 
   return dc.put(params).promise()
@@ -63,19 +62,15 @@ export async function loadTournament(id: string) {
 
   const teams: ITeam[] = []
 
-  const t: ITournament = {
-    id: resp.Item.id,
-    matches: resp.Item.matches,
-    teams: teams,
-    division: resp.Item.division
-  }
+  const t: ITournament = resp.Item as ITournament
+  t.teams = []
 
   for (const m of t.matches) {
     for (const team of m.teams) {
       t.teams.push(team)
     }
   }
-  console.log("WAT!!! loaded tournament")
+  console.log("loaded tournament")
 
   return t
 }
