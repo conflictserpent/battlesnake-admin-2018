@@ -15,7 +15,7 @@ const DefaultGameConfig: IGameConfig = {
     snakes: []
 }
 
-export async function createGame(teams: ITeam[]) {
+export async function createGame(teams: ITeam[], serverUrl: string) {
     return createGameWithConfig({
         ...DefaultGameConfig,
         snakes: teams.map(t => {
@@ -34,6 +34,7 @@ export interface IGameConfig {
     snakeStartLength: number,
     decHealthPoints: number,
     pinTail?: boolean,
+    serverUrl?: string,
     snakes: ISnakeConfig[]
 }
 
@@ -42,7 +43,7 @@ export interface ISnakeConfig {
     url: string
 }
 
-export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig): Promise<number> {
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail, serverUrl }: IGameConfig): Promise<number> {
     console.log("create game with config")
     const formData = {
         "game_form[width]": width || 20,
@@ -64,7 +65,7 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         formData[deleteKey] = 'false'
     });
     const post = promisify(request.post)
-    const host = process.env.BATTLESNAKE_SERVER_HOST
+    const host = serverUrl || process.env.BATTLESNAKE_SERVER_HOST
     console.log(host)
     try {
         const res = await post(process.env.BATTLESNAKE_SERVER_HOST, { form: formData })

@@ -1,4 +1,5 @@
 import { getDocumentClient } from './client'
+import * as AWS from 'aws-sdk'
 
 export interface ITeam {
   captainId: string // id of team captain. Also the table hash key
@@ -24,28 +25,24 @@ export async function getTeam(teamId: string): Promise<ITeam> {
   return item.Item as ITeam
 }
 
-export async function getTeams(division): Promise<ITeam[]> {
-  const params: any = {
-    TableName: TEAM_TABLE
-  }
+export async function getTeams(): Promise<ITeam[]> {
 
-  if (division) {
-    const n = {
-      FilterExpression: "division = :division",
-      ExpressionAttributeValues: {
-        ':division': {
-          S: division
-        }
-      }
+  const teams: ITeam[] = []
+  let cursor = null
+  do {
+    const params: AWS.DynamoDB.ScanInput = {
+      TableName: TEAM_TABLE,
+      ExclusiveStartKey: cursor
     }
-    Object.assign(params, n)
-  }
-  console.log(params)
-  const item = await getDocumentClient()
-    .scan(params)
-    .promise()
-  console.log(item)
-  return item.Items as ITeam[]
+    const item = await getDocumentClient()
+      .scan(params)
+      .promise()
+    for (const i of item.Items as ITeam[]) {
+      teams.push(i)
+    }
+    cursor = item.LastEvaluatedKey
+  } while (cursor)
+  return teams
 }
 
 // TODO: Make sure user is on this team (otherwise - unauthorized)

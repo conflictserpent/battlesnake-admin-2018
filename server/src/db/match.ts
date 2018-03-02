@@ -1,6 +1,7 @@
 import { createGame, getGameStatus, IGameStatus } from "../game-server"
 import { v4 } from 'uuid'
 import { ITeam } from "./teams";
+import config from '../config'
 
 export interface IMatch {
     teams: ITeam[]
@@ -26,7 +27,7 @@ export async function startGame(match: IMatch) {
     if (!match.gameIds) {
         match.gameIds = []
     }
-    const game = await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1))
+    const game = await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1), config.BATTLESNAKE_TOURNAMENT_SERVER_HOST)
     match.gameIds.push(game)
 }
 

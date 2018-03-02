@@ -8,7 +8,7 @@ import * as _ from 'lodash'
 export const router = Router()
 
 router.get('/teams', ensureAuthenticated, authorizeAdmin, async (req: express.Request, res: express.Response) => {
-    const teams = await getTeams('')
+    const teams = await getTeams()
     teams.sort((a, b) => {
         if (a.teamName > b.teamName) {
             return -1

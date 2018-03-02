@@ -97,7 +97,7 @@ router.post('/create', ensureAuthenticated, authorizeAdmin, async (req, res) => 
   const divisions = ['expert', 'intermediate', 'beginner']
   for (const division of divisions) {
     console.log(division)
-    const teams = await getTeams(division)
+    const teams = (await getTeams()).filter(team => team.division === division)
     const t = createTournament(teams, division)
     saveTournament(t)
     tournaments.push(t)
