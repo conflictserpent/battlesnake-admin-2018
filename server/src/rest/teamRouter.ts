@@ -38,7 +38,8 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
     username: req.body.user.username,
     displayName: req.body.user.displayName,
     isTeamCaptain: true,
-    teamId: req.body.user.username
+    teamId: req.body.user.username,
+    admin: false
   }
   const newUser = await updateUser(user as IUser)
 
@@ -123,7 +124,7 @@ router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Requ
     url: team.snakeUrl
   })
 
-  let gameId: string
+  let gameId: number
   try {
     gameId = await createGameWithConfig({
       width: req.body.width,

@@ -101,6 +101,9 @@ hr {
   background-color: #ECF1F4;
   border-radius: 1.2rem; }
 
+.bs-action {
+  cursor: pointer;}
+
 .bs-btn {
   display: flex;
   align-items: center;

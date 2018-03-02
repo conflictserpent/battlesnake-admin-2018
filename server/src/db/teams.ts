@@ -24,20 +24,34 @@ export async function getTeam(teamId: string): Promise<ITeam> {
   return item.Item as ITeam
 }
 
-export async function getTeams(): Promise<ITeam[]> {
-  const params = {
-    TableName: TEAM_TABLE,
+export async function getTeams(division): Promise<ITeam[]> {
+  const params: any = {
+    TableName: TEAM_TABLE
   }
+
+  if (division) {
+    const n = {
+      FilterExpression: "division = :division",
+      ExpressionAttributeValues: {
+        ':division': {
+          S: division
+        }
+      }
+    }
+    Object.assign(params, n)
+  }
+  console.log(params)
   const item = await getDocumentClient()
     .scan(params)
     .promise()
+  console.log(item)
   return item.Items as ITeam[]
 }
 
 // TODO: Make sure user is on this team (otherwise - unauthorized)
 export async function updateTeam(team: ITeam) {
   const eavals = {
-    ':tn': team.teamName,    
+    ':tn': team.teamName,
     ':desc': team.description,
     ':div': team.division
   }
