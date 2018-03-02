@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Form } from 'semantic-ui-react'
+import { Container, Table, Form, Segment, Header } from 'semantic-ui-react'
 
 import axios from 'axios'
 import config from '../config'
@@ -12,7 +12,8 @@ class Snakes extends Component {
     width: 20,
     food: 5,
     gameId: null,
-    teamId: null
+    teamId: null,
+    snakeUrl: null
   }
 
   componentDidMount = () => {
@@ -21,8 +22,10 @@ class Snakes extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
+      console.log(nextProps.teamMgr)
       this.setState({
-        teamId: nextProps.teamMgr.team.captainId
+        teamId: nextProps.teamMgr.team.captainId,
+        snakeUrl: nextProps.teamMgr.team.snakeUrl
       })
     }
   }
@@ -64,13 +67,16 @@ class Snakes extends Component {
   }
 
   render() {
-    const { snakes, height, width, food, gameId } = this.state
+    const { snakes, height, width, food, gameId, snakeUrl } = this.state
     const loading = this.props.teamMgr.loading
     const split = Math.ceil(snakes.length / 2)
     const first = snakes.slice(0, split)
     const second = snakes.slice(split)
     return (
       <Container>
+        {!snakeUrl && <Segment inverted>
+          <Header as='h4' inverted color='red'>Warning: Team snake url needs to be set before creating a game.</Header>
+        </Segment>}
         <Table celled inverted>
           <Table.Header>
             <Table.Row>
@@ -139,7 +145,7 @@ class Snakes extends Component {
             />
           </Form.Group>
 
-          <Form.Button content="Create Game" />
+          {snakeUrl && <Form.Button content="Create Game" />}
           {gameId && <a href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
         </Form>
       </Container>

@@ -86,8 +86,7 @@ class TeamHomeDisplay extends Component {
                   <Table.Cell />
                   <Table.Cell textAlign="right">
                     <a onClick={() => this.removeMember(member.username)}
-                      class='bs-action'
-                    >
+                      className='bs-action'>
                       <span role="img" aria-label="Remove">❎</span> Remove
                     </a>
                   </Table.Cell>

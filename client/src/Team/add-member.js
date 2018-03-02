@@ -49,7 +49,6 @@ class AddMember extends Component {
     } catch (e) {
       this.setState({ error: e.response.data.msg })
     }
-
   };
 
   render() {
