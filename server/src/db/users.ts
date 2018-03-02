@@ -20,7 +20,7 @@ export interface IUser {
   isTeamCaptain: boolean
   teamId?: string
 
-  admin?: boolean
+  admin: boolean
 
   bountyCollector?: IBountyCollector
 }
@@ -33,6 +33,7 @@ const setDefaults = (u: IUser): IUser => {
     isTeamCaptain: u.isTeamCaptain || false,
     teamId: u.teamId || null,
     bountyCollector: null,
+    admin: false,
   }
   return user
 }
