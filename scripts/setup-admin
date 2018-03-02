@@ -1,6 +1,12 @@
 #!/bin/bash
 
-read -p "username: " username
+args_list=($@)
+num_args=${#args_list[@]}
+if [ $num_args = 3 ]; then
+  username=$args_list
+else
+  read -p "username: " username
+fi
 
 cat > dynamo-input.json <<EOF
 {
