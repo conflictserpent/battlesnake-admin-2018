@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Container, Button, Item, Table, Divider, Segment, Label, Card } from 'semantic-ui-react'
+import { Grid, Container, Button, Item, Table, Divider, Segment, Label, Card, Tab } from 'semantic-ui-react'
 import { Route, NavLink } from 'react-router-dom'
 import { NavButton } from '../components/NavButton'
 
@@ -43,7 +43,7 @@ export class TournamentActiveGame extends Component {
 
   render() {
     const {gameId} = this.state
-    return (<iframe src={`${config.GAME_SERVER}/${gameId}`} style={{width: '100%', height: '1080px'}}></iframe>)
+    return (<iframe title="game-view" src={`${config.GAME_SERVER}/${gameId}`} style={{width: '100%', height: '1080px'}}></iframe>)
   }
 }
 
@@ -185,6 +185,20 @@ class TournamentInfo extends Component {
     })
   }
 
+  setActiveGame = async(match, game, number) => {
+    const { tournament } = this.state
+    await axios(`${config.SERVER}/api/tournaments/${tournament.id}/match/${match.matchId}/set-active`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: true,
+      data: {
+        gameServerId: game,
+        gameIndex: number
+      }
+    })
+    this.setState({activeMatch: match, activeGame: number})
+  }
+
   startGame = async(matchId) => {
     const { tournament } = this.state
     if (!tournament) {
@@ -200,18 +214,77 @@ class TournamentInfo extends Component {
     this.loadTournament()
   }
 
-  setActiveGame = async(match, game, number) => {
-    const { tournament } = this.state
-    await axios(`${config.SERVER}/api/tournaments/${tournament.id}/match/${match.matchId}/set-active`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      withCredentials: true,
-      data: {
-        gameServerId: game,
-        gameIndex: number
+  getTabPanes = (tournament) => {
+    const panes = tournament.rounds.map(r => {
+      return {
+        menuItem: `Round #${r.number}`,
+        render: () => <Tab.Pane attached={false}>{this.getRoundTable(tournament, r)}</Tab.Pane>
       }
     })
-    this.setState({activeMatch: match, activeGame: number})
+    return panes
+  }
+
+  getRoundTable = (tournament, round) => {
+    return (
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Match ID</Table.HeaderCell>
+            <Table.HeaderCell># of Teams</Table.HeaderCell>
+            <Table.HeaderCell>Rounds</Table.HeaderCell>
+            <Table.HeaderCell/>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {round.matches.map(m => {
+            return (
+              <Table.Row key={m.matchId}>
+                <Table.Cell>
+                  <NavLink to={`/tournament/${tournament.id}/match/${m.matchId}`}>{m.matchId}</NavLink>
+                </Table.Cell>
+                <Table.Cell>
+                  {m.teams.length}
+                </Table.Cell>
+                <Table.Cell>
+                  {(m.gameIds || []).map(g => {
+                    return (
+                      <div key={g}>
+                        <a style={{paddingRight: '10px'}} key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
+                        <a href="#top" onClick={() => { this.setActiveGame(m, g, m.gameIds.indexOf(g) + 1) }}>Set Active</a>
+                      </div>
+                    )
+                  })}
+                </Table.Cell>
+                <Table.Cell>
+                  <Button
+                    primary
+                    size="mini"
+                    type="button"
+                    onClick={() => this.startGame(m.matchId)}>
+                             Next Heat
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            )
+          })}
+        </Table.Body>
+      </Table>
+    )
+  }
+
+  startNextRound = async() => {
+    const { tournament } = this.state
+    if (!tournament) {
+      return
+    }
+
+    await axios(`${config.SERVER}/api/tournaments/${tournament.id}/start-next-round`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: true
+    })
+
+    this.loadTournament()
   }
 
   render() {
@@ -230,6 +303,10 @@ class TournamentInfo extends Component {
               floated="right"
               type="button"
               onClick={this.loadTournament}>Refresh</Button>
+            <Button
+              floated="right"
+              type="button"
+              onClick={this.startNextRound}>Next Round</Button>
             {activeMatch && activeGame &&
             <div>
               Current Match: {activeMatch.matchId}&nbsp;&nbsp;&nbsp;
@@ -238,49 +315,8 @@ class TournamentInfo extends Component {
             </div>}
           </Item>
           <h1>{ tournament.division }</h1>
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Match ID</Table.HeaderCell>
-                <Table.HeaderCell># of Teams</Table.HeaderCell>
-                <Table.HeaderCell>Rounds</Table.HeaderCell>
-                <Table.HeaderCell/>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {tournament.matches.map(m => {
-                return (
-                  <Table.Row key={m.matchId}>
-                    <Table.Cell>
-                      <NavLink to={`/tournament/${tournament.id}/match/${m.matchId}`}>{m.matchId}</NavLink>
-                    </Table.Cell>
-                    <Table.Cell>
-                      {m.teams.length}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {(m.gameIds || []).map(g => {
-                        return (
-                          <div key={g}>
-                            <a style={{paddingRight: '10px'}} key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
-                            <a href="#top" onClick={() => { this.setActiveGame(m, g, m.gameIds.indexOf(g) + 1) }}>Set Active</a>
-                          </div>
-                        )
-                      })}
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Button
-                        primary
-                        size="mini"
-                        type="button"
-                        onClick={() => this.startGame(m.matchId)}>
-                           Next Heat
-                      </Button>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
+          <Tab menu={{ secondary: true, pointing: true }} panes={this.getTabPanes(tournament)} />
+
         </div>}
       </div>
     )

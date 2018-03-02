@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import { company } from 'faker'
 
-import { ITournament, createTournament, loadTournament, saveTournament } from '../db/tournament'
+import { ITournament, createTournament, loadTournament, saveTournament, findMatch, startNextRound } from '../db/tournament'
 import { getDocumentClient } from '../db/client'
 import { startGame, getMatchWinners } from '../db/match'
-import { ITeam } from '../db/teams';
+import { ITeam, getTeams } from '../db/teams';
 import { v4 } from 'uuid'
 import { getGameStatus } from '../game-server';
 import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
@@ -28,13 +28,13 @@ router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
         activeGame: t.gameIndex,
         activeMatch: t.activeMatch,
         gameServerId: t.gameServerId,
-        matches: await Promise.all(t.matches.map(async m => {
+        matches: await Promise.all(t.rounds.map(r => r.matches.map(async m => {
           const winners = (await getMatchWinners(m)).filter(w => w !== null)
           return {
             ...m,
             winners: (winners || []).map(w => w.teamName)
           }
-        }))
+        })))
       }
     })),
     // gameServerUrl: process.env.BATTLESNAKE_SERVER_HOST,
@@ -43,6 +43,13 @@ router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
 
 router.get("/:id", ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const t = await loadTournament(req.params.id)
+  console.log(t)
+  res.send(t)
+})
+
+router.post('/:id/start-next-round', ensureAuthenticated, authorizeAdmin, async (req, res) => {
+  const t = await loadTournament(req.params.id)
+  await startNextRound(t)
   res.send(t)
 })
 
@@ -56,9 +63,9 @@ router.get('/:id/match/:matchId', authorizeAdmin, async (req, res) => {
   const matchId = req.params.matchId
 
   const t = await loadTournament(id)
-  const m = t.matches.find(match => match.matchId === matchId)
+  const m = findMatch(t, matchId)
   if (m == null || (m.gameIds || []).length === 0) {
-    res.send({})
+    res.send(m || {})
     return
   }
 
@@ -69,47 +76,19 @@ router.get('/:id/match/:matchId', authorizeAdmin, async (req, res) => {
   })
 })
 
-router.get('/extra', ensureAuthenticated, authorizeAdmin, async (req, res) => {
-  const id = req.query.id
-  if (id) {
-    const t = await loadTournament(id)
-    res.render('test-tournament.html', {
-      tournament: JSON.stringify(t),
-    })
-  } else {
-    const teams = []
-    for (let i = 0; i < 100; i++) {
-      const team: ITeam = {
-        snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
-        teamName: company.companyName(),
-        captainId: v4(),
-        division: 'Expert'
-      }
-      teams.push(team)
-    }
-    const t = createTournament(teams, 'Expert')
-    saveTournament(t)
-    res.render('test-tournament.html', {
-      tournament: JSON.stringify(t),
-      id: t.id,
-    })
-  }
-})
-
 router.post('/create', ensureAuthenticated, authorizeAdmin, async (req, res) => {
-  const teams = []
-  for (let i = 0; i < 100; i++) {
-    const team: ITeam = {
-      snakeUrl: snakeUrls[Math.floor(Math.random() * snakeUrls.length)],
-      teamName: company.companyName(),
-      captainId: v4(),
-      division: 'Expert'
-    }
-    teams.push(team)
+
+  const tournaments = []
+  const divisions = ['expert', 'intermediate', 'beginner']
+  for (const division of divisions) {
+    console.log(division)
+    const teams = await getTeams(division)
+    const t = createTournament(teams, division)
+    saveTournament(t)
+    tournaments.push(t)
   }
-  const t = createTournament(teams, 'Expert')
-  saveTournament(t)
-  res.send(JSON.stringify(t))
+
+  res.send(tournaments)
 })
 
 router.post('/delete', ensureAuthenticated, authorizeAdmin, async (req, res) => {
@@ -134,7 +113,7 @@ router.get('/:id/match/:matchId/run-game', ensureAuthenticated, authorizeAdmin, 
   }
 
   const t = await loadTournament(req.params.id)
-  const m = t.matches.find(mm => mm.matchId === req.params.matchId)
+  const m = findMatch(t, req.params.matchId)
   await startGame(m)
   await saveTournament(t)
   res.send(m)
@@ -147,7 +126,7 @@ router.post('/:id/match/:matchId/set-active', ensureAuthenticated, authorizeAdmi
   }
 
   const t = await loadTournament(req.params.id)
-  const m = t.matches.find(mm => mm.matchId === req.params.matchId)
+  const m = findMatch(t, req.params.matchId)
   t.gameIndex = req.body.gameIndex
   t.gameServerId = req.body.gameServerId
   t.activeMatch = m
@@ -162,7 +141,7 @@ router.get('/reset-matches', ensureAuthenticated, authorizeAdmin, async (req, re
   }
 
   const t = await loadTournament(req.query.id)
-  t.matches.forEach(m => (m.gameIds = []))
+  t.rounds.forEach(r => r.matches.forEach(m => (m.gameIds = [])))
   await saveTournament(t)
   res.redirect('/tournaments')
 })

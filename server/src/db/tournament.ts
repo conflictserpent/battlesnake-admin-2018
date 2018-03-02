@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 
-import { IMatch, createMatch } from './match'
+import { IMatch, createMatch, getGameWinner, getMatchWinners } from './match'
 import { getDocumentClient } from './client'
 import { ITeam } from './teams';
 
@@ -8,9 +8,14 @@ export const optimalMatchSize = 8
 
 const dynamoTable = "tournaments"
 
+interface IRound {
+  number: number,
+  matches: IMatch[]
+}
+
 export interface ITournament {
   id: string,
-  matches: IMatch[],
+  rounds: IRound[],
   teams: ITeam[],
   division: string,
   gameIndex?: number,
@@ -21,7 +26,7 @@ export interface ITournament {
 export function createTournament(teams: ITeam[], division: string) {
   const obj: ITournament = {
     id: v4(),
-    matches: [],
+    rounds: [],
     teams: teams,
     division: division
   }
@@ -56,20 +61,8 @@ export async function loadTournament(id: string) {
   }
 
   const resp = await dc.get(input).promise()
-  if (!resp.Item.matches) {
-    return
-  }
-
-  const teams: ITeam[] = []
 
   const t: ITournament = resp.Item as ITournament
-  t.teams = []
-
-  for (const m of t.matches) {
-    for (const team of m.teams) {
-      t.teams.push(team)
-    }
-  }
   console.log("loaded tournament")
 
   return t
@@ -77,24 +70,59 @@ export async function loadTournament(id: string) {
 
 function createMatches(tournament: ITournament) {
   const teams = tournament.teams
-  const length = teams.length
+
+  tournament.rounds.push(createRound(teams, tournament.rounds.length + 1))
+}
+
+function createRound(teams: ITeam[], roundNumber: number): IRound {
   let i = 0
   let size = 0
+  const length = teams.length
   let chunks = Math.ceil(length / optimalMatchSize)
+
+  const round: IRound = {
+    number: roundNumber,
+    matches: []
+  }
 
   if (length % chunks === 0) {
     size = Math.floor(length / chunks)
     while (i < length) {
       const m = addMatch(teams.slice(i, (i += size)))
-      tournament.matches.push(m)
+      round.matches.push(m)
     }
   } else {
     while (i < length) {
       size = Math.ceil((length - i) / chunks--)
       const m = addMatch(teams.slice(i, (i += size)))
-      tournament.matches.push(m)
+      round.matches.push(m)
     }
   }
+
+  return round
+}
+
+export function findMatch(tournament: ITournament, matchId: string): IMatch {
+  let m = null
+  for (const round of tournament.rounds) {
+    m = round.matches.find(match => match.matchId === matchId)
+    if (m) {
+      break
+    }
+  }
+  console.log("find match", m)
+  return m
+}
+
+export async function startNextRound(tournament: ITournament) {
+  const lastRound = tournament.rounds[tournament.rounds.length - 1]
+  const winners: ITeam[] = []
+  const list = (await Promise.all(lastRound.matches.map(m => getMatchWinners(m))))
+  list.forEach(i => i.forEach(t => winners.push(t)))
+
+  const round = createRound(winners, tournament.rounds.length + 1)
+  tournament.rounds.push(round)
+  await saveTournament(tournament)
 }
 
 function addMatch(teams: ITeam[]) {
