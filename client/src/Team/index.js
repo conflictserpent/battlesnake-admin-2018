@@ -39,6 +39,23 @@ class Team extends Component {
   }
 }
 
+class TeamDetailDisplay extends Component {
+
+  render() {
+    let team = !this.props.teamMgr.loading
+      ? this.props.teamMgr.team
+      : {}
+      console.log(team)
+    return (
+      <div>
+        <h2>{team.teamName} <span class='bs-badge bs-badge-right'>{team.division}</span></h2>  
+        <p>{team.description}</p>
+        <code>{team.snakeUrl}</code>
+      </div>
+        );
+      }
+    }
+
 class TeamHomeDisplay extends Component {
   removeMember = async(username) => {
     try {
@@ -61,11 +78,11 @@ class TeamHomeDisplay extends Component {
       : []
     return (
       <div>
+        <TeamDetail />
         <Table celled inverted>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>User</Table.HeaderCell>
               <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -83,7 +100,6 @@ class TeamHomeDisplay extends Component {
                     />
                     {member.displayName || member.username}
                   </Table.Cell>
-                  <Table.Cell />
                   <Table.Cell textAlign="right">
                     <a onClick={() => this.removeMember(member.username)}
                       class='bs-action'
@@ -95,7 +111,6 @@ class TeamHomeDisplay extends Component {
               )
             })}
             <Table.Row>
-              <Table.Cell />
               <Table.Cell />
               <Table.Cell textAlign="right">
                 <Link to="/team/edit">
@@ -111,5 +126,6 @@ class TeamHomeDisplay extends Component {
   }
 }
 const TeamHome = membersProvider(TeamHomeDisplay)
+const TeamDetail = teamProvider(TeamDetailDisplay)
 
 export default Team
