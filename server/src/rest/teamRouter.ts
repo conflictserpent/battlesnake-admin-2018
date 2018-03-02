@@ -144,16 +144,9 @@ router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Requ
   res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
 })
 
-// Start a bounty game
-router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+// Get team info
+router.get('/:teamId/snake', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const teamId = req.params.teamId
-  const user: IUser = req.user as IUser
-
-  if (!user.bountyCollector) {
-    res.status(500)
-    res.json({ error: 'must be a bounty collector' })
-    return
-  }
 
   let team: ITeam = null
   try {
@@ -167,42 +160,11 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
 
   if (!team) {
     res.status(400)
-    res.json({ error: 'Team not found' })
+    res.json({ error: 'could not find team' })
     return
   }
 
-  // Collect snakes.
-  const snakes: ISnakeConfig[] = [{
-    name: team.captainId,
-    url: team.snakeUrl
-  }]
-
-  user.bountyCollector.snakeUrls.forEach((snakeUrl, idx) => {
-    snakes.push({
-      name: `${user.username}-${idx}`,
-      url: snakeUrl
-    })
-  })
-
-  let gameId: string
-  try {
-    gameId = await createGameWithConfig({
-      width: user.bountyCollector.boardWidth,
-      height: user.bountyCollector.boardHeight,
-      maxFood: user.bountyCollector.maxFood,
-      snakeStartLength: user.bountyCollector.snakeStartLength,
-      decHealthPoints: user.bountyCollector.decHealthPoints,
-      pinTail: user.bountyCollector.pinTail,
-      snakes: snakes,
-    })
-  } catch (error) {
-    console.log(error)
-    res.status(500)
-    res.json({ error })
-    return
-  }
-
-  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}`, snakes })
+  res.json({ team })
 })
 
 // Info about the team captain
