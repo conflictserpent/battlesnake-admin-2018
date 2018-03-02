@@ -51,12 +51,7 @@ class App extends Component {
     }
   }
   render() {
-    let className = 'body-wrapper'
     const isActiveTournamentGame = window.location.pathname.endsWith('active-game')
-
-    if (isActiveTournamentGame) {
-      className = ''
-    }
 
     // Loading
     if (this.props.userMgr.loading) {
@@ -78,29 +73,31 @@ class App extends Component {
       <Router>
         <div>
           {!isActiveTournamentGame &&
-            <div className={className}>
-              {!this.props.userMgr.loggedIn &&
-                <LoginLink />
-              }
-              {!this.props.userMgr.user.teamId &&
-                !this.props.userMgr.user.bountyCollector &&
-                !this.props.userMgr.user.admin &&
-                <NoTeam />
-              }
-              {this.props.userMgr.user.teamId &&
-                <div>
-                  <Route exact path="/" render={() => <Redirect to='/team' />} />
-                  <Route path="/team" component={Team} />
-                </div>
-              }
-              {this.props.userMgr.user.admin &&
-                <div>
-                  <Route path="/new-team" component={CreateTeam} />
-                  <Route path="/swu" component={Admin} />
-                  <Route path="/tournament" component={Tournaments} />
-                  <Route path="/bounty" component={Bounty} />
-                </div>
-              }
+            <div className="body-wrapper">
+              <div className="body-content">
+                {!this.props.userMgr.loggedIn &&
+                  <LoginLink />
+                }
+                {!this.props.userMgr.user.teamId &&
+                  !this.props.userMgr.user.bountyCollector &&
+                  !this.props.userMgr.user.admin &&
+                  <NoTeam />
+                }
+                {this.props.userMgr.user.teamId &&
+                  <div>
+                    <Route exact path="/" render={() => <Redirect to='/team' />} />
+                    <Route path="/team" component={Team} />
+                  </div>
+                }
+                {this.props.userMgr.user.admin &&
+                  <div>
+                    <Route path="/new-team" component={CreateTeam} />
+                    <Route path="/swu" component={Admin} />
+                    <Route path="/tournament" component={Tournaments} />
+                    <Route path="/bounty" component={Bounty} />
+                  </div>
+                }
+              </div>
             </div>
           }
           {isActiveTournamentGame &&
