@@ -17,7 +17,6 @@ import logo from '../images/logo-bs18.png'
 
 class Team extends Component {
   render() {
-    console.log(this.props)
     return (
       <Grid container>
         <Grid.Column width={4}>
