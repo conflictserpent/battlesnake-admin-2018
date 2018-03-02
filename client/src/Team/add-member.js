@@ -5,7 +5,6 @@ import { Form, Message } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
-
 class AddMember extends Component {
   state = {
     newUsername: '',
@@ -52,40 +51,40 @@ class AddMember extends Component {
       success: true
     })
   };
-  
+
   render() {
     const { newUsername } = this.state
     return (
       <div>
         <Form
-        error={this.state.error}
-        success={this.state.success}
-        onSubmit={this.handleSubmit}
-      >
-        <h1>Add User</h1>
-        <Form.Group>
-          <Form.Input
-            label="GitHub Username"
-            placeholder="GitHub Username"
-            name="newUsername"
-            value={newUsername}    
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
+          error={this.state.error}
+          success={this.state.success}
+          onSubmit={this.handleSubmit}
+        >
+          <h1>Add User</h1>
+          <Form.Group>
+            <Form.Input
+              label="GitHub Username"
+              placeholder="GitHub Username"
+              name="newUsername"
+              value={newUsername}
+              onChange={this.handleChange}
+              error={
+                this.state.error &&
               this.state.error.field === 'newUsername'
-            }
-          />
-        </Form.Group>        
-        <Message error>
-          <p>{this.state.error && this.state.error.msg}</p>
-        </Message>
-        <Message success>
-          <p>Added successfully</p>
-        </Message>
-        <Form.Button content="Submit" />
+              }
+            />
+          </Form.Group>
+          <Message error>
+            <p>{this.state.error && this.state.error.msg}</p>
+          </Message>
+          <Message success>
+            <p>Added successfully</p>
+          </Message>
+          <Form.Button content="Submit" />
 
-        <br/>
-      </Form>
+          <br/>
+        </Form>
       </div>
     )
   }

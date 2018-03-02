@@ -66,26 +66,26 @@ class TeamHomeDisplay extends Component {
                   </Table.Cell>
                   <Table.Cell />
                   <Table.Cell textAlign="right">
-                  <Link to={"/team/remove/" + member.username}>
-                  <span role="img">❎</span> Remove
-                  </Link>
+                    <Link to={'/team/remove/' + member.username}>
+                      <span role="img">❎</span> Remove
+                    </Link>
                   </Table.Cell>
                 </Table.Row>
               )
             })}
             <Table.Row>
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell textAlign="right">
-                        <Link to="/team/edit">
-                        <span role="img">✏️</span> Edit Team
-                        </Link>
-                        <br /><br />
-                        <Link to="/team/add-member">
-                        <span role="img">😁</span> Add Member
-                        </Link>
-                  </Table.Cell>
-                </Table.Row>
+              <Table.Cell />
+              <Table.Cell />
+              <Table.Cell textAlign="right">
+                <Link to="/team/edit">
+                  <span role="img">✏️</span> Edit Team
+                </Link>
+                <br /><br />
+                <Link to="/team/add-member">
+                  <span role="img">😁</span> Add Member
+                </Link>
+              </Table.Cell>
+            </Table.Row>
           </Table.Body>
         </Table>
       </div>
