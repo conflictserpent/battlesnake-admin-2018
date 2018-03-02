@@ -20,7 +20,7 @@ class Bounty extends React.Component {
     }).then(res => {
       this.setState({
         gameUrl: res.data.gameUrl,
-        error: null,
+        error: null
       })
     }).catch(error => {
       this.setState({ error: error.message })
@@ -30,7 +30,7 @@ class Bounty extends React.Component {
   render() {
     const { loading, user } = this.props.userMgr
     const config = user.bountyCollector
-    const { game, error } = this.state
+    const { game } = this.state
     console.log(game)
 
     if (!user.bountyCollector) {
@@ -55,7 +55,7 @@ class BountyGame extends React.Component {
   state = {
     bountySnakes: [],
     challengerSnakes: [],
-    snakeCount: 1,
+    snakeCount: 1
   }
 
   handleFieldChange = (name, ev) => {
@@ -82,11 +82,11 @@ class BountyGame extends React.Component {
     }).then(res => {
       const challengerSnakes = []
       for (let i = 0; i < this.state.challengerCount; i++) {
-        challengerSnakes.push(`${this.state.captainId}-${i+1}@${res.data.team.snakeUrl}`)
+        challengerSnakes.push(`${this.state.captainId}-${i + 1}@${res.data.team.snakeUrl}`)
       }
       this.setState({
         challengerSnakes: challengerSnakes,
-        error: null,
+        error: null
       })
     }).catch(error => {
       this.setState({ error: error.message })
@@ -105,14 +105,14 @@ class BountyGame extends React.Component {
       const spl = snake.split('@')
       body.snakes.push({
         url: spl[1],
-        name: spl[0],
+        name: spl[0]
       })
     })
     body.challengerSnakes.forEach((snake) => {
       const spl = snake.split('@')
       body.snakes.push({
         url: spl[1],
-        name: spl[0],
+        name: spl[0]
       })
     })
     console.log(body)
@@ -122,7 +122,7 @@ class BountyGame extends React.Component {
       withCredentials: true,
       data: JSON.stringify(body),
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     }).then(res => {
       this.setState({ gameUrl: res.data.gameUrl })
@@ -132,10 +132,7 @@ class BountyGame extends React.Component {
   }
 
   render() {
-    const { user } = this.props
     const {
-      snakeCount,
-      game,
       width,
       height,
       decHealthPoints,
@@ -146,9 +143,8 @@ class BountyGame extends React.Component {
       snakeStartLength,
       maxFood,
       pinTail,
-      challenger,
       challengerSnakes,
-      gameUrl,
+      gameUrl
     } = this.state
 
     return (
@@ -212,14 +208,14 @@ class BountyGame extends React.Component {
           value={pinTail || ''}
         />
 
-        <label>Bounty Snake URL's</label>
+        <label>{"Bounty Snake URL's"}</label>
         <p>
           Setup a bounty snake url using mysnakename@http://mysnakeurl.com
         </p>
         {bountySnakes.map((snake, idx) =>
           <Form.Input
             key={idx}
-            placeholder={`Bounty Snake ${idx+1}`}
+            placeholder={`Bounty Snake ${idx + 1}`}
             name='bountySnake'
             onChange={this.handleUpdateSnake.bind(this, 'bountySnakes', idx)}
             value={bountySnakes[idx] || ''}
@@ -264,7 +260,7 @@ class BountyGame extends React.Component {
         {gameUrl &&
           <Form.Button onClick={() => { window.open(gameUrl) }}>{gameUrl}</Form.Button>
         }
-    </div>
+      </div>
     )
   }
 }
