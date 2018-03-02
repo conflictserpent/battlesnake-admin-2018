@@ -42,18 +42,23 @@ const USER_TABLE = 'users'
 
 export async function updateUser(u: IUser): Promise<IUser> {
   const user = setDefaults(u)
+  let uexpr = 'set displayName = :dn, id = :id, isTeamCaptain = :tc'
+  const eav = {
+    ':dn': user.displayName,
+    ':id': user.id,
+    ':tc': user.isTeamCaptain,
+  }
+  if(user.teamId){
+    uexpr += ', teamId = :tid'
+    eav[':tid'] = user.teamId
+  }
   const params = {
     TableName: USER_TABLE,
     Key: {
       username: user.username,
     },
-    UpdateExpression: 'set displayName = :dn, id = :id, isTeamCaptain = :tc, teamId = :tid',
-    ExpressionAttributeValues: {
-      ':dn': user.displayName,
-      ':id': user.id,
-      ':tc': user.isTeamCaptain,
-      ':tid': user.teamId,
-    },
+    UpdateExpression: uexpr,
+    ExpressionAttributeValues: eav,
     ReturnValues: 'ALL_NEW',
   }
   const res = await getDocumentClient()
