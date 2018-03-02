@@ -27,7 +27,7 @@ export async function createGame(teams: ITeam[]) {
     })
 }
 
-interface IGameConfig {
+export interface IGameConfig {
     width: number,
     height: number,
     maxFood: number,
@@ -42,7 +42,7 @@ export interface ISnakeConfig {
     url: string
 }
 
-export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig) {
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig): Promise<string> {
     console.log("create game with config")
     const formData = {
         "game_form[width]": width || 20,
@@ -70,9 +70,9 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         const res = await post(process.env.BATTLESNAKE_SERVER_HOST, { form: formData })
         const gameId = _.get(res.headers.location.split('/'), 1)
         return gameId
-    } catch {
-        console.log("unable to create new game")
-        return -1
+    } catch (err) {
+        console.log("unable to create new game", err)
+        return '-1'
     }
 }
 
