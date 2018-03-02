@@ -26,7 +26,8 @@ export async function startGame(match: IMatch) {
     if (!match.gameIds) {
         match.gameIds = []
     }
-    match.gameIds.push(await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1)))
+    const game = await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1))
+    match.gameIds.push(game)
 }
 
 export function gameUrl(match: IMatch, gameId: number) {
