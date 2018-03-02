@@ -38,7 +38,8 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
     username: req.body.user.username,
     displayName: req.body.user.displayName,
     isTeamCaptain: true,
-    teamId: req.body.user.username
+    teamId: req.body.user.username,
+    admin: false
   }
   console.log(user)
   const newUser = await updateUser(user)
@@ -124,7 +125,7 @@ router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Requ
     url: team.snakeUrl
   })
 
-  let gameId: string
+  let gameId: number
   try {
     gameId = await createGameWithConfig({
       width: req.body.width,
@@ -232,12 +233,12 @@ router.post(
     }
 
     // Don't allow removing el capitan!
-    if (removeUser.teamId == removeUser.username) {
+    if (removeUser.teamId === removeUser.username) {
       return res.status(400).json({ msg: 'captains cannot be removed' })
     }
 
     // Don't allow removing user from another team
-    if (removeUser.teamId != req.user.teamId) {
+    if (removeUser.teamId !== req.user.teamId) {
       return res.status(400).json({ msg: 'users are not on the same team - you can only manage users from your own team' })
     }
 

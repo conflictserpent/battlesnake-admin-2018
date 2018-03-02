@@ -6,9 +6,8 @@ import { getDocumentClient } from '../db/client'
 import { startGame, getMatchWinners } from '../db/match'
 import { ITeam, getTeams } from '../db/teams';
 import { v4 } from 'uuid'
-import { getGameStatus } from '../game-server';
 import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
-import { createGameWithConfig, IGameConfig, SERVER_HOST } from '../game-server'
+import { createGameWithConfig, IGameConfig, SERVER_HOST, getGameStatus } from '../game-server'
 
 export const router = Router()
 

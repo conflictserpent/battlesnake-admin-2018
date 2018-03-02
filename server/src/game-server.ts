@@ -42,7 +42,7 @@ export interface ISnakeConfig {
     url: string
 }
 
-export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig): Promise<string> {
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail }: IGameConfig): Promise<number> {
     console.log("create game with config")
     const formData = {
         "game_form[width]": width || 20,
@@ -72,7 +72,7 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         return gameId
     } catch (err) {
         console.log("unable to create new game", err)
-        return '-1'
+        return -1
     }
 }
 
