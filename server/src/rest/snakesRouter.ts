@@ -14,7 +14,7 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
     })
 
     snakes.push({
-        name: "Training Snake 11",
+        name: "DSnek",
         url: "https://dsnek.herokuapp.com"
     })
 
