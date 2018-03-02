@@ -1,6 +1,13 @@
 #!/bin/bash
 
-read -p "username: " username
+args_list=($@)
+num_args=${#args_list[@]}
+if [ $num_args = 3 ]; then
+  username=$args_list
+else
+  read -p "username: " username
+fi
+
 # read -p "snakeUrl: " snakeUrl
 # read -p "boardWidth: " boardWidth
 # read -p "boardHeight: " boardHeight
