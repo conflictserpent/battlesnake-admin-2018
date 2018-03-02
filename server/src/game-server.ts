@@ -70,8 +70,8 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         const res = await post(process.env.BATTLESNAKE_SERVER_HOST, { form: formData })
         const gameId = _.get(res.headers.location.split('/'), 1)
         return gameId
-    } catch {
-        console.log("unable to create new game")
+    } catch (err) {
+        console.log("unable to create new game", err)
         return '-1'
     }
 }

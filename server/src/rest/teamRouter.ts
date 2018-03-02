@@ -144,7 +144,7 @@ router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Requ
   res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
 })
 
-// Start a bounty game
+// Get team info
 router.get('/:teamId/snake', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const teamId = req.params.teamId
 
