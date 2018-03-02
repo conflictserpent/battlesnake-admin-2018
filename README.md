@@ -19,6 +19,7 @@ REDIS_HOST: localhost
 BATTLESNAKE_SERVER_HOST: http://localhost:3001
 AUTH_REDIRECT_URL: http://localhost:3000
 COOKIE_DOMAIN: localhost
+SESSION_SECRET: any_appropriate_text
 ```
 
 ### Create Github OAuth vars
