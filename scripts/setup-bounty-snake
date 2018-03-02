@@ -1,13 +1,13 @@
 #!/bin/bash
 
 read -p "username: " username
-read -p "snakeUrl: " snakeUrl
-read -p "boardWidth: " boardWidth
-read -p "boardHeight: " boardHeight
-read -p "maxFood: " maxFood
-read -p "snakeStartLength: " snakeStartLength
-read -p "decHealthPoints: " decHealthPoints
-read -p "pinTail: " pinTail
+# read -p "snakeUrl: " snakeUrl
+# read -p "boardWidth: " boardWidth
+# read -p "boardHeight: " boardHeight
+# read -p "maxFood: " maxFood
+# read -p "snakeStartLength: " snakeStartLength
+# read -p "decHealthPoints: " decHealthPoints
+# read -p "pinTail: " pinTail
 
 cat > dynamo-input.json <<EOF
 {
@@ -18,29 +18,7 @@ cat > dynamo-input.json <<EOF
   "UpdateExpression": "set bountyCollector = :m",
   "ExpressionAttributeValues": {
     ":m": {
-      "M": {
-        "snakeUrls": {
-          "SS": ["${snakeUrl}"]
-        },
-        "boardWidth": {
-          "N": "${boardWidth}"
-        },
-        "boardHeight": {
-          "N": "${boardHeight}"
-        },
-        "maxFood": {
-          "N": "${maxFood}"
-        },
-        "snakeStartLength": {
-          "N": "${snakeStartLength}"
-        },
-        "decHealthPoints": {
-          "N": "${decHealthPoints}"
-        },
-        "pinTail": {
-          "BOOL": ${pinTail}
-        }
-      }
+      "BOOL": true
     }
   }
 }

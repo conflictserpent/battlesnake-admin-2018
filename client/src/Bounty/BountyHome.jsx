@@ -33,67 +33,131 @@ class Bounty extends React.Component {
     const { game, error } = this.state
     console.log(game)
 
+    if (!user.bountyCollector) {
+      return <h1>Not A Bounty Collector</h1>
+    }
+
     return (
       <div>
         <h1>Bounty</h1>
         {loading &&
           <p>Loading...</p>
         }
-        {config &&
-          <p>Not a bounty collector.</p>
-        }
         {!loading && config &&
-          <div>
-            <p>
-              Snake URLs: {config.snakeUrls.join(' ')}
-            </p>
-            <p>
-              Board Width: {config.boardWidth}
-            </p>
-            <p>
-              Board Height: {config.boardHeight}
-            </p>
-            <p>
-              Max Food: {config.maxFood}
-            </p>
-            <p>
-              Pin Tail: {config.pinTail}
-            </p>
-            <p>
-              Snake Start Length: {config.snakeStartLength}
-            </p>
-            <p>
-              Health Lost Per Turn: {config.decHealthPoints}
-            </p>
-
-            <div>
-              <h3>Setup Game</h3>
-              <p>
-                Insert the captain's Github username:
-              </p>
-              <Form.Input
-                placeholder="Captains Github Username"
-                name="teamName"
-                onChange={this.handleFieldChange.bind(this, 'teamName')}
-                value={this.state.teamName || ''}
-              />
-              <Form.Button content="Setup" onClick={this.handleStartGame} />
-            </div>
-
-            {game &&
-              <h4>
-                <a target="_blank" href={game.gameUrl}>{game.gameUrl}</a>
-              </h4>
-            }
-
-            {error &&
-              <div>
-                Error starting game: {error}
-              </div>
-            }
-          </div>
+          <BountyGame />
         }
       </div>
+    )
+  }
+}
+
+class BountyGame extends React.Component {
+  state = {
+    bountySnakes: [],
+  }
+
+  handleFieldChange = (name, ev) => {
+    this.setState({
+      [name]: ev.target.value
+    })
+  }
+
+  handleAddSnake = (name, idx, ev) => {
+    const snakes = this.state.bountySnakes.slice()
+    snakes[idx] = ev.target.value
+    this.setState({ bountySnakes: snakes })
+  }
+
+  handleIncrSnakes = () => {
+    this.setState({ bountySnakes: this.state.bountySnakes.concat(['']) })
+  }
+
+  handleStartGame = (ev) => {
+    axios(`${config.SERVER}/api/team/${this.state.teamName}/start-bounty-game`, {
+      method: 'post',
+      withCredentials: true
+    }).then(res => {
+      this.setState({
+        game: res.data,
+        error: null,
+      })
+    }).catch(error => {
+      this.setState({ error: error.message })
+    })
+  }
+
+  render() {
+    const { user } = this.props
+    const {
+      snakeCount,
+      game,
+      width,
+      height,
+      captainId,
+      bountySnakes,
+    } = this.state
+
+    console.log('snakes', bountySnakes)
+
+    return (
+      <div>
+        <hr />
+        <h3>Game Setup</h3>
+
+        <label>Game Width</label>
+        <Form.Input
+          placeholder='Game Width'
+          name='width'
+          onChange={this.handleFieldChange.bind(this, 'width')}
+          value={width || ''}
+        />
+
+        <label>Game Height</label>
+        <Form.Input
+          placeholder='Game Height'
+          name='height'
+          onChange={this.handleFieldChange.bind(this, 'height')}
+          value={height || ''}
+        />
+
+        <label>Health Points per Turn</label>
+        <Form.Input
+          placeholder='Health Points per Turn'
+          name='decHealthPoints'
+          onChange={this.handleFieldChange.bind(this, 'height')}
+          value={height || ''}
+        />
+
+        <label>Bounty Snake URL's</label>
+        {bountySnakes.map((snake, idx) =>
+          <Form.Input
+            key={idx}
+            placeholder={`Bounty Snake ${idx+1}`}
+            name='bountySnake'
+            onChange={this.handleAddSnake.bind(this, 'bountySnakes', idx)}
+            value={bountySnakes[idx] || ''}
+          />
+        )}
+
+        <Form.Button
+          content="Add Snake"
+          onClick={this.handleIncrSnakes}
+        />
+
+        <h3>User Snakes</h3>
+        <Form.Input
+          placeholder='Team Captain GitHub Username'
+          name='captainId'
+          onChange={this.handleFieldChange.bind(this, 'captainId')}
+          value={captainId || ''}
+        />
+        <Form.Button
+          content="Search"
+          onClick={this.handleIncrSnakes}
+        />
+
+        <Form.Button content="Run Game" onClick={this.handleStartGame} />
+    </div>
     )
   }
 }
