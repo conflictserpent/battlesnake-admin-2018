@@ -4,22 +4,24 @@ import passport = require('passport')
 import session = require('express-session')
 import RedisStore = require('connect-redis')
 import github = require('octonode')
+import bodyParser = require('body-parser')
+import csurf = require('csurf')
 
 import { ensureAuthenticated } from './passport-auth'
 import config from './config'
-import bodyParser = require('body-parser')
 import { createGame, getGameStatus } from './game-server'
 import request = require('request')
 import { userRouter, teamRouter, tournamentRouter, swuRouter, snakesRouter } from './rest'
 import { ITeam } from './db/teams'
 
 const Store = RedisStore(session)
+const csrfProtection = csurf()
 
 // Setup Passport to set sessions in redis
 const app = express()
 app.use(
   session({
-    secret: 'fi5e',
+    secret: config.SESSION_SECRET,
     store: new Store({
       host: config.REDIS_HOST,
       port: '6379',
@@ -39,7 +41,7 @@ app.use(
     extended: true,
   })
 )
-
+app.use(csrfProtection)
 
 app.use('/api/self', userRouter)
 app.use('/api/team', teamRouter)
@@ -48,16 +50,16 @@ app.use('/api/swu', swuRouter)
 app.use('/api/snakes', snakesRouter)
 
 app.post('/api/github-username', (req: express.Request, res: express.Response) => {
-  const client = github.client(config.GITHUB_OAUTH_TOKEN);
-  const ghme = client.user(req.body.username);
+  const client = github.client(config.GITHUB_OAUTH_TOKEN)
+  const ghme = client.user(req.body.username)
   ghme.info((err, data, headers) => {
     res.send({
       username: data.login,
       avatar: data.avatar_url,
       id: data.id,
-      displayName: data.name
+      displayName: data.name,
     })
-  });
+  })
 })
 
 // Init login flow
@@ -81,7 +83,7 @@ app.get('/start-game', (req, res) => {
       snakeUrl: url,
       teamName: 'a team',
       captainId: '',
-      division: ''
+      division: '',
     })
   })
   createGame(teams)

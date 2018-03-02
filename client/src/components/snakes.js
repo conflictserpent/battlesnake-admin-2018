@@ -45,6 +45,7 @@ class Snakes extends Component {
       }
     })
     this.setState({gameId: resp.data.gameId})
+    window.open(`${config.GAME_SERVER}/${resp.data.gameId}`)
   }
 
   loadSnakes = async() => {
@@ -146,7 +147,7 @@ class Snakes extends Component {
           </Form.Group>
 
           {snakeUrl && <Form.Button content="Create Game" />}
-          {gameId && <a href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
+          {gameId && <a style={{color: 'white'}} href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
         </Form>
       </Container>
     )

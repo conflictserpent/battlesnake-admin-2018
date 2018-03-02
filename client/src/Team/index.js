@@ -5,7 +5,7 @@ import { Grid, Container, Image, Table } from 'semantic-ui-react'
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
 
-import { membersProvider, teamProvider } from '../components/data'
+import { membersProvider, teamProvider, userProvider } from '../components/data'
 
 import TeamEdit from './edit'
 import AddMember from './add-member'
@@ -23,7 +23,7 @@ class Team extends Component {
           <Link to="/">
             <img src={logo} className="App-logo" alt="logo" />
           </Link>
-          <Nav />
+          <Nav bountyCollector={this.props.userMgr.user.bountyCollector}/>
         </Grid.Column>
         <Grid.Column width={12}>
           <Container>
@@ -35,6 +35,22 @@ class Team extends Component {
           </Container>
         </Grid.Column>
       </Grid>
+    )
+  }
+}
+
+class TeamDetailDisplay extends Component {
+  render() {
+    let team = !this.props.teamMgr.loading
+      ? this.props.teamMgr.team
+      : {}
+    console.log(team)
+    return (
+      <div>
+        <h2>{team.teamName} <span className='bs-badge bs-badge-right'>{team.division}</span></h2>
+        <p>{team.description}</p>
+        <code>{team.snakeUrl}</code>
+      </div>
     )
   }
 }
@@ -61,11 +77,11 @@ class TeamHomeDisplay extends Component {
       : []
     return (
       <div>
+        <TeamDetail />
         <Table celled inverted>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>User</Table.HeaderCell>
               <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -83,7 +99,6 @@ class TeamHomeDisplay extends Component {
                     />
                     {member.displayName || member.username}
                   </Table.Cell>
-                  <Table.Cell />
                   <Table.Cell textAlign="right">
                     <a onClick={() => this.removeMember(member.username)}
                       className='bs-action'>
@@ -94,7 +109,6 @@ class TeamHomeDisplay extends Component {
               )
             })}
             <Table.Row>
-              <Table.Cell />
               <Table.Cell />
               <Table.Cell textAlign="right">
                 <Link to="/team/edit">
@@ -110,5 +124,6 @@ class TeamHomeDisplay extends Component {
   }
 }
 const TeamHome = membersProvider(TeamHomeDisplay)
+const TeamDetail = teamProvider(TeamDetailDisplay)
 
-export default Team
+export default userProvider(Team)
