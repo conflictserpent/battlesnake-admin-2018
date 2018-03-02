@@ -8,6 +8,7 @@ import {
   setTeamMembership,
   addUnknownUserToTeam,
   IUser,
+  removeTeamMembership,
 } from '../db/users'
 import { updateTeam, getTeam, ITeam } from '../db/teams'
 import { createGameWithConfig, ISnakeConfig, SERVER_HOST } from '../game-server'
@@ -254,5 +255,31 @@ router.post(
     // Post body : github userid
     // find user (no user, just exit)
     // Remove 'teamMember' param from user (but only if it equals _this_ users team id - prevent booting other users from other teams)
+    // validation
+    if (!req.user.teamId) {
+      return res.status(400).json({ msg: 'you are not on a team' })
+    }
+    if (!req.body.username) {
+      return res.status(400).json({ msg: 'missing parameter' })
+    }
+
+    const userName = req.body.username.toLowerCase()
+    const removeUser = await findUserByUserName(userName)
+    if (removeUser === undefined) {
+      return res.status(400).json({ msg: 'the user does not exist' })
+    }
+
+    // Don't allow removing el capitan!
+    if (removeUser.teamId == removeUser.username) {
+      return res.status(400).json({ msg: 'captains cannot be removed' })
+    }
+
+    // Don't allow removing user from another team
+    if (removeUser.teamId != req.user.teamId) {
+      return res.status(400).json({ msg: 'users are not on the same team - you can only manage users from your own team' })
+    }
+
+    removeTeamMembership(removeUser.username)
+    return res.json({ status: 'ok' })
   }
 )

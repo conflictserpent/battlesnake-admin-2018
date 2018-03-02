@@ -8,6 +8,8 @@ import Nav from '../components/nav'
 import { membersProvider, teamProvider } from '../components/data'
 
 import TeamEdit from './edit'
+import AddMember from './add-member'
+import RemoveMember from './remove-member'
 
 import logo from '../images/logo-bs18.png'
 
@@ -25,6 +27,8 @@ class Team extends Component {
           <Container>
             <Route exact path="/team" component={TeamHome} />
             <Route path="/team/edit" component={TeamEdit} />
+            <Route path="/team/add-member" component={AddMember} />
+            <Route path="/team/remove/:username" component={RemoveMember} />
             <Route path="/team/snakes" component={teamProvider(Snakes)} />
           </Container>
         </Grid.Column>
@@ -40,15 +44,12 @@ class TeamHomeDisplay extends Component {
       : []
     return (
       <div>
-        <Link to="/team/edit">
-          Edit Team
-        </Link>
         <Table celled inverted>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Notes</Table.HeaderCell>
+              <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -65,11 +66,26 @@ class TeamHomeDisplay extends Component {
                   </Table.Cell>
                   <Table.Cell />
                   <Table.Cell textAlign="right">
-                    {member.displayName || member.username}
+                  <Link to={"/team/remove/" + member.username}>
+                  <span role="img">❎</span> Remove
+                  </Link>
                   </Table.Cell>
                 </Table.Row>
               )
             })}
+            <Table.Row>
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell textAlign="right">
+                        <Link to="/team/edit">
+                        <span role="img">✏️</span> Edit Team
+                        </Link>
+                        <br /><br />
+                        <Link to="/team/add-member">
+                        <span role="img">😁</span> Add Member
+                        </Link>
+                  </Table.Cell>
+                </Table.Row>
           </Table.Body>
         </Table>
       </div>

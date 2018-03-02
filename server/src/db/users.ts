@@ -68,9 +68,8 @@ export async function addUnknownUserToTeam(username: string, teamId: string) {
     Key: {
       username,
     },
-    UpdateExpression: 'set username = :un, teamId =:tm',
+    UpdateExpression: 'set teamId =:tm',
     ExpressionAttributeValues: {
-      ':un': username.toLowerCase(),
       ':tm': teamId,
     },
     ReturnValues: 'ALL_NEW',
@@ -120,6 +119,21 @@ export async function setTeamMembership(username: string, teamId: string | null)
   return res.Attributes as IUser
 }
 
+export async function removeTeamMembership(username: string): Promise<IUser> {
+  const params = {
+    TableName: USER_TABLE,
+    Key: {
+      username,
+    },
+    UpdateExpression: 'REMOVE teamId',
+    ReturnValues: 'ALL_NEW',
+  }
+  const res = await getDocumentClient()
+    .update(params)
+    .promise()
+  return res.Attributes as IUser
+}
+
 export async function findUserByUserName(id: string): Promise<IUser> {
   const params = {
     TableName: USER_TABLE,
@@ -132,7 +146,7 @@ export async function findUserByUserName(id: string): Promise<IUser> {
     .promise()
 
   // DynamoDB will return a string[] as { values: string[] }.
-  if (item.Item.bountyCollector && item.Item.bountyCollector.snakeUrls) {
+  if (item.Item && item.Item.bountyCollector && item.Item.bountyCollector.snakeUrls) {
     item.Item.bountyCollector.snakeUrls = item.Item.bountyCollector.snakeUrls.values
   }
   return item.Item as IUser
