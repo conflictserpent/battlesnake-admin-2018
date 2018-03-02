@@ -8,10 +8,26 @@ import { ITeam, getTeams } from '../db/teams';
 import { v4 } from 'uuid'
 import { getGameStatus } from '../game-server';
 import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
+import { createGameWithConfig, IGameConfig, SERVER_HOST } from '../game-server'
 
 export const router = Router()
 
 const snakeUrls = ['http://35.230.120.237', 'https://dsnek.herokuapp.com']
+
+
+router.post('/start', ensureAuthenticated, (req, res) => {
+  const body: IGameConfig = req.body
+  console.log('body', body)
+  createGameWithConfig(body)
+    .then(gameId => {
+      res.send({ gameUrl: `${SERVER_HOST}/${gameId}` })
+    })
+    .catch(error => {
+      console.log('error', error)
+      res.status(500)
+      res.send({ error })
+    })
+})
 
 router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const dc = getDocumentClient()

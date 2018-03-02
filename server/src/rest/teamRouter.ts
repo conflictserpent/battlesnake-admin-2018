@@ -8,6 +8,7 @@ import {
   setTeamMembership,
   addUnknownUserToTeam,
   IUser,
+  removeTeamMembership,
 } from '../db/users'
 import { updateTeam, getTeam, ITeam } from '../db/teams'
 import { createGameWithConfig, ISnakeConfig, SERVER_HOST } from '../game-server'
@@ -144,16 +145,9 @@ router.post('/:teamId/start-game', ensureAuthenticated, async (req: express.Requ
   res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}` })
 })
 
-// Start a bounty game
-router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+// Get team info
+router.get('/:teamId/snake', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const teamId = req.params.teamId
-  const user: IUser = req.user as IUser
-
-  if (!user.bountyCollector) {
-    res.status(500)
-    res.json({ error: 'must be a bounty collector' })
-    return
-  }
 
   let team: ITeam = null
   try {
@@ -167,42 +161,11 @@ router.post('/:teamId/start-bounty-game', ensureAuthenticated, async (req: expre
 
   if (!team) {
     res.status(400)
-    res.json({ error: 'Team not found' })
+    res.json({ error: 'could not find team' })
     return
   }
 
-  // Collect snakes.
-  const snakes: ISnakeConfig[] = [{
-    name: team.captainId,
-    url: team.snakeUrl
-  }]
-
-  user.bountyCollector.snakeUrls.forEach((snakeUrl, idx) => {
-    snakes.push({
-      name: `${user.username}-${idx}`,
-      url: snakeUrl
-    })
-  })
-
-  let gameId: string
-  try {
-    gameId = await createGameWithConfig({
-      width: user.bountyCollector.boardWidth,
-      height: user.bountyCollector.boardHeight,
-      maxFood: user.bountyCollector.maxFood,
-      snakeStartLength: user.bountyCollector.snakeStartLength,
-      decHealthPoints: user.bountyCollector.decHealthPoints,
-      pinTail: user.bountyCollector.pinTail,
-      snakes: snakes,
-    })
-  } catch (error) {
-    console.log(error)
-    res.status(500)
-    res.json({ error })
-    return
-  }
-
-  res.json({ gameId, gameUrl: `${SERVER_HOST}/${gameId}`, snakes })
+  res.json({ team })
 })
 
 // Info about the team captain
@@ -254,5 +217,31 @@ router.post(
     // Post body : github userid
     // find user (no user, just exit)
     // Remove 'teamMember' param from user (but only if it equals _this_ users team id - prevent booting other users from other teams)
+    // validation
+    if (!req.user.teamId) {
+      return res.status(400).json({ msg: 'you are not on a team' })
+    }
+    if (!req.body.username) {
+      return res.status(400).json({ msg: 'missing parameter' })
+    }
+
+    const userName = req.body.username.toLowerCase()
+    const removeUser = await findUserByUserName(userName)
+    if (removeUser === undefined) {
+      return res.status(400).json({ msg: 'the user does not exist' })
+    }
+
+    // Don't allow removing el capitan!
+    if (removeUser.teamId == removeUser.username) {
+      return res.status(400).json({ msg: 'captains cannot be removed' })
+    }
+
+    // Don't allow removing user from another team
+    if (removeUser.teamId != req.user.teamId) {
+      return res.status(400).json({ msg: 'users are not on the same team - you can only manage users from your own team' })
+    }
+
+    removeTeamMembership(removeUser.username)
+    return res.json({ status: 'ok' })
   }
 )
