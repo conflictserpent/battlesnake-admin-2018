@@ -8,7 +8,8 @@ import * as _ from 'lodash'
 export const router = Router()
 
 router.get('/', ensureAuthenticated, (req: express.Request, res: express.Response) => {
-  res.json(req.user)
+  console.log((req as any).session.csrfSecret)
+  res.set({ csrfToken: (req as any).csrfToken(), 'Access-Control-Expose-Headers': 'csrfToken' }).json(req.user)
 })
 
 router.get('/logout', (req: express.Request, res: express.Response) => {
@@ -20,7 +21,7 @@ router.post(
   '/captain-on',
   ensureAuthenticated,
   async (req: express.Request, res: express.Response) => {
-    const user: IUser = (req.user as IUser)
+    const user: IUser = req.user as IUser
     if (user.teamId) {
       throw new Error('Already a team member - must remove self from team')
     }
@@ -31,7 +32,7 @@ router.post(
       captainId: user.username,
       teamName: null,
       snakeUrl: null,
-      division: null
+      division: null,
     }
 
     await updateTeam(team)
