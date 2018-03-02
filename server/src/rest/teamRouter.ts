@@ -41,8 +41,7 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
     teamId: req.body.user.username,
     admin: false
   }
-  console.log(user)
-  const newUser = await updateUser(user)
+  const newUser = await updateUser(user as IUser)
 
   const team = {
     captainId: user.username,
