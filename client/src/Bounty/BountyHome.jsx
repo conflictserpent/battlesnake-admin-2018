@@ -54,6 +54,7 @@ class Bounty extends React.Component {
 class BountyGame extends React.Component {
   state = {
     bountySnakes: [],
+    snakeCount: 1,
   }
 
   handleFieldChange = (name, ev) => {
@@ -62,13 +63,32 @@ class BountyGame extends React.Component {
     })
   }
 
-  handleAddSnake = (name, idx, ev) => {
+  handleUpdateSnake = (name, idx, ev) => {
     const snakes = this.state.bountySnakes.slice()
     snakes[idx] = ev.target.value
     this.setState({ bountySnakes: snakes })
   }
 
   handleIncrSnakes = () => {
+    const snakes = this.state.bountySnakes.concat([''])
+    this.setState({ bountySnakes: snakes })
+  }
+
+  handleSearchChallenger = () => {
+    axios(`${config.SERVER}/api/team/${this.state.captainId}/snake`, {
+      method: 'get',
+      withCredentials: true
+    }).then(res => {
+      this.setState({
+        challenger: res.data,
+        error: null,
+      })
+    }).catch(error => {
+      this.setState({ error: error.message })
+    })
+  }
+
+  handleSearch = () => {
     this.setState({ bountySnakes: this.state.bountySnakes.concat(['']) })
   }
 
@@ -93,8 +113,13 @@ class BountyGame extends React.Component {
       game,
       width,
       height,
+      decHealthPoints,
       captainId,
       bountySnakes,
+      challengerCount,
+      turnDelay,
+      snakeStartLength,
+      maxFood,
     } = this.state
 
     console.log('snakes', bountySnakes)
@@ -124,8 +149,40 @@ class BountyGame extends React.Component {
         <Form.Input
           placeholder='Health Points per Turn'
           name='decHealthPoints'
-          onChange={this.handleFieldChange.bind(this, 'height')}
-          value={height || ''}
+          onChange={this.handleFieldChange.bind(this, 'decHealthPoints')}
+          value={decHealthPoints || ''}
+        />
+
+        <label>Turn Delay</label>
+        <Form.Input
+          placeholder='Turn Delay'
+          name='turnDelay'
+          onChange={this.handleFieldChange.bind(this, 'turnDelay')}
+          value={turnDelay || ''}
+        />
+
+        <label>Max Food</label>
+        <Form.Input
+          placeholder='Max Food'
+          name='maxFood'
+          onChange={this.handleFieldChange.bind(this, 'maxFood')}
+          value={maxFood || ''}
+        />
+
+        <label>Snake Start Length</label>
+        <Form.Input
+          placeholder='Snake Start Length'
+          name='snakeStartLength'
+          onChange={this.handleFieldChange.bind(this, 'snakeStartLength')}
+          value={snakeStartLength || ''}
+        />
+
+        <label>Pin Tail</label>
+        <Form.Input
+          placeholder='Pin Tail'
+          name='pinTail'
+          onChange={this.handleFieldChange.bind(this, 'pinTail')}
+          value={pinTail || ''}
         />
 
         <label>Bounty Snake URL's</label>
@@ -134,7 +191,7 @@ class BountyGame extends React.Component {
             key={idx}
             placeholder={`Bounty Snake ${idx+1}`}
             name='bountySnake'
-            onChange={this.handleAddSnake.bind(this, 'bountySnakes', idx)}
+            onChange={this.handleUpdateSnake.bind(this, 'bountySnakes', idx)}
             value={bountySnakes[idx] || ''}
           />
         )}
@@ -145,6 +202,15 @@ class BountyGame extends React.Component {
         />
 
         <h3>User Snakes</h3>
+
+        <label>Challenger Count</label>
+        <Form.Input
+          placeholder='Challenger Count'
+          name='challengerCount'
+          onChange={this.handleFieldChange.bind(this, 'challengerCount')}
+          value={challengerCount || ''}
+        />
+        <label>Team Captain GitHub Username</label>
         <Form.Input
           placeholder='Team Captain GitHub Username'
           name='captainId'
@@ -153,7 +219,7 @@ class BountyGame extends React.Component {
         />
         <Form.Button
           content="Search"
-          onClick={this.handleIncrSnakes}
+          onClick={this.handleSearchChallenger}
         />
 
         <Form.Button content="Run Game" onClick={this.handleStartGame} />
