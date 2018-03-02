@@ -42,6 +42,7 @@ class Snakes extends Component {
       }
     })
     this.setState({gameId: resp.data.gameId})
+    window.open(`${config.GAME_SERVER}/${resp.data.gameId}`);
   }
 
   loadSnakes = async() => {
