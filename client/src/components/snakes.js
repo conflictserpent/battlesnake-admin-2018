@@ -141,7 +141,7 @@ class Snakes extends Component {
           </Form.Group>
 
           <Form.Button content="Create Game" />
-          {gameId && <a href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
+          {gameId && <a style={{color:"white"}} href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
         </Form>
       </Container>
     )
