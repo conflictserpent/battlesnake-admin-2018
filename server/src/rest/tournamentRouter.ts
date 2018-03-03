@@ -129,7 +129,7 @@ router.get('/:id/match/:matchId/run-game', ensureAuthenticated, authorizeAdmin, 
 
   const t = await loadTournament(req.params.id)
   const m = findMatch(t, req.params.matchId)
-  await startGame(m)
+  await startGame(m, t.division)
   await saveTournament(t)
   res.send(m)
 })

@@ -81,7 +81,7 @@ app.get('/start-game', (req, res) => {
       division: '',
     })
   })
-  createGame(teams, null)
+  createGame(teams, null, '')
 })
 
 app.post('/game-status', (req, res) => {

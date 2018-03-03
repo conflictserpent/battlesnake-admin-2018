@@ -19,7 +19,7 @@ export function createMatch(): IMatch {
     }
 }
 
-export async function startGame(match: IMatch) {
+export async function startGame(match: IMatch, division: string) {
     console.log("start game")
     const winners = (await getMatchWinners(match)).filter(w => w !== null)
     console.log("winners:", winners)
@@ -27,7 +27,7 @@ export async function startGame(match: IMatch) {
     if (!match.gameIds) {
         match.gameIds = []
     }
-    const game = await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1), config.BATTLESNAKE_TOURNAMENT_SERVER_HOST)
+    const game = await createGame(match.teams.filter(m => winnerIds.indexOf(m.captainId) === -1), config.BATTLESNAKE_TOURNAMENT_SERVER_HOST, division)
     match.gameIds.push(game)
 }
 

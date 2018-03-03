@@ -15,9 +15,13 @@ const DefaultGameConfig: IGameConfig = {
     snakes: []
 }
 
-export async function createGame(teams: ITeam[], serverUrl: string) {
-    return createGameWithConfig({
+export async function createGame(teams: ITeam[], serverUrl: string, division: string) {
+    const config = {
         ...DefaultGameConfig,
+        division
+    }
+    return createGameWithConfig({
+        ...config,
         snakes: teams.map(t => {
             return {
                 name: t.teamName,
@@ -35,6 +39,7 @@ export interface IGameConfig {
     decHealthPoints: number,
     pinTail?: boolean,
     serverUrl?: string,
+    division?: string
     snakes: ISnakeConfig[]
 }
 
@@ -43,8 +48,8 @@ export interface ISnakeConfig {
     url: string
 }
 
-export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail, serverUrl }: IGameConfig): Promise<number> {
-    console.log("create game with config")
+export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail, serverUrl, division }: IGameConfig): Promise<number> {
+    console.log("create game with config for division", division)
     const formData = {
         "game_form[width]": width || 20,
         "game_form[height]": height || 20,
@@ -53,7 +58,8 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
         "game_form[pin_tail]": `${!!pinTail}`,
         "game_form[max_food]": maxFood || 10,
         "game_form[snake_start_length]": snakeStartLength || 3,
-        "game_form[dec_health_points]": decHealthPoints || 1
+        "game_form[dec_health_points]": decHealthPoints || 1,
+        "game_form[division]": division
     }
     snakes.forEach((snake, idx) => {
         const urlKey = `game_form[snakes][${idx}][url]`
