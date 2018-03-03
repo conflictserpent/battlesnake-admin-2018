@@ -34,8 +34,13 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
     })
 
     snakes.push({
-        name: "Checkfront Bounty Snake",
-        url: "http://battlesnake.checkfront.net/"
+        name: "Checkfront Bounty Snake #1",
+        url: "http://battlesnake.checkfront.net:81/"
+    })
+
+    snakes.push({
+        name: "Checkfront Bounty Snake #2",
+        url: "http://battlesnake.checkfront.net:82/"
     })
 
     snakes.push({
