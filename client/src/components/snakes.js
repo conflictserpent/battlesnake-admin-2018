@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Form, Segment, Header } from 'semantic-ui-react'
+import { Container, Table, Form, Segment, Header, Grid } from 'semantic-ui-react'
 
 import axios from 'axios'
 import config from '../config'
@@ -32,7 +32,7 @@ class Snakes extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = async() => {
+  handleSubmit = async () => {
     const { selected, width, height, food, teamId } = this.state
     const resp = await axios(`${config.SERVER}/api/team/${teamId}/start-game`, {
       method: 'post',
@@ -44,17 +44,17 @@ class Snakes extends Component {
         snakes: selected
       }
     })
-    this.setState({gameId: resp.data.gameId})
+    this.setState({ gameId: resp.data.gameId })
     window.open(`${config.GAME_SERVER}/${resp.data.gameId}`)
   }
 
-  loadSnakes = async() => {
+  loadSnakes = async () => {
     const resp = await axios(`${config.SERVER}/api/snakes/`, {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       withCredentials: true
     })
-    this.setState({snakes: resp.data})
+    this.setState({ snakes: resp.data })
   }
 
   selectSnake = (snake) => {
@@ -64,7 +64,7 @@ class Snakes extends Component {
     } else {
       selected = selected.filter(s => s !== snake)
     }
-    this.setState({selected})
+    this.setState({ selected })
   }
 
   render() {
@@ -81,10 +81,10 @@ class Snakes extends Component {
         <Table celled inverted>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell/>
+              <Table.HeaderCell />
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell />
-              <Table.HeaderCell/>
+              <Table.HeaderCell />
               <Table.HeaderCell>Name</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -96,7 +96,7 @@ class Snakes extends Component {
                     <Form.Checkbox onChange={() => this.selectSnake(s)} />
                   </Table.Cell>
                   <Table.Cell>{s.name}</Table.Cell>
-                  <Table.Cell/>
+                  <Table.Cell />
                   <Table.Cell textAlign="center">
                     {(i < second.length) && <Form.Checkbox onChange={() => this.selectSnake(second[i])} />}
                   </Table.Cell>
@@ -107,48 +107,55 @@ class Snakes extends Component {
               )
             })}
           </Table.Body>
+          <Table.Footer>
+            <Table.Row>
+              <Table.HeaderCell colSpan='5'>
+                <Grid centered padded>
+                  <Form inverted onSubmit={this.handleSubmit} loading={loading}>
+                    <Form.Group>
+                      <Form.Input
+                        label="Board Width"
+                        placeholder="Board Width"
+                        name="width"
+                        value={width}
+                        onChange={this.handleChange}
+                        error={
+                          this.state.error &&
+                          this.state.error.field === 'width'
+                        }
+                      />
+                      <Form.Input
+                        label="Board Height"
+                        placeholder="Board Height"
+                        name="height"
+                        value={height}
+                        onChange={this.handleChange}
+                        error={
+                          this.state.error &&
+                          this.state.error.field === 'height'
+                        }
+                      />
+                      <Form.Input
+                        label="Food"
+                        placeholder="Food"
+                        name="food"
+                        value={food}
+                        onChange={this.handleChange}
+                        error={
+                          this.state.error &&
+                          this.state.error.field === 'food'
+                        }
+                      />
+                    </Form.Group>
+
+                    {snakeUrl && <Form.Button content="Create Game" />}
+                    {gameId && <a style={{ color: 'white' }} href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
+                  </Form>
+                </Grid>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
         </Table>
-
-        <Form onSubmit={this.handleSubmit} loading={loading}>
-          <Form.Group>
-            <Form.Input
-              label="Board Width"
-              placeholder="Board Width"
-              name="width"
-              value={width}
-              onChange={this.handleChange}
-              error={
-                this.state.error &&
-                this.state.error.field === 'width'
-              }
-            />
-            <Form.Input
-              label="Board Height"
-              placeholder="Board Height"
-              name="height"
-              value={height}
-              onChange={this.handleChange}
-              error={
-                this.state.error &&
-                this.state.error.field === 'height'
-              }
-            />
-            <Form.Input
-              label="Food"
-              placeholder="Food"
-              name="food"
-              value={food}
-              onChange={this.handleChange}
-              error={
-                this.state.error &&
-                this.state.error.field === 'food'
-              }
-            />
-          </Form.Group>
-
-          {snakeUrl && <Form.Button content="Create Game" />}
-          {gameId && <a style={{color: 'white'}} href={`${config.GAME_SERVER}/${gameId}`} target="_blank">View Game</a>}
-        </Form>
       </Container>
     )
   }

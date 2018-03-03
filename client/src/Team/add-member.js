@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Message, Icon, Header } from 'semantic-ui-react'
+import { Form, Message, Icon, Header, Grid } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
@@ -60,16 +60,25 @@ class AddMember extends Component {
         success={this.state.success}
         onSubmit={this.handleSubmit}
       >
-        <Header as="h3">Add a new team member</Header>
+      <Header inverted textAlign="center" as="h3">Add a new team member</Header>
+      <Grid centered padded>
         <Form.Group>
-          <Form.Field inline fluid>
-            <Form.Input fluid placeholder='GitHub Username' value={newUsername}
+          <Form.Field inline>
+            <Form.Input 
+              placeholder='GitHub Username'
+              inverted
+              value={newUsername}
               onChange={this.handleChange}
+              name="newUsername"
               error={
                 this.state.error &&
                 this.state.error.field === 'newUsername'
               } />
           </Form.Field>
+          <Form.Button inverted color='blue'>
+            Add Member
+          <Icon name='add' />
+        </Form.Button>
         </Form.Group>
 
         <Message error>
@@ -79,10 +88,7 @@ class AddMember extends Component {
           <p>Added successfully</p>
         </Message>
 
-        <Form.Button inverted color='blue'>
-            Add Member
-          <Icon name='add' />
-        </Form.Button>
+        </Grid>
       </Form>
     )
   }

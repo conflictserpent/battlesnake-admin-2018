@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Link } from 'react-router-dom'
-import { Grid, Container, Image, Table, Header, Button, Icon, Segment } from 'semantic-ui-react'
+import { Grid, Container, Image, Table, Header, Button, Icon, Label, Message } from 'semantic-ui-react'
 
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
@@ -19,7 +19,6 @@ class Team extends Component {
   render() {
     return (
       <div>
-
         <Grid verticalAlign='bottom'>
           <Grid.Column width={4}>
             <Link to="/">
@@ -31,7 +30,7 @@ class Team extends Component {
               as='h1'
               inverted
             >Team Page
-              <Button inverted size='small' floated='right' onClick={() => this.props.history.push("team/edit")}>
+              <Button inverted size='small' floated='right' href="team/edit">
                 Edit Team
                 <Icon name='pencil' />
               </Button>
@@ -67,8 +66,8 @@ class TeamDetailDisplay extends Component {
     console.log(team)
     return (
       <div>
-        <h2>{team.teamName} <span className='bs-badge bs-badge-right'>{team.division}</span></h2>
-        <p>{team.description}</p>
+        <Header as='h2' color='teal'>{team.teamName} <Label color='teal'>{team.division}</Label></Header>
+        <Message size="small">{team.description}</Message>
         <code>{team.snakeUrl}</code>
       </div>
     )
@@ -152,18 +151,16 @@ class TeamHomeDisplay extends Component {
             <Table.Row>
               <Table.Cell />
               <Table.Cell textAlign="right">
-                <Link to="/team/edit">
-                  <span role="img" aria-label="Edit">✏️</span> Edit Team
+                <Link to="/team/edit" className="ui button">
+                  <Icon name="pencil" /> Edit Team
                 </Link>
               </Table.Cell>
             </Table.Row>}
           </Table.Body>
           <Table.Footer>
-            <Table.Row color="red">
+            <Table.Row>
               <Table.HeaderCell colSpan='2'>
-                <Segment centered inverted>
-                  <AddMember />
-                </Segment>
+                <AddMember />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>

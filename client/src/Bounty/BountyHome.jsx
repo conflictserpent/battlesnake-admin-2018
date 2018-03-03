@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { userProvider } from '../components/data'
-import { Form } from 'semantic-ui-react'
+import { Form, Message, Header, Segment } from 'semantic-ui-react'
 import axios from 'axios'
 import config from '../config'
 
@@ -148,119 +148,132 @@ class BountyGame extends React.Component {
     } = this.state
 
     return (
-      <div>
-        <hr />
-        <h3>Game Setup</h3>
+      <Segment stacked padded='very'>
+        <Form >
+          <Header as="h3" >Game Setup</Header>
+          <Form.Group widths={2}>
+            <Form.Input
+              placeholder='Game Width'
+              label="Game Width"
+              name='width'
+              onChange={this.handleFieldChange.bind(this, 'width')}
+              value={width || ''}
+            />
 
-        <label>Game Width</label>
-        <Form.Input
-          placeholder='Game Width'
-          name='width'
-          onChange={this.handleFieldChange.bind(this, 'width')}
-          value={width || ''}
-        />
+            <Form.Input
+              placeholder='Game Height'
+              label="Game Height"
+              name='height'
+              onChange={this.handleFieldChange.bind(this, 'height')}
+              value={height || ''}
+            />
+          </Form.Group>
+          <Form.Group widths={2}>
+            <Form.Input
+              placeholder='Health Points per Turn'
+              label="Health Points per Turn"
+              name='decHealthPoints'
+              onChange={this.handleFieldChange.bind(this, 'decHealthPoints')}
+              value={decHealthPoints || ''}
+            />
 
-        <label>Game Height</label>
-        <Form.Input
-          placeholder='Game Height'
-          name='height'
-          onChange={this.handleFieldChange.bind(this, 'height')}
-          value={height || ''}
-        />
+            <Form.Input
+              placeholder='Turn Delay'
+              label="Turn Delay"
+              name='turnDelay'
+              onChange={this.handleFieldChange.bind(this, 'turnDelay')}
+              value={turnDelay || ''}
+            />
+          </Form.Group>
+          <Form.Group widths={2}>
 
-        <label>Health Points per Turn</label>
-        <Form.Input
-          placeholder='Health Points per Turn'
-          name='decHealthPoints'
-          onChange={this.handleFieldChange.bind(this, 'decHealthPoints')}
-          value={decHealthPoints || ''}
-        />
+            <Form.Input
+              label='Max Food'
+              placeholder='Max Food'
+              name='maxFood'
+              onChange={this.handleFieldChange.bind(this, 'maxFood')}
+              value={maxFood || ''}
+            />
 
-        <label>Turn Delay</label>
-        <Form.Input
-          placeholder='Turn Delay'
-          name='turnDelay'
-          onChange={this.handleFieldChange.bind(this, 'turnDelay')}
-          value={turnDelay || ''}
-        />
+            <Form.Input
+              label='Snake Start Length'
+              placeholder='Snake Start Length'
+              name='snakeStartLength'
+              onChange={this.handleFieldChange.bind(this, 'snakeStartLength')}
+              value={snakeStartLength || ''}
+            />
+          </Form.Group>
+          <Form.Group widths={2}>
+            <Form.Input
+              label='Pin Tail'
+              placeholder='Pin Tail'
+              name='pinTail'
+              onChange={this.handleFieldChange.bind(this, 'pinTail')}
+              value={pinTail || ''}
+            />
+          </Form.Group>
+          <Header as="h3">{"Bounty Snake URL's"}</Header>
+          <Message color="blue">
+            Setup a bounty snake url using mysnakename@http://mysnakeurl.com
+        </Message>
+          {bountySnakes.map((snake, idx) =>
+            <Form.Input
+              key={idx}
+              placeholder={`Bounty Snake ${idx + 1}`}
+              name='bountySnake'
+              onChange={this.handleUpdateSnake.bind(this, 'bountySnakes', idx)}
+              value={bountySnakes[idx] || ''}
+            />
+          )}
 
-        <label>Max Food</label>
-        <Form.Input
-          placeholder='Max Food'
-          name='maxFood'
-          onChange={this.handleFieldChange.bind(this, 'maxFood')}
-          value={maxFood || ''}
-        />
-
-        <label>Snake Start Length</label>
-        <Form.Input
-          placeholder='Snake Start Length'
-          name='snakeStartLength'
-          onChange={this.handleFieldChange.bind(this, 'snakeStartLength')}
-          value={snakeStartLength || ''}
-        />
-
-        <label>Pin Tail</label>
-        <Form.Input
-          placeholder='Pin Tail'
-          name='pinTail'
-          onChange={this.handleFieldChange.bind(this, 'pinTail')}
-          value={pinTail || ''}
-        />
-
-        <label>{"Bounty Snake URL's"}</label>
-        <p>
-          Setup a bounty snake url using mysnakename@http://mysnakeurl.com
-        </p>
-        {bountySnakes.map((snake, idx) =>
-          <Form.Input
-            key={idx}
-            placeholder={`Bounty Snake ${idx + 1}`}
-            name='bountySnake'
-            onChange={this.handleUpdateSnake.bind(this, 'bountySnakes', idx)}
-            value={bountySnakes[idx] || ''}
+          <Form.Button
+            content="Add Snake"
+            onClick={this.handleIncrSnakes}
           />
-        )}
 
-        <Form.Button
-          content="Add Snake"
-          onClick={this.handleIncrSnakes}
-        />
+          <Header as="h3" >User Snakes</Header>
+          <Form.Group widths={2}>
+            <Form.Input
+              label='Challenger Count'
+              placeholder='Challenger Count'
+              name='challengerCount'
+              onChange={this.handleFieldChange.bind(this, 'challengerCount')}
+              value={challengerCount || ''}
+            />
 
-        <h3>User Snakes</h3>
+            <Form.Input
+              label='Team Captain GitHub Username'
+              placeholder='Team Captain GitHub Username'
+              name='captainId'
+              onChange={this.handleFieldChange.bind(this, 'captainId')}
+              value={captainId || ''}
+            />
+          </Form.Group>
+          <Form.Group widths={2}>
+            {challengerSnakes.map((snakeUrl, idx) =>
+              <Form.Input
+                fluid
+                key={idx}
+                value={snakeUrl}
+                disabled={true}
+              />
+            )}
+          </Form.Group>
+          <Form.Group widths={'even'}>
+            <Form.Button
+              content="Search"
+              color="blue"
+              onClick={this.handleSearchChallenger}
+            />
 
-        <label>Challenger Count</label>
-        <Form.Input
-          placeholder='Challenger Count'
-          name='challengerCount'
-          onChange={this.handleFieldChange.bind(this, 'challengerCount')}
-          value={challengerCount || ''}
-        />
-        <label>Team Captain GitHub Username</label>
-        <Form.Input
-          placeholder='Team Captain GitHub Username'
-          name='captainId'
-          onChange={this.handleFieldChange.bind(this, 'captainId')}
-          value={captainId || ''}
-        />
-        {challengerSnakes.map((snakeUrl, idx) =>
-          <Form.Input
-            key={idx}
-            value={snakeUrl}
-            disabled={true}
-          />
-        )}
-        <Form.Button
-          content="Search"
-          onClick={this.handleSearchChallenger}
-        />
+            <Form.Button content="Run Game" onClick={this.handleStartGame} />
 
-        <Form.Button content="Run Game" onClick={this.handleStartGame} />
-
-        {gameUrl &&
-          <Form.Button onClick={() => { window.open(gameUrl) }}>{gameUrl}</Form.Button>
-        }
-      </div>
+            {gameUrl &&
+              <Form.Button onClick={() => { window.open(gameUrl) }}>{gameUrl}</Form.Button>
+            }
+          </Form.Group>
+        </Form>
+      </Segment>
     )
   }
 }

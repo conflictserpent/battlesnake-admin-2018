@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Message } from 'semantic-ui-react'
+import { Form, Message, Grid, Segment, Header, Button } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
@@ -29,7 +29,7 @@ class EditTeam extends Component {
     })
   };
 
-  handleSubmit = async() => {
+  handleSubmit = async () => {
     this.setState({ loading: true })
 
     const { snakeUrl, teamName } = this.state
@@ -92,72 +92,79 @@ class EditTeam extends Component {
   render() {
     const { snakeUrl, teamName, description, division } = this.state
     return (
-      <Form
-        loading={this.props.teamMgr.loading || this.state.loading}
-        error={this.state.error}
-        success={!this.state.loading && this.state.success}
-        onSubmit={this.handleSubmit}
+      <Grid
+        textAlign='center'
+        style={{ height: '100%' }}
+        verticalAlign='middle'
       >
-        <h1>Edit Team</h1>
-        <Form.Group>
-          <Form.Input
-            label="Team Name"
-            placeholder="Team Name"
-            name="teamName"
-            value={teamName}
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'teamName'
-            }
-          />
-          <Form.Input
-            label="Snake URL"
-            placeholder="Snake URL"
-            name="snakeUrl"
-            value={snakeUrl}
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'snakeUrl'
-            }
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.TextArea
-            label="Team Description"
-            placeholder="Team Description"
-            name="description"
-            value={description}
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'description'
-            }
-          />
-          <Form.Dropdown
-            label="Division"
-            options={divisions}
-            name="division"
-            value={division}
-            placeholder="Division"
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'divisions'
-            }
-          />
-        </Form.Group>
-        <Message error>
-          <p>{this.state.error && this.state.error.msg}</p>
-        </Message>
-        <Message success>
-          <p>Team updated successfully</p>
-        </Message>
-        <Form.Button content="Submit" />
-
-        <br/>
-      </Form>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as='h1' color='teal' textAlign='center'>
+            {' '}Edit your team
+          </Header>
+          <Form size='large'
+            loading={this.props.teamMgr.loading || this.state.loading}
+            error={this.state.error}
+            success={!this.state.loading && this.state.success}
+            onSubmit={this.handleSubmit}
+            style={{ textAlign: 'left' }}>
+            <Segment stacked>
+              <Form.Input
+                label="Team Name"
+                placeholder="Team Name"
+                name="teamName"
+                value={teamName}
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'teamName'
+                }
+              />
+              <Form.Input
+                label="Snake URL"
+                placeholder="Snake URL"
+                name="snakeUrl"
+                value={snakeUrl}
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'snakeUrl'
+                }
+              />
+              <Form.TextArea
+                label="Team Description"
+                placeholder="Team Description"
+                name="description"
+                value={description}
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'description'
+                }
+              />
+              <Form.Select
+                label="Division"
+                options={divisions}
+                name="division"
+                fluid
+                value={division}
+                placeholder="Division"
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'divisions'
+                }
+              />
+              <Form.Button color='teal' fluid size='large'>Submit</Form.Button>
+            </Segment>
+            <Message error>
+              <p>{this.state.error && this.state.error.msg}</p>
+            </Message>
+            <Message success>
+              <p>Team updated successfully</p>
+            </Message>
+          </Form>
+        </Grid.Column>
+      </Grid>
     )
   }
 }
