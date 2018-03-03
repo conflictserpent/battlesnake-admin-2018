@@ -337,7 +337,9 @@ class TournamentList extends Component {
     })
     this.setState((state) => {
       const t = state.tournaments
-      t.push(resp.data)
+      for (const tournament of resp.data) {
+        t.push(tournament)
+      }
 
       return {tournaments: t}
     })
