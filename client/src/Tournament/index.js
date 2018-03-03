@@ -43,7 +43,15 @@ export class TournamentActiveGame extends Component {
 
   render() {
     const {gameId} = this.state
-    return (<iframe title="game-view" src={`${config.GAME_SERVER}/${gameId}`} style={{width: '100%', height: '1080px'}}></iframe>)
+    return (
+      <iframe
+        src={`${config.GAME_SERVER}/${gameId}`}
+        style={{width: '100vw', height: '100vh'}}
+        title="game-view"
+        frameBorder="0"
+        scrolling="no"
+      ></iframe>
+    )
   }
 }
 

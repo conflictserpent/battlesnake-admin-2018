@@ -335,7 +335,12 @@ ul.task-meta-items {
   color: #df1688; }
 
 .body-wrapper {
-  margin: 30px auto;
+  padding: 30px 0;
+  width: 100vw;
+  height: 100vh; }
+
+.body-content {
+  margin: 0 auto;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
