@@ -31,18 +31,18 @@ class Team extends Component {
               as='h1'
               inverted
             >Team Page
-              <Button inverted outline size='small' floated='right' onClick={() => this.props.history.push("team/edit")}>
-              Edit Team
-                <Icon name='right pencil' />
+              <Button inverted size='small' floated='right' onClick={() => this.props.history.push("team/edit")}>
+                Edit Team
+                <Icon name='pencil' />
               </Button>
             </Header>
-            
+
           </Grid.Column>
         </Grid>
 
         <Grid container>
           <Grid.Column width={4}>
-            <Nav bountyCollector={this.props.userMgr.user.bountyCollector}/>
+            <Nav bountyCollector={this.props.userMgr.user.bountyCollector} />
           </Grid.Column>
           <Grid.Column width={12}>
             <Container>
@@ -142,7 +142,7 @@ class TeamHomeDisplay extends Component {
                   <Table.Cell textAlign="right">
                     <Button inverted color='red' size='small' onClick={() => this.removeMember(member.username)}>
                       Remove
-                      <Icon name='right x' />
+                      <Icon name='x' />
                     </Button>
                   </Table.Cell>
                 </Table.Row>
@@ -158,8 +158,16 @@ class TeamHomeDisplay extends Component {
               </Table.Cell>
             </Table.Row>}
           </Table.Body>
+          <Table.Footer>
+            <Table.Row color="red">
+              <Table.HeaderCell colSpan='2'>
+                <Segment centered inverted>
+                  <AddMember />
+                </Segment>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
         </Table>
-        <AddMember />
       </div>
     )
   }

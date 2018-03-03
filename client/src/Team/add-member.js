@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Message } from 'semantic-ui-react'
+import { Form, Message, Icon, Header } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
@@ -54,37 +54,36 @@ class AddMember extends Component {
   render() {
     const { newUsername } = this.state
     return (
-      <div>
-        <Form
-          error={this.state.error}
-          success={this.state.success}
-          onSubmit={this.handleSubmit}
-        >
-          <h1>Add User</h1>
-          <Form.Group>
-            <Form.Input
-              label="GitHub Username"
-              placeholder="GitHub Username"
-              name="newUsername"
-              value={newUsername}
+      <Form
+        inverted
+        error={this.state.error}
+        success={this.state.success}
+        onSubmit={this.handleSubmit}
+      >
+        <Header as="h3">Add a new team member</Header>
+        <Form.Group>
+          <Form.Field inline fluid>
+            <Form.Input fluid placeholder='GitHub Username' value={newUsername}
               onChange={this.handleChange}
               error={
                 this.state.error &&
-              this.state.error.field === 'newUsername'
-              }
-            />
-          </Form.Group>
-          <Message error>
-            <p>{this.state.error}</p>
-          </Message>
-          <Message success>
-            <p>Added successfully</p>
-          </Message>
-          <Form.Button content="Submit" />
+                this.state.error.field === 'newUsername'
+              } />
+          </Form.Field>
+        </Form.Group>
 
-          <br/>
-        </Form>
-      </div>
+        <Message error>
+          <p>{this.state.error}</p>
+        </Message>
+        <Message success>
+          <p>Added successfully</p>
+        </Message>
+
+        <Form.Button inverted color='blue'>
+            Add Member
+          <Icon name='add' />
+        </Form.Button>
+      </Form>
     )
   }
 }

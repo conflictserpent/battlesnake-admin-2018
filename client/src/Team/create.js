@@ -53,10 +53,10 @@ class TeamFields extends Component {
         verticalAlign='middle'
       >
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as='h2' color='teal' textAlign='center'>
+          <Header as='h1' color='teal' textAlign='center'>
             {' '}Create a team
           </Header>
-          <Form size='large' onSubmit={this.handleSubmit} textAlign='left'>
+          <Form size='large' onSubmit={this.handleSubmit} style={{ textAlign: 'left' }}> 
             <Segment stacked>
               <Form.Input
                 label="Team Name"
@@ -76,7 +76,6 @@ class TeamFields extends Component {
                 name="description"
                 value={description}
                 onChange={this.handleChange}
-                fluid
               />
               <Form.Select
                 label="Division"
@@ -130,7 +129,6 @@ class GithubUsername extends Component {
       }
       this.setState({user: user})
     } catch (e) {
-      console.log(e)
       this.setState({ error: e })
     }
 
@@ -156,12 +154,12 @@ class GithubUsername extends Component {
           verticalAlign='middle'
         >
           <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as='h2' color='teal' textAlign='center'>
+            <Header as='h1' color='teal' textAlign='center'>
               {' '}Create a team
             </Header>
             {!user &&
               <Segment stacked>
-                <Form size='large' onSubmit={this.handleSubmit} textAlign='left'>
+                <Form size='large' onSubmit={this.handleSubmit} style={{ textAlign: 'left' }}>
                   <Form.Input
                     label="Github Username"
                     placeholder="Github Username"
