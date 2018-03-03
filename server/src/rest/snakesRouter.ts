@@ -65,12 +65,12 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
 
     snakes.push({
         name: "Rooof Bounty Snake #1",
-        url: " http://adam.snake.rooof.com:7878/"
+        url: " http://adam.snake.rooof.com:7878"
     })
 
     snakes.push({
         name: "Rooof Bounty Snake #2",
-        url: "http://catlin.snake.rooof.com/"
+        url: "http://catlin.snake.rooof.com"
     })
 
     snakes.push({
