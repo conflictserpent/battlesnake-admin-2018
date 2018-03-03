@@ -7,7 +7,7 @@ export PUBLIC_URL=https://s3-us-west-2.amazonaws.com/admin.battlesnake.io
 export REACT_APP_SERVER=https://admin.battlesnake.io
 # update to actual production server day of
 export REACT_APP_GAME_SERVER=http://testing.battlesnake.io
-export REACT_APP_TOURNAMENT_GAME_SERVER=http://tournament.us-west-2.elasticbeanstalk.com
+export REACT_APP_TOURNAMENT_GAME_SERVER=http://tournament.us-west-2.elasticbeanstalk.com/
 yarn run build
 
 # Sync up the files to the S3 bucket.
