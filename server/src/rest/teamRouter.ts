@@ -12,6 +12,7 @@ import {
 } from '../db/users'
 import { updateTeam, getTeam, ITeam } from '../db/teams'
 import { createGameWithConfig, ISnakeConfig, SERVER_HOST } from '../game-server'
+import config from '../config'
 import * as _ from 'lodash'
 
 export const router = Router()
@@ -29,6 +30,10 @@ router.get('/', ensureAuthenticated, async (req: express.Request, res: express.R
     throw new Error('team not created')
   }
   res.json(team)
+})
+
+router.get('/can-edit', ensureAuthenticated, (req: express.Request, res: express.Response) => {
+  res.json({ can_edit: config.ALLOW_TEAM_EDIT })
 })
 
 router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: express.Request, res: express.Response) => {
@@ -76,6 +81,11 @@ router.post('/', ensureAuthenticated, async (req: express.Request, res: express.
 
 // Update
 router.post('/update', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
+  if (!config.ALLOW_TEAM_EDIT) {
+    res.json({ error: "unable to edit teams" })
+    return
+  }
+
   const user: IUser = req.user as IUser
   const teamId = user.teamId
   if (!teamId) {

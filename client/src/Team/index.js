@@ -56,6 +56,10 @@ class TeamDetailDisplay extends Component {
 }
 
 class TeamHomeDisplay extends Component {
+  state = {
+    canEdit: false
+  }
+
   removeMember = async(username) => {
     try {
       await axios(`${config.SERVER}/api/team/remove-user`, {
@@ -71,10 +75,26 @@ class TeamHomeDisplay extends Component {
     window.location.reload()
   }
 
+  componentDidMount = async() => {
+    try {
+      const resp = await axios(`${config.SERVER}/api/team/can-edit`, {
+        method: 'get',
+        withCredentials: true
+      })
+
+      this.setState({canEdit: resp.data.can_edit})
+    } catch (e) {
+      this.setState({ error: e.response.data.msg })
+    }
+  }
+
   render() {
     let members = !this.props.membersMgr.loading
       ? this.props.membersMgr.members
       : []
+
+    const {canEdit} = this.state
+    console.log(canEdit)
     return (
       <div>
         <TeamDetail />
@@ -108,6 +128,7 @@ class TeamHomeDisplay extends Component {
                 </Table.Row>
               )
             })}
+            {canEdit &&
             <Table.Row>
               <Table.Cell />
               <Table.Cell textAlign="right">
@@ -115,7 +136,7 @@ class TeamHomeDisplay extends Component {
                   <span role="img" aria-label="Edit">✏️</span> Edit Team
                 </Link>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row>}
           </Table.Body>
         </Table>
         <AddMember />

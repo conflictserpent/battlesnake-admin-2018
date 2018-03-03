@@ -28,7 +28,9 @@ const config = {
   HOMEPAGE: process.env.HOMEPAGE || 'https://s3-us-west-2.amazonaws.com/admin.battlesnake.io/index.html',
 
   SESSION_SECRET: process.env.SESSION_SECRET,
-  BATTLESNAKE_TOURNAMENT_SERVER_HOST: process.env.BATTLESNAKE_TOURNAMENT_SERVER_HOST || process.env.BATTLESNAKE_SERVER_HOST
+  BATTLESNAKE_TOURNAMENT_SERVER_HOST: process.env.BATTLESNAKE_TOURNAMENT_SERVER_HOST || process.env.BATTLESNAKE_SERVER_HOST,
+
+  ALLOW_TEAM_EDIT: process.env.ALLOW_TEAM_EDIT
 }
 
 export default config
