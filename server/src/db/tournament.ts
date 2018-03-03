@@ -110,7 +110,6 @@ export function findMatch(tournament: ITournament, matchId: string): IMatch {
       break
     }
   }
-  console.log("find match", m)
   return m
 }
 

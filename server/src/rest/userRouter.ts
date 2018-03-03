@@ -8,7 +8,6 @@ import * as _ from 'lodash'
 export const router = Router()
 
 router.get('/', ensureAuthenticated, (req: express.Request, res: express.Response) => {
-  console.log((req as any).session.csrfSecret)
   res.set({ csrfToken: (req as any).csrfToken(), 'Access-Control-Expose-Headers': 'csrfToken' }).json(req.user)
 })
 

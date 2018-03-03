@@ -112,7 +112,6 @@ class TeamHomeDisplay extends Component {
       ? this.props.membersMgr.members
       : []
 
-    console.log(this.props)
     const { canEdit } = this.props
 
     return (

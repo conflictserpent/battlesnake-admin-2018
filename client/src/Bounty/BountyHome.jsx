@@ -56,6 +56,14 @@ class BountyGame extends React.Component {
     snakeCount: 1
   }
 
+  handlePinTail = () => {
+    this.setState(state => {
+      return {
+        'pinTail': !state.pinTail
+      }
+    })
+  }
+
   handleFieldChange = (name, ev) => {
     this.setState({
       [name]: ev.target.value
@@ -99,7 +107,7 @@ class BountyGame extends React.Component {
     const body = JSON.parse(JSON.stringify(this.state))
     body.snakes = []
 
-    body.bountySnakes.forEach((snake) => {
+    body.bountySnakes.forEach((snake, i) => {
       const spl = snake.split('@')
       body.snakes.push({
         url: spl[1],
@@ -113,7 +121,6 @@ class BountyGame extends React.Component {
         name: spl[0]
       })
     })
-    console.log(body)
 
     axios(`${config.SERVER}/api/tournaments/start`, {
       method: 'post',
@@ -202,12 +209,12 @@ class BountyGame extends React.Component {
             />
           </Form.Group>
           <Form.Group widths={2}>
-            <Form.Input
+            <Form.Checkbox
               label='Pin Tail'
               placeholder='Pin Tail'
               name='pinTail'
-              onChange={this.handleFieldChange.bind(this, 'pinTail')}
-              value={pinTail || ''}
+              onChange={this.handlePinTail}
+              checked={pinTail || false}
             />
           </Form.Group>
           <Header as="h3">{"Bounty Snake URL's"}</Header>
@@ -257,7 +264,7 @@ class BountyGame extends React.Component {
               />
             )}
           </Form.Group>
-          <Form.Group widths={'even'}>
+          <Form.Group>
             <Form.Button
               content="Search"
               color="blue"

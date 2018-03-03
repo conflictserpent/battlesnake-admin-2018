@@ -55,7 +55,6 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
     division: req.body.division,
     description: req.body.description
   }
-  console.log(team)
   const newTeam = await updateTeam(team)
   res.json(newTeam)
 })
@@ -63,7 +62,6 @@ router.post('/admin-create', authorizeAdmin, ensureAuthenticated, async (req: ex
 // Create
 router.post('/', ensureAuthenticated, async (req: express.Request, res: express.Response) => {
   const user: IUser = req.user as IUser
-  console.log(user)
   const teamId = user.teamId
   if (teamId) {
     res.status(500).send('already on a team')

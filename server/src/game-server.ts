@@ -51,7 +51,6 @@ export interface ISnakeConfig {
 
 export async function createGameWithConfig({ width, height, maxFood, snakeStartLength, decHealthPoints, snakes, pinTail, serverUrl, division }: IGameConfig): Promise<number> {
     console.log("create game with config for division", division)
-    console.log("server host:", serverUrl)
     const formData = {
         "game_form[width]": width || 20,
         "game_form[height]": height || 20,
@@ -74,8 +73,13 @@ export async function createGameWithConfig({ width, height, maxFood, snakeStartL
     });
     const post = promisify(request.post)
     const host = serverUrl || process.env.BATTLESNAKE_SERVER_HOST
+    console.log("server host:", host)
     try {
         const res = await post(host, { form: formData })
+        if (res.statusCode >= 400) {
+            console.log("unable to create new game", res.body)
+            return -1
+        }
         const gameId = _.get(res.headers.location.split('/'), 1)
         return gameId
     } catch (err) {
@@ -108,7 +112,6 @@ interface IDeath {
 export async function getGameStatus(gameId: number): Promise<IGameStatus> {
     const get = promisify(request.get)
     const host = `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}`
-    console.log(host)
     try {
         const res = await get({ uri: host })
         if (res.statusCode !== 200) {
