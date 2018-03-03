@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Button, Item } from 'semantic-ui-react'
+import { Form, Button, Grid, Header, Segment, Message, Card, Image, Icon } from 'semantic-ui-react'
 
 const divisions = [
   { key: 'beginner', text: 'Beginner', value: 'beginner' },
@@ -47,44 +47,58 @@ class TeamFields extends Component {
     const { teamName, description, division } = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Group>
-          <Form.Input
-            label="Team Name"
-            placeholder="Team Name"
-            name="teamName"
-            value={teamName}
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'teamName'
-            }
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.TextArea
-            label="Team Description"
-            placeholder="Team Description"
-            name="description"
-            value={description}
-            onChange={this.handleChange}
-          />
-          <Form.Dropdown
-            label="Division"
-            options={divisions}
-            name="division"
-            value={division}
-            placeholder="Division"
-            onChange={this.handleChange}
-            error={
-              this.state.error &&
-              this.state.error.field === 'divisions'
-            }
-          />
-        </Form.Group>
-        <Form.Button content="Submit" />
-        <Button onClick={this.props.reset}>Reset</Button>
-      </Form>
+      <Grid
+        textAlign='center'
+        style={{ height: '100%' }}
+        verticalAlign='middle'
+      >
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as='h2' color='teal' textAlign='center'>
+            {' '}Create a team
+          </Header>
+          <Form size='large' onSubmit={this.handleSubmit} textAlign='left'>
+            <Segment stacked>
+              <Form.Input
+                label="Team Name"
+                placeholder="Team Name"
+                name="teamName"
+                fluid
+                value={teamName}
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'teamName'
+                }
+              />
+              <Form.TextArea
+                label="Team Description"
+                placeholder="Team Description"
+                name="description"
+                value={description}
+                onChange={this.handleChange}
+                fluid
+              />
+              <Form.Select
+                label="Division"
+                options={divisions}
+                fluid
+                name="division"
+                value={division}
+                placeholder="Division"
+                onChange={this.handleChange}
+                error={
+                  this.state.error &&
+                  this.state.error.field === 'divisions'
+                }
+              />
+              <Form.Button color='teal' fluid size='large'>Submit</Form.Button>
+            </Segment>
+          </Form>
+          <Message>
+            <Button onClick={this.props.reset}>Reset</Button>
+          </Message>
+        </Grid.Column>
+      </Grid>
     )
   }
 }
@@ -107,7 +121,6 @@ class GithubUsername extends Component {
           username: this.state.username
         }
       })
-      console.log(resp.data)
       const user = {
         username: resp.data.login,
         avatar: resp.data.avatar_url,
@@ -129,7 +142,7 @@ class GithubUsername extends Component {
   }
 
   back = () => {
-    this.setState({user: null})
+    this.setState({ user: null })
   }
 
   render() {
@@ -137,33 +150,59 @@ class GithubUsername extends Component {
 
     return (
       <div>
-        {!user &&
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Input
-            label="Github Username"
-            placeholder="Github Username"
-            name="username"
-            value={username}
-            onChange={this.handleChange}
-          />
-          <Form.Button content="Submit" />
-        </Form>}
-        {user &&
-          <div>
-            <Item.Group>
-              <Item>
-                <Item.Image size="tiny" src={user.avatar} />
-                <Item.Content>
-                  <Item.Header>{user.displayName}</Item.Header>
-                  <Item.Meta>Created: {user.createdAt}</Item.Meta>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-            <div>
-              <Button onClick={this.continue}>Continue</Button>
-              <Button onClick={this.back}>Back</Button>
-            </div>
-          </div>}
+        <Grid
+          textAlign='center'
+          style={{ height: '100%' }}
+          verticalAlign='middle'
+        >
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='teal' textAlign='center'>
+              {' '}Create a team
+            </Header>
+            {!user &&
+              <Segment stacked>
+                <Form size='large' onSubmit={this.handleSubmit} textAlign='left'>
+                  <Form.Input
+                    label="Github Username"
+                    placeholder="Github Username"
+                    name="username"
+                    value={username}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Button color='teal' fluid size='large'>Submit</Form.Button>
+                </Form>
+              </Segment>
+            }
+            {user &&
+              <Card centered>
+                <Image alt={user.username} src={user.avatar} />
+                <Card.Content>
+                  <Card.Header>
+                    <Icon name="github" />
+                    {user.username}
+                  </Card.Header>
+                  <Card.Meta>
+                    <span className='date'>
+                      Created: {user.createdAt}
+                    </span>
+                  </Card.Meta>
+                  <Card.Description>
+                    {user.displayName}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  <Button.Group widths={'3'}>
+                    <Button onClick={this.back}>Back</Button>
+                    <Button.Or />
+                    <Button onClick={this.continue} positive color='teal'>Continue</Button>
+                  </Button.Group>
+                </Card.Content>
+              </Card>
+            }
+
+          </Grid.Column>
+        </Grid>
+
       </div>
     )
   }
@@ -185,9 +224,8 @@ export default class CreateTeam extends Component {
     const { githubUser } = this.state
     return (
       <div>
-        <h1>Create a new Team</h1>
-        { !githubUser && <GithubUsername updateUser={this.updateUser} />}
-        { githubUser && <TeamFields githubUser={githubUser} reset={() => this.setState({user: null})} /> }
+        {!githubUser && <GithubUsername updateUser={this.updateUser} />}
+        {githubUser && <TeamFields githubUser={githubUser} reset={() => this.setState({ user: null })} />}
       </div>
     )
   }

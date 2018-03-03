@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Link } from 'react-router-dom'
-import { Grid, Container, Image, Table } from 'semantic-ui-react'
+import { Grid, Container, Image, Table, Header, Button, Icon, Segment } from 'semantic-ui-react'
 
 import Snakes from '../components/snakes'
 import Nav from '../components/nav'
@@ -18,23 +18,43 @@ import logo from '../images/logo-bs18.png'
 class Team extends Component {
   render() {
     return (
-      <Grid container>
-        <Grid.Column width={4}>
-          <Link to="/">
-            <img src={logo} className="App-logo" alt="logo" />
-          </Link>
-          <Nav bountyCollector={this.props.userMgr.user.bountyCollector}/>
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <Container>
-            <Route exact path="/team" component={TeamHome} />
-            <Route path="/team/edit" component={TeamEdit} />
-            {/* <Route path="/team/add-member" component={AddMember} /> */}
-            {/* <Route path="/team/remove/:username" component={RemoveMember} /> */}
-            <Route path="/team/snakes" component={teamProvider(Snakes)} />
-          </Container>
-        </Grid.Column>
-      </Grid>
+      <div>
+
+        <Grid verticalAlign='bottom'>
+          <Grid.Column width={4}>
+            <Link to="/">
+              <img src={logo} className="App-logo" alt="logo" />
+            </Link>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <Header
+              as='h1'
+              inverted
+            >Team Page
+              <Button inverted outline size='small' floated='right' onClick={() => this.props.history.push("team/edit")}>
+              Edit Team
+                <Icon name='right pencil' />
+              </Button>
+            </Header>
+            
+          </Grid.Column>
+        </Grid>
+
+        <Grid container>
+          <Grid.Column width={4}>
+            <Nav bountyCollector={this.props.userMgr.user.bountyCollector}/>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <Container>
+              <Route exact path="/team" component={TeamHome} />
+              <Route path="/team/edit" component={TeamEdit} />
+              {/* <Route path="/team/add-member" component={AddMember} /> */}
+              {/* <Route path="/team/remove/:username" component={RemoveMember} /> */}
+              <Route path="/team/snakes" component={teamProvider(Snakes)} />
+            </Container>
+          </Grid.Column>
+        </Grid>
+      </div>
     )
   }
 }
@@ -98,7 +118,7 @@ class TeamHomeDisplay extends Component {
     return (
       <div>
         <TeamDetail />
-        <Table celled inverted>
+        <Table celled inverted verticalAlign='middle' sortable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>User</Table.HeaderCell>
@@ -109,7 +129,7 @@ class TeamHomeDisplay extends Component {
             {members.map(member => {
               return (
                 <Table.Row key={member.username}>
-                  <Table.Cell>
+                  <Table.Cell verticalAlign="middle">
                     <Image
                       width="50"
                       height="50"
@@ -120,10 +140,10 @@ class TeamHomeDisplay extends Component {
                     {member.displayName || member.username}
                   </Table.Cell>
                   <Table.Cell textAlign="right">
-                    <a onClick={() => this.removeMember(member.username)}
-                      className='bs-action'>
-                      <span role="img" aria-label="Remove">❎</span> Remove
-                    </a>
+                    <Button inverted color='red' size='small' onClick={() => this.removeMember(member.username)}>
+                      Remove
+                      <Icon name='right x' />
+                    </Button>
                   </Table.Cell>
                 </Table.Row>
               )

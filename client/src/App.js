@@ -5,12 +5,13 @@ import config from './config'
 import Team from './Team'
 import CreateTeam from './Team/create'
 import Admin from './Admin'
-import Tournaments, {TournamentActiveGame} from './Tournament'
+import Tournaments, { TournamentActiveGame } from './Tournament'
 
 import Bounty from './Bounty'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 import axios from 'axios'
+import { Container } from 'semantic-ui-react'
 
 const LoginLink = () => <a href={`${config.SERVER}/auth/github`}>Login Here</a>
 
@@ -39,7 +40,7 @@ const NoTeam = () => {
  *  -- Snake management
  */
 class App extends Component {
-  logout = async() => {
+  logout = async () => {
     try {
       await axios(`${config.SERVER}/self/logout`, {
         method: 'get',
@@ -73,33 +74,31 @@ class App extends Component {
       <Router>
         <div>
           {!isActiveTournamentGame &&
-            <div className="body-wrapper">
-              <div className="body-content">
-                {!this.props.userMgr.loggedIn &&
-                  <LoginLink />
-                }
-                {!this.props.userMgr.user.teamId &&
-                  !this.props.userMgr.user.bountyCollector &&
-                  !this.props.userMgr.user.admin &&
-                  <NoTeam />
-                }
-                {this.props.userMgr.user.teamId &&
-                  <div>
-                    <Route exact path="/" render={() => <Redirect to='/team' />} />
-                    <Route path="/team" component={Team} />
-                  </div>
-                }
-                {this.props.userMgr.user.bountyCollector &&
-                    <Route path="/bounty" component={Bounty} />}
-                {this.props.userMgr.user.admin &&
-                  <div>
-                    <Route path="/new-team" component={CreateTeam} />
-                    <Route path="/swu" component={Admin} />
-                    <Route path="/tournament" component={Tournaments} />
-                  </div>
-                }
-              </div>
-            </div>
+            <Container style={{ marginTop: '32px' }}>
+              {!this.props.userMgr.loggedIn &&
+                <LoginLink />
+              }
+              {!this.props.userMgr.user.teamId &&
+                !this.props.userMgr.user.bountyCollector &&
+                !this.props.userMgr.user.admin &&
+                <NoTeam />
+              }
+              {this.props.userMgr.user.teamId &&
+                <div>
+                  <Route exact path="/" render={() => <Redirect to='/team' />} />
+                  <Route path="/team" component={Team} />
+                </div>
+              }
+              {this.props.userMgr.user.bountyCollector &&
+                <Route path="/bounty" component={Bounty} />}
+              {this.props.userMgr.user.admin &&
+                <div>
+                  <Route path="/new-team" component={CreateTeam} />
+                  <Route path="/swu" component={Admin} />
+                  <Route path="/tournament" component={Tournaments} />
+                </div>
+              }
+            </Container>
           }
           {isActiveTournamentGame &&
             <Route exact path="/tournament/:id/active-game" component={TournamentActiveGame} />
