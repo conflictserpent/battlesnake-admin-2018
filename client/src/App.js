@@ -89,12 +89,13 @@ class App extends Component {
                     <Route path="/team" component={Team} />
                   </div>
                 }
+                {this.props.userMgr.user.bountyCollector &&
+                    <Route path="/bounty" component={Bounty} />}
                 {this.props.userMgr.user.admin &&
                   <div>
                     <Route path="/new-team" component={CreateTeam} />
                     <Route path="/swu" component={Admin} />
                     <Route path="/tournament" component={Tournaments} />
-                    <Route path="/bounty" component={Bounty} />
                   </div>
                 }
               </div>
