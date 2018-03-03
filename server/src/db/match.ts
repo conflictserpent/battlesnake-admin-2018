@@ -21,7 +21,7 @@ export function createMatch(): IMatch {
 
 export async function startGame(match: IMatch, division: string) {
     console.log("start game")
-    const winners = (await getMatchWinners(match)).filter(w => w !== null)
+    const winners = (await getMatchWinners(match, config.BATTLESNAKE_TOURNAMENT_SERVER_HOST)).filter(w => w !== null)
     console.log("winners:", winners)
     const winnerIds = winners.map(w => w.captainId)
     if (!match.gameIds) {
@@ -31,24 +31,20 @@ export async function startGame(match: IMatch, division: string) {
     match.gameIds.push(game)
 }
 
-export function gameUrl(match: IMatch, gameId: number) {
-    return `${process.env.BATTLESNAKE_SERVER_HOST}/${gameId}`
-}
-
-export async function matchStatus(match: IMatch): Promise<IGameStatus[]> {
+export async function matchStatus(match: IMatch, serverHost: string): Promise<IGameStatus[]> {
     if (match.gameIds.length === 0) {
         return
     }
 
-    return Promise.all(match.gameIds.map(id => getGameStatus(id)))
+    return Promise.all(match.gameIds.map(id => getGameStatus(id, serverHost)))
 }
 
-export async function getMatchWinners(match: IMatch): Promise<ITeam[]> {
-    return Promise.all((match.gameIds || []).map(id => getGameWinner(match, id)))
+export async function getMatchWinners(match: IMatch, serverHost: string): Promise<ITeam[]> {
+    return Promise.all((match.gameIds || []).map(id => getGameWinner(match, id, serverHost)))
 }
 
-export async function getGameWinner(match: IMatch, gameId: number): Promise<ITeam> {
-    const json = await getGameStatus(gameId)
+export async function getGameWinner(match: IMatch, gameId: number, serverHost: string): Promise<ITeam> {
+    const json = await getGameStatus(gameId, serverHost)
 
     if (!json || json.status !== "halted") {
         return null

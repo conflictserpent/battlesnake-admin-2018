@@ -3,6 +3,7 @@ import { v4 } from 'uuid'
 import { IMatch, createMatch, getGameWinner, getMatchWinners } from './match'
 import { getDocumentClient } from './client'
 import { ITeam } from './teams';
+import config from '../config'
 
 export const optimalMatchSize = 8
 
@@ -116,7 +117,7 @@ export function findMatch(tournament: ITournament, matchId: string): IMatch {
 export async function startNextRound(tournament: ITournament) {
   const lastRound = tournament.rounds[tournament.rounds.length - 1]
   const winners: ITeam[] = []
-  const list = (await Promise.all(lastRound.matches.map(m => getMatchWinners(m))))
+  const list = (await Promise.all(lastRound.matches.map(m => getMatchWinners(m, config.BATTLESNAKE_TOURNAMENT_SERVER_HOST))))
   list.forEach(i => i.forEach(t => winners.push(t)))
 
   const round = createRound(winners, tournament.rounds.length + 1)

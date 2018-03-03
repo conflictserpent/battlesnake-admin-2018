@@ -8,6 +8,7 @@ import { ITeam, getTeams } from '../db/teams';
 import { v4 } from 'uuid'
 import { ensureAuthenticated, authorizeAdmin } from '../passport-auth'
 import { createGameWithConfig, IGameConfig, SERVER_HOST, getGameStatus } from '../game-server'
+import config from '../config'
 
 export const router = Router()
 
@@ -44,7 +45,7 @@ router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
         activeMatch: t.activeMatch,
         gameServerId: t.gameServerId,
         matches: await Promise.all(t.rounds.map(r => r.matches.map(async m => {
-          const winners = (await getMatchWinners(m)).filter(w => w !== null)
+          const winners = (await getMatchWinners(m, config.BATTLESNAKE_TOURNAMENT_SERVER_HOST)).filter(w => w !== null)
           return {
             ...m,
             winners: (winners || []).map(w => w.teamName)
@@ -83,7 +84,7 @@ router.get('/:id/match/:matchId', authorizeAdmin, async (req, res) => {
     return
   }
 
-  const winners = (await getMatchWinners(m)).filter(w => w !== null)
+  const winners = (await getMatchWinners(m, config.BATTLESNAKE_TOURNAMENT_SERVER_HOST)).filter(w => w !== null)
   res.send({
     ...m,
     winners

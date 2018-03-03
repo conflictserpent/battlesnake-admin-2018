@@ -109,9 +109,9 @@ interface IDeath {
     turn: number
 }
 
-export async function getGameStatus(gameId: number): Promise<IGameStatus> {
+export async function getGameStatus(gameId: number, serverHost: string): Promise<IGameStatus> {
     const get = promisify(request.get)
-    const host = `${process.env.BATTLESNAKE_SERVER_HOST}/status/${gameId}`
+    const host = `${serverHost}/status/${gameId}`
     try {
         const res = await get({ uri: host })
         if (res.statusCode !== 200) {

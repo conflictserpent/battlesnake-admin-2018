@@ -85,7 +85,7 @@ app.get('/start-game', (req, res) => {
 })
 
 app.post('/game-status', (req, res) => {
-  const json = getGameStatus(req.body.gameId)
+  const json = getGameStatus(req.body.gameId, process.env.BATTLESNAKE_SERVER_HOST)
   res.render('test-tournament.html', {
     data: json,
   })
