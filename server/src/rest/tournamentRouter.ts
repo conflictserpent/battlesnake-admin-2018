@@ -58,7 +58,6 @@ router.get('/', ensureAuthenticated, authorizeAdmin, async (req, res) => {
 
 router.get("/:id", ensureAuthenticated, authorizeAdmin, async (req, res) => {
   const t = await loadTournament(req.params.id)
-  console.log(t)
   res.send(t)
 })
 

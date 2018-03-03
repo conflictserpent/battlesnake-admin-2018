@@ -45,7 +45,7 @@ export class TournamentActiveGame extends Component {
     const {gameId} = this.state
     return (
       <iframe
-        src={`${config.GAME_SERVER}/${gameId}`}
+        src={`${config.TOURNAMENT_GAME_SERVER}/${gameId}`}
         style={{width: '100vw', height: '100vh'}}
         title="game-view"
         frameBorder="0"
@@ -119,7 +119,7 @@ class TournamentMatchInfo extends Component {
                       {(match.gameIds || []).map(g => {
                         return (
                           <span>
-                            <a key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank"># {match.gameIds.indexOf(g) + 1}</a>&nbsp;&nbsp;&nbsp;
+                            <a key={g} href={`${config.TOURNAMENT_GAME_SERVER}/${g}`} target="_blank"># {match.gameIds.indexOf(g) + 1}</a>&nbsp;&nbsp;&nbsp;
                           </span>
                         )
                       })}
@@ -257,7 +257,7 @@ class TournamentInfo extends Component {
                   {(m.gameIds || []).map(g => {
                     return (
                       <div key={g}>
-                        <a style={{paddingRight: '10px'}} key={g} href={`${config.GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
+                        <a style={{paddingRight: '10px'}} key={g} href={`${config.TOURNAMENT_GAME_SERVER}/${g}`} target="_blank">Game # {m.gameIds.indexOf(g) + 1}</a>
                         <a href="#top" onClick={() => { this.setActiveGame(m, g, m.gameIds.indexOf(g) + 1) }}>Set Active</a>
                       </div>
                     )
