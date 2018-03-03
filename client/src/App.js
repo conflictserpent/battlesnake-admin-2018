@@ -40,7 +40,7 @@ const NoTeam = () => {
  *  -- Snake management
  */
 class App extends Component {
-  logout = async () => {
+  logout = async() => {
     try {
       await axios(`${config.SERVER}/self/logout`, {
         method: 'get',

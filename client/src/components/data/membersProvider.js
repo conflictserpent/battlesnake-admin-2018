@@ -11,7 +11,7 @@ export const membersProvider = ReactClass => {
       members: []
     };
 
-    handleError (e) {
+    handleError(e) {
       if (e.response && e.response.status === 401) {
         this.setState({
           loading: false
@@ -24,7 +24,7 @@ export const membersProvider = ReactClass => {
       })
     }
 
-    componentDidMount = async () => {
+    componentDidMount = async() => {
       try {
         const membersResp = await axios.get(`${config.SERVER}/api/team/members`, {
           withCredentials: true
@@ -38,6 +38,6 @@ export const membersProvider = ReactClass => {
       }
     };
 
-    render = () => <ReactClass membersMgr={{ ...this.state }} />;
+    render = () => <ReactClass membersMgr={{ ...this.state }} {...this.props} />;
   }
 }

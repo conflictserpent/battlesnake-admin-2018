@@ -10,9 +10,6 @@ class Snake extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = async() => {
-    const { snakeUrl, teamName } = this.state
-    console.log(snakeUrl, teamName)
-
     this.setState({ loading: true })
 
     try {

@@ -22,7 +22,6 @@ class Snakes extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.teamMgr.loading && !nextProps.teamMgr.loading) {
-      console.log(nextProps.teamMgr)
       this.setState({
         teamId: nextProps.teamMgr.team.captainId,
         snakeUrl: nextProps.teamMgr.team.snakeUrl
@@ -32,7 +31,7 @@ class Snakes extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = async () => {
+  handleSubmit = async() => {
     const { selected, width, height, food, teamId } = this.state
     const resp = await axios(`${config.SERVER}/api/team/${teamId}/start-game`, {
       method: 'post',
@@ -48,7 +47,7 @@ class Snakes extends Component {
     window.open(`${config.GAME_SERVER}/${resp.data.gameId}`)
   }
 
-  loadSnakes = async () => {
+  loadSnakes = async() => {
     const resp = await axios(`${config.SERVER}/api/snakes/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

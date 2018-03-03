@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Message, Grid, Segment, Header, Button } from 'semantic-ui-react'
+import { Form, Message, Grid, Segment, Header } from 'semantic-ui-react'
 
 import { teamProvider } from '../components/data'
 
@@ -29,7 +29,7 @@ class EditTeam extends Component {
     })
   };
 
-  handleSubmit = async () => {
+  handleSubmit = async() => {
     this.setState({ loading: true })
 
     const { snakeUrl, teamName } = this.state

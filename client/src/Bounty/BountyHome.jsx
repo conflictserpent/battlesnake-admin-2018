@@ -30,8 +30,6 @@ class Bounty extends React.Component {
   render() {
     const { loading, user } = this.props.userMgr
     const config = user.bountyCollector
-    const { game } = this.state
-    console.log(game)
 
     if (!user.bountyCollector) {
       return <h1>Not A Bounty Collector</h1>
@@ -215,7 +213,7 @@ class BountyGame extends React.Component {
           <Header as="h3">{"Bounty Snake URL's"}</Header>
           <Message color="blue">
             Setup a bounty snake url using mysnakename@http://mysnakeurl.com
-        </Message>
+          </Message>
           {bountySnakes.map((snake, idx) =>
             <Form.Input
               key={idx}
