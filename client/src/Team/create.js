@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import config from '../config'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Item } from 'semantic-ui-react'
 
 const divisions = [
   { key: 'beginner', text: 'Beginner', value: 'beginner' },
@@ -107,7 +107,15 @@ class GithubUsername extends Component {
           username: this.state.username
         }
       })
-      this.setState({user: resp.data})
+      console.log(resp.data)
+      const user = {
+        username: resp.data.login,
+        avatar: resp.data.avatar_url,
+        id: resp.data.id,
+        displayName: resp.data.name,
+        createdAt: resp.data.created_at
+      }
+      this.setState({user: user})
     } catch (e) {
       console.log(e)
       this.setState({ error: e })
@@ -142,13 +150,20 @@ class GithubUsername extends Component {
         </Form>}
         {user &&
           <div>
+            <Item.Group>
+              <Item>
+                <Item.Image size="tiny" src={user.avatar} />
+                <Item.Content>
+                  <Item.Header>{user.displayName}</Item.Header>
+                  <Item.Meta>Created: {user.createdAt}</Item.Meta>
+                </Item.Content>
+              </Item>
+            </Item.Group>
             <div>
-              <img alt={user.username} src={user.avatar} />
+              <Button onClick={this.continue}>Continue</Button>
+              <Button onClick={this.back}>Back</Button>
             </div>
-            <Button onClick={this.continue}>Continue</Button>
-            <Button onClick={this.back}>Back</Button>
           </div>}
-
       </div>
     )
   }

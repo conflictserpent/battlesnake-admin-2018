@@ -53,12 +53,7 @@ app.post('/api/github-username', (req: express.Request, res: express.Response) =
   const client = github.client(config.GITHUB_OAUTH_TOKEN)
   const ghme = client.user(req.body.username)
   ghme.info((err, data, headers) => {
-    res.send({
-      username: data.login,
-      avatar: data.avatar_url,
-      id: data.id,
-      displayName: data.name,
-    })
+    res.send(data)
   })
 })
 
