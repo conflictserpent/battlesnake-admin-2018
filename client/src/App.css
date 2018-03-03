@@ -101,21 +101,6 @@ hr {
   background-color: #ECF1F4;
   border-radius: 1.2rem; }
 
-  .bs-action {
-    cursor: pointer;}
-  
- .bs-badge-right {
-   float:right;
- }
- 
- .bs-badge {
-   background-color: #000;
-   color: #fff;
-   padding-left: 40px;
-   padding-right: 40px;
-   border-radius: 50%;
-   text-align: center; }
-
 .bs-btn {
   display: flex;
   align-items: center;
